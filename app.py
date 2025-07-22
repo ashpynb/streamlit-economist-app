@@ -1,5 +1,10 @@
 import streamlit as st
 
+st.set_page_config(
+    page_title="Menu de um Economista em Formação",
+    page_icon="📈"
+)
+
 #tela inicial 
 def opcoes_menu():  #feito
     st.title('Menu de um economista em formação')
