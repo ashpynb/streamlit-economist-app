@@ -277,7 +277,10 @@ def tela_conv():
     resultado = None
 
     with col1:
-        if st.button("▶️"):
+        if st.button("Voltar"):
+            st.session_state.tela = 'menu'
+    with col2:
+        if st.button("▶️Converter"):
             try: #tratamento de erro né, vamos mexer com divisão, vai dar erro se for zero
                 # Converte o valor para USD e depois para a moeda destino
                 sigla1 = siglas[moedas.index(opcaomoeda1)]
@@ -289,9 +292,7 @@ def tela_conv():
                 st.error("Erro: Divisão por zero nas taxas.")
             except Exception as e:
                 st.error(f"Erro inesperado: {e}")   
-    with col2:
-        if st.button("Voltar"):
-            st.session_state.tela = 'menu'
+
 
 
 
