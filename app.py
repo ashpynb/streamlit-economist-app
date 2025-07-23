@@ -10,7 +10,6 @@ st.set_page_config(
 def opcoes_menu():  #feito
     st.title('Fórmula Econômica📈')
     st.header('Os melhores simuladores e cálculos econômicos estão aqui!')
-    st.subheader('Feito por Ash Machado')
 
     opcao = st.selectbox("Escolha um Simulador:", 
                          ["Macroeconômico", "Microeconômico", "Financeiro", "Estatístico", "Conversor de Moeda"])
@@ -26,7 +25,7 @@ def opcoes_menu():  #feito
             st.session_state.tela = 'est'
         elif opcao == "Conversor de Moeda":
             st.session_state.tela = 'conv'
-    st.subheader('Feito por Ash Machado')
+    st.write('Feito por Ash Machado')
 
 
 #menu macroeconômico
