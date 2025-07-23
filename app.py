@@ -1,4 +1,5 @@
 import streamlit as st
+import requests
 
 st.set_page_config(
     page_title="Menu de um Economista em Formação",
@@ -188,6 +189,33 @@ def tela_crescimento():
     if st.button("Voltar para Macroeconômico"):
         st.session_state.tela = 'macro'
 
+# Função para obter taxas de câmbio atualizadas via API (via chat gpt ajuda)
+def obter_taxas():
+    pares = "USD-BRL,USD-EUR,USD-GBP,USD-JPY,USD-CNY,USD-AUD,USD-CAD,USD-CHF,USD-HKD,USD-SGD,USD-INR,USD-KRW,USD-MXN,USD-NOK"
+    url = f"https://economia.awesomeapi.com.br/json/last/{pares}"
+    resposta = requests.get(url).json()
+
+    taxas = {
+        "USD": 1.0,  # Base é o dólar
+        "BRL": float(resposta['USDBRL']['bid']),
+        "EUR": float(resposta['USDEUR']['bid']),
+        "GBP": float(resposta['USDGBP']['bid']),
+        "JPY": float(resposta['USDJPY']['bid']),
+        "CNY": float(resposta['USDCNY']['bid']),
+        "AUD": float(resposta['USDAUD']['bid']),
+        "CAD": float(resposta['USDCAD']['bid']),
+        "CHF": float(resposta['USDCHF']['bid']),
+        "HKD": float(resposta['USDHKD']['bid']),
+        "SGD": float(resposta['USDSGD']['bid']),
+        "INR": float(resposta['USDINR']['bid']),
+        "KRW": float(resposta['USDKRW']['bid']),
+        "MXN": float(resposta['USDMXN']['bid']),
+        "NOK": float(resposta['USDNOK']['bid']),
+    }
+
+    return taxas
+
+
 # Simuladores simples
 def tela_micro():
     st.title('Simulador Microeconômico')
@@ -211,11 +239,59 @@ def tela_est():
         st.session_state.tela = 'menu'
 
 def tela_conv():
-    st.title('Conversor de Moeda')
-    st.write('Calcule sua conversão de moeda aqui')
+    st.title('Conversor de Moeda💲')
+    st.subheader('Converta para mais de 13 moedas!')
+    #armazenando as moedas
+    nomes_moedas = {
+        "USD": "Dólar (USD)",
+        "EUR": "Euro (EUR)",
+        "BRL": "Real (BRL)",
+        "GBP": "Libra Esterlina (GBP)",
+        "JPY": "Iene Japonês (JPY)",
+        "CNY": "Yuan Chinês (CNY)",
+        "AUD": "Dólar Australiano (AUD)",
+        "CAD": "Dólar Canadense (CAD)",
+        "CHF": "Franco Suíço (CHF)",
+        "HKD": "Dólar de Hong Kong (HKD)",
+        "SGD": "Dólar de Singapura (SGD)",
+        "INR": "Rupia Indiana (INR)",
+        "KRW": "Won Sul-Coreano (KRW)",
+        "MXN": "Peso Mexicano (MXN)",
+        "NOK": "Coroa Norueguesa (NOK)"}   #recomendação via chat gpt
+    
+    moedas = list(nomes_moedas.values())
+    siglas = list(nomes_moedas.keys())
 
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
+    #inputs
+    valor1 = st.number_input("Valor:")
+    opcaomoeda1 = st.selectbox("Converter de:", moedas)
+    opcaomoeda2 = st.selectbox("Para:", moedas)
+    
+    #divide em duas colunas o frame
+    col1, col2 = st.columns(2)
+
+     # Carrega taxas atualizadas
+    taxas_em_usd = obter_taxas()
+    resultado = None
+
+    with col1:
+        if st.button("▶️"):
+            try: #tratamento de erro né, vamos mexer com divisão, vai dar erro se for zero
+                # Converte o valor para USD e depois para a moeda destino
+                sigla1 = siglas[moedas.index(opcaomoeda1)]
+                sigla2 = siglas[moedas.index(opcaomoeda2)]
+                valor_em_usd = valor1 / taxas_em_usd[sigla1]
+                resultado = valor_em_usd * taxas_em_usd[sigla2]
+                st.success(f'{valor1:.2f} {sigla1} ≈ {resultado:.2f} {sigla2}')
+            except ZeroDivisionError:
+                st.error("Erro: Divisão por zero nas taxas.")
+            except Exception as e:
+                st.error(f"Erro inesperado: {e}")   
+    with col2:
+        if st.button("Voltar"):
+            st.session_state.tela = 'menu'
+
+
 
 # Menu (main)
 def main():
