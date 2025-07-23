@@ -2,14 +2,15 @@ import streamlit as st
 import requests
 
 st.set_page_config(
-    page_title="Menu de um Economista em Formação",
+    page_title="Fórmula Econômica",
     page_icon="📈"
 )
 
 #tela inicial 
 def opcoes_menu():  #feito
-    st.title('Menu de um economista em formação')
-    st.header('Escolha qual simulador econômico deseja utilizar:')
+    st.title('Fórmula Econômica📈')
+    st.header('Os melhores simuladores e cálculos econômicos estão aqui!')
+    st.subheader('Feito por Ash Machado')
 
     opcao = st.selectbox("Escolha um Simulador:", 
                          ["Macroeconômico", "Microeconômico", "Financeiro", "Estatístico", "Conversor de Moeda"])
@@ -25,6 +26,8 @@ def opcoes_menu():  #feito
             st.session_state.tela = 'est'
         elif opcao == "Conversor de Moeda":
             st.session_state.tela = 'conv'
+    st.subheader('Feito por Ash Machado')
+
 
 #menu macroeconômico
 def tela_macro(): #feito
@@ -275,9 +278,6 @@ def tela_conv():
     resultado = None
 
     with col1:
-        if st.button("Voltar"):
-            st.session_state.tela = 'menu'
-    with col2:
         if st.button("▶️"):
             try: #tratamento de erro né, vamos mexer com divisão, vai dar erro se for zero
                 # Converte o valor para USD e depois para a moeda destino
@@ -290,6 +290,9 @@ def tela_conv():
                 st.error("Erro: Divisão por zero nas taxas.")
             except Exception as e:
                 st.error(f"Erro inesperado: {e}")   
+    with col2:
+        if st.button("Voltar"):
+            st.session_state.tela = 'menu'
 
 
 
