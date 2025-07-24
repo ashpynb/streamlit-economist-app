@@ -10,9 +10,6 @@ st.set_page_config(
 def opcoes_menu():  #feito
     st.title(":orange[Fórmula] :orange[Econômica]")
     st.header('_Os melhores simuladores e cálculos econômicos estão aqui!_', divider = 'orange')
-    logo_formula_economica = "link aqui"
-    st.logo(logo_formula_economica, icon_image= logo_formula_economica)
-    st.sidebar.markdown("Hi!")
 
     opcao = st.selectbox("Escolha um Simulador:", 
                          ["Macroeconômico", "Microeconômico", "Financeiro", "Estatístico", "Conversor de Moeda"])
