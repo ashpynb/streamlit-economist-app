@@ -31,7 +31,8 @@ def opcoes_menu():  #feito
         with col2:
             st.markdown("## :orange[Fórmula] :orange[Econômica]")
         
-        st.markdown("## 🪙 Bem-vindo!")
+        if st.button('Sobre'):
+            st.session_state.tela = 'sobre'
         st.link_button('Entre em Contato',"https://wa.me/5533998488760?text=Ol%C3%A1%21%20Vim%20pelo%20seu%20site%20F%C3%B3rmula%20Econ%C3%B4mica.%20Gostaria%20de%20mais%20informa%C3%A7%C3%B5es%21")
         st.markdown("---")
         st.caption("Versão 1.0 • 2025")
@@ -317,7 +318,10 @@ def tela_conv():   #finalizado
             except Exception as e:
                 st.error(f"Erro inesperado: {e}")   
 
-
+def tela_sobre():
+    st.subheader('Sobre o Projeto')
+    if st.button('Voltar ao Menu'):
+            st.session_state.tela = 'menu'    
 
 
 # Menu (main)
@@ -352,6 +356,8 @@ def main():
             tela_PIB_oferta()
         case 'pib_renda':
             tela_PIB_renda()
+        case 'sobre':
+            tela_sobre()
 
 #loop 
 if __name__ == "__main__":
