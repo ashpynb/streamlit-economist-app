@@ -25,7 +25,7 @@ def opcoes_menu():  #feito
     st.header('_Os melhores simuladores e cálculos econômicos estão aqui!_', divider = 'orange')
     #vou criar uma barra lateral para entrarem em contato, informações complementares e deixar o site bonito!
     with st.sidebar:
-        col1, col2 = st.columns([3, 6])
+        col1, col2 = st.columns([4, 5])
         with col1:
             st.image("logo.square.png", width=90)  # ou 70, se preferir
         with col2:
