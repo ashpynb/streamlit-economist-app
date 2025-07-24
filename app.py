@@ -8,8 +8,13 @@ st.set_page_config(
 
 #tela inicial 
 def opcoes_menu():  #feito
-    st.title(':yellow[Fórmula Econômica📈]:')
+    st.title(':yellow[Fórmula] :yellow [Econômica]:')
     st.header('_Os melhores simuladores e cálculos econômicos estão aqui!_', divider = 'orange')
+    st.write_stream
+    st.button
+    st.caption
+    st.code
+
     opcao = st.selectbox("Escolha um Simulador:", 
                          ["Macroeconômico", "Microeconômico", "Financeiro", "Estatístico", "Conversor de Moeda"])
 
