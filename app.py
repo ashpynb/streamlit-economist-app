@@ -1,9 +1,6 @@
 import streamlit as st
 import requests
 from datetime import datetime
-from PIL import Image
-
-
 
 st.set_page_config(
     page_title="Fórmula Econômica",
@@ -30,7 +27,7 @@ def opcoes_menu():  #feito
             st.image("logo.square.png", width=90)  # ou 70, se preferir
         with col2:
             st.markdown("## :orange[Fórmula] :orange[Econômica]")
-        st.markdown("---")
+        st.markdown("--")
         if st.button('Sobre'):
             st.session_state.tela = 'sobre'
         st.link_button('Entre em Contato',"https://wa.me/5533998488760?text=Ol%C3%A1%21%20Vim%20pelo%20seu%20site%20F%C3%B3rmula%20Econ%C3%B4mica.%20Gostaria%20de%20mais%20informa%C3%A7%C3%B5es%21")
