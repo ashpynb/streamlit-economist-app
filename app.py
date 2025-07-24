@@ -196,25 +196,24 @@ def tela_crescimento():
 def obter_taxas(): #finalizado com api e gpt
     pares = "USD-BRL,USD-EUR,USD-GBP,USD-JPY,USD-CNY,USD-AUD,USD-CAD,USD-CHF,USD-HKD,USD-SGD,USD-INR,USD-KRW,USD-MXN,USD-NOK"
     url = f"https://economia.awesomeapi.com.br/json/last/{pares}"
-    st.json(dados)  # exibe a resposta da API no app
 
     try:
-        resposta = requests.get(url)
-        resposta.raise_for_status()  # levanta erro se status != 200
+        resposta = requests.get(url, timeout=10)
+        resposta.raise_for_status()  # lança erro se status != 200
+
         dados = resposta.json()
 
-        # checa se todas as chaves estão disponíveis
+        # Verifica se todas as chaves necessárias estão presentes
         chaves_necessarias = [
-            'USDBRL','USDEUR','USDGBP','USDJPY','USDCNY',
-            'USDAUD','USDCAD','USDCHF','USDHKD','USDSGD',
-            'USDINR','USDKRW','USDMXN','USDNOK'
+            'USDBRL','USDEUR','USDGBP','USDJPY','USDCNY','USDAUD','USDCAD',
+            'USDCHF','USDHKD','USDSGD','USDINR','USDKRW','USDMXN','USDNOK'
         ]
         for chave in chaves_necessarias:
             if chave not in dados:
-                raise ValueError(f"Erro: chave '{chave}' não encontrada na resposta da API.")
+                raise ValueError(f"Chave '{chave}' não encontrada na resposta da API.")
 
         taxas = {
-            "USD": 1.0,
+            "USD": 1.0,  # Base
             "BRL": float(dados['USDBRL']['bid']),
             "EUR": float(dados['USDEUR']['bid']),
             "GBP": float(dados['USDGBP']['bid']),
@@ -233,10 +232,14 @@ def obter_taxas(): #finalizado com api e gpt
 
         return taxas
 
-    except Exception as e:
-        st.error(f"Erro ao obter taxas de câmbio: {e}")
-        return {"USD": 1.0}  # retorna valor padrão para evitar quebra
+    except requests.exceptions.RequestException as e:
+        st.error(f"Erro na requisição da API: {e}")
+    except ValueError as ve:
+        st.error(f"Erro nos dados da API: {ve}")
+    except Exception as erro:
+        st.error(f"Erro inesperado: {erro}")
 
+    return {"USD": 1.0}  # Retorno padrão para não quebrar o app
 
 # Simuladores simples
 def tela_micro():
@@ -263,6 +266,10 @@ def tela_est():
 def tela_conv():   #finalizado
     st.title('Conversor de Moeda💲')
     st.subheader('Converta para mais de 13 moedas!')
+    taxas_em_usd = obter_taxas()
+    if len(taxas_em_usd) <= 1:
+        st.warning("Não foi possível obter as taxas de câmbio. Tente novamente mais tarde.")
+        return
     #armazenando as moedas
     nomes_moedas = {
         "USD": "Dólar (USD)",
