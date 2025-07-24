@@ -27,7 +27,7 @@ def opcoes_menu():  #feito
     with st.sidebar:
         col1, col2 = st.columns([3, 6])
         with col1:
-            st.image("logo.square.png", width=70)  # ou 70, se preferir
+            st.image("logo.square.png", width=90)  # ou 70, se preferir
         with col2:
             st.title(":orange[Fórmula] :orange[Econômica]")
         
