@@ -14,7 +14,7 @@ st.set_page_config(
 
 #tela inicial 
 def opcoes_menu():  #feito
-    st.image("logo.square.png", use_container_width=100)
+    st.image("logo.square.png", use_container_width=True, width = 100)
     st.title(":orange[Fórmula] :orange[Econômica]")
     st.header('_Os melhores simuladores e cálculos econômicos estão aqui!_', divider = 'orange')
     #vou criar uma barra lateral para entrarem em contato, informações complementares e deixar o site bonito!
