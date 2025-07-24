@@ -8,9 +8,8 @@ st.set_page_config(
 
 #tela inicial 
 def opcoes_menu():  #feito
-    st.title('Fórmula Econômica📈')
-    st.header('Os melhores simuladores e cálculos econômicos estão aqui!')
-
+    st.title(':yellow[Fórmula Econômica📈]')
+    st.header('_Os melhores simuladores e cálculos econômicos estão aqui!_', divider = 'orange')
     opcao = st.selectbox("Escolha um Simulador:", 
                          ["Macroeconômico", "Microeconômico", "Financeiro", "Estatístico", "Conversor de Moeda"])
 
@@ -26,12 +25,13 @@ def opcoes_menu():  #feito
         elif opcao == "Conversor de Moeda":
             st.session_state.tela = 'conv'
     st.write('Feito por Ash Machado')
-
+    st.link_button('Contato com desenvolvedor',"https://wa.me/5533998488760?text=Ol%C3%A1%21%20Vim%20pelo%20seu%20site%20F%C3%B3rmula%20Econ%C3%B4mica.%20Gostaria%20de%20mais%20informa%C3%A7%C3%B5es%21")
+    #Novo
 
 #menu macroeconômico
 def tela_macro(): #feito
     st.title('Simulador Macroeconômico')
-    st.subheader('Simule e analise os principais indicadores da economia')
+    st.subheader('Simule e analise os principais indicadores da economia', divider = True)
 
     opcao = st.selectbox("Escolha uma operação:", 
                          ["Cálculo PIB", "Índice de Preços, Quantidade e Inflação", "Crescimento Econômico"])
@@ -192,7 +192,7 @@ def tela_crescimento():
         st.session_state.tela = 'macro'
 
 # Função para obter taxas de câmbio atualizadas via API (via chat gpt ajuda)
-def obter_taxas():
+def obter_taxas(): #finalizado com api e gpt
     pares = "USD-BRL,USD-EUR,USD-GBP,USD-JPY,USD-CNY,USD-AUD,USD-CAD,USD-CHF,USD-HKD,USD-SGD,USD-INR,USD-KRW,USD-MXN,USD-NOK"
     url = f"https://economia.awesomeapi.com.br/json/last/{pares}"
     resposta = requests.get(url).json()
@@ -240,7 +240,7 @@ def tela_est():
     if st.button('Voltar ao Menu'):
         st.session_state.tela = 'menu'
 
-def tela_conv():
+def tela_conv():   #finalizado
     st.title('Conversor de Moeda💲')
     st.subheader('Converta para mais de 13 moedas!')
     #armazenando as moedas
