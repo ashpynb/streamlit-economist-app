@@ -4,17 +4,21 @@ from datetime import datetime
 
 st.set_page_config(
     page_title="Fórmula Econômica",
-    page_icon="📈"
+    page_icon="https://drive.google.com/uc?export=view&id=1UaY7SZ7ZScTGrwJJHIFu0GtRBNyiVOov",
+    layout="wide"
 )
+
 
 #tela inicial 
 def opcoes_menu():  #feito
+    st.image("https://drive.google.com/uc?export=view&id=1UaY7SZ7ZScTGrwJJHIFu0GtRBNyiVOov", width=200)
     st.title(":orange[Fórmula] :orange[Econômica]")
     st.header('_Os melhores simuladores e cálculos econômicos estão aqui!_', divider = 'orange')
     #vou criar uma barra lateral para entrarem em contato, informações complementares e deixar o site bonito!
     with st.sidebar:
+        st.image("https://drive.google.com/uc?export=view&id=1UaY7SZ7ZScTGrwJJHIFu0GtRBNyiVOov", width=150)
         st.markdown("## 🪙 Bem-vindo!")
-        st.markdown(":orange[Este é o site fórmula econômica!]")
+        st.markdown(":orange[Fórmula econômica!]")
         st.link_button('Entre em Contato',"https://wa.me/5533998488760?text=Ol%C3%A1%21%20Vim%20pelo%20seu%20site%20F%C3%B3rmula%20Econ%C3%B4mica.%20Gostaria%20de%20mais%20informa%C3%A7%C3%B5es%21")
         st.markdown("---")
         st.caption("Versão 1.0 • 2025")
