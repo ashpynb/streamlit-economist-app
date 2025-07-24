@@ -195,28 +195,47 @@ def tela_crescimento():
 # Função para obter taxas de câmbio atualizadas via API (via chat gpt ajuda)
 def obter_taxas(): #finalizado com api e gpt
     pares = "USD-BRL,USD-EUR,USD-GBP,USD-JPY,USD-CNY,USD-AUD,USD-CAD,USD-CHF,USD-HKD,USD-SGD,USD-INR,USD-KRW,USD-MXN,USD-NOK"
-    url = (f"https://economia.awesomeapi.com.br/json/last/{pares}")
-    resposta = requests.get(url).json()
+    url = f"https://economia.awesomeapi.com.br/json/last/{pares}"
+    st.json(dados)  # exibe a resposta da API no app
 
-    taxas = {
-        "USD": 1.0,  # Base é o dólar
-        "BRL": float(resposta['USDBRL']['bid']),
-        "EUR": float(resposta['USDEUR']['bid']),
-        "GBP": float(resposta['USDGBP']['bid']),
-        "JPY": float(resposta['USDJPY']['bid']),
-        "CNY": float(resposta['USDCNY']['bid']),
-        "AUD": float(resposta['USDAUD']['bid']),
-        "CAD": float(resposta['USDCAD']['bid']),
-        "CHF": float(resposta['USDCHF']['bid']),
-        "HKD": float(resposta['USDHKD']['bid']),
-        "SGD": float(resposta['USDSGD']['bid']),
-        "INR": float(resposta['USDINR']['bid']),
-        "KRW": float(resposta['USDKRW']['bid']),
-        "MXN": float(resposta['USDMXN']['bid']),
-        "NOK": float(resposta['USDNOK']['bid']),
-    }
+    try:
+        resposta = requests.get(url)
+        resposta.raise_for_status()  # levanta erro se status != 200
+        dados = resposta.json()
 
-    return taxas
+        # checa se todas as chaves estão disponíveis
+        chaves_necessarias = [
+            'USDBRL','USDEUR','USDGBP','USDJPY','USDCNY',
+            'USDAUD','USDCAD','USDCHF','USDHKD','USDSGD',
+            'USDINR','USDKRW','USDMXN','USDNOK'
+        ]
+        for chave in chaves_necessarias:
+            if chave not in dados:
+                raise ValueError(f"Erro: chave '{chave}' não encontrada na resposta da API.")
+
+        taxas = {
+            "USD": 1.0,
+            "BRL": float(dados['USDBRL']['bid']),
+            "EUR": float(dados['USDEUR']['bid']),
+            "GBP": float(dados['USDGBP']['bid']),
+            "JPY": float(dados['USDJPY']['bid']),
+            "CNY": float(dados['USDCNY']['bid']),
+            "AUD": float(dados['USDAUD']['bid']),
+            "CAD": float(dados['USDCAD']['bid']),
+            "CHF": float(dados['USDCHF']['bid']),
+            "HKD": float(dados['USDHKD']['bid']),
+            "SGD": float(dados['USDSGD']['bid']),
+            "INR": float(dados['USDINR']['bid']),
+            "KRW": float(dados['USDKRW']['bid']),
+            "MXN": float(dados['USDMXN']['bid']),
+            "NOK": float(dados['USDNOK']['bid']),
+        }
+
+        return taxas
+
+    except Exception as e:
+        st.error(f"Erro ao obter taxas de câmbio: {e}")
+        return {"USD": 1.0}  # retorna valor padrão para evitar quebra
 
 
 # Simuladores simples
