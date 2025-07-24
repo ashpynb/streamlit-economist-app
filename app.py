@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+from datetime import datetime
 
 st.set_page_config(
     page_title="Fórmula Econômica",
@@ -192,54 +193,26 @@ def tela_crescimento():
     if st.button("Voltar para Macroeconômico"):
         st.session_state.tela = 'macro'
 
+@st.cache_data(ttl=86400)  # cache diário (86400 segundos = 24 horas)     #via chat gpt
+
 # Função para obter taxas de câmbio atualizadas via API (via chat gpt ajuda)
 def obter_taxas(): #finalizado com api e gpt
-    pares = "USD-BRL,USD-EUR,USD-GBP,USD-JPY,USD-CNY,USD-AUD,USD-CAD,USD-CHF,USD-HKD,USD-SGD,USD-INR,USD-KRW,USD-MXN,USD-NOK"
-    url = f"https://economia.awesomeapi.com.br/json/last/{pares}"
-
     try:
+        url = "https://api.frankfurter.app/latest?from=USD"
         resposta = requests.get(url, timeout=10)
-        resposta.raise_for_status()  # lança erro se status != 200
-
+        resposta.raise_for_status()
         dados = resposta.json()
 
-        # Verifica se todas as chaves necessárias estão presentes
-        chaves_necessarias = [
-            'USDBRL','USDEUR','USDGBP','USDJPY','USDCNY','USDAUD','USDCAD',
-            'USDCHF','USDHKD','USDSGD','USDINR','USDKRW','USDMXN','USDNOK'
-        ]
-        for chave in chaves_necessarias:
-            if chave not in dados:
-                raise ValueError(f"Chave '{chave}' não encontrada na resposta da API.")
-
-        taxas = {
-            "USD": 1.0,  # Base
-            "BRL": float(dados['USDBRL']['bid']),
-            "EUR": float(dados['USDEUR']['bid']),
-            "GBP": float(dados['USDGBP']['bid']),
-            "JPY": float(dados['USDJPY']['bid']),
-            "CNY": float(dados['USDCNY']['bid']),
-            "AUD": float(dados['USDAUD']['bid']),
-            "CAD": float(dados['USDCAD']['bid']),
-            "CHF": float(dados['USDCHF']['bid']),
-            "HKD": float(dados['USDHKD']['bid']),
-            "SGD": float(dados['USDSGD']['bid']),
-            "INR": float(dados['USDINR']['bid']),
-            "KRW": float(dados['USDKRW']['bid']),
-            "MXN": float(dados['USDMXN']['bid']),
-            "NOK": float(dados['USDNOK']['bid']),
-        }
+        # Frankfurter retorna um dicionário de taxas direto
+        taxas = {"USD": 1.0}  # base USD
+        for moeda, valor in dados['rates'].items():
+            taxas[moeda] = float(valor)
 
         return taxas
 
-    except requests.exceptions.RequestException as e:
-        st.error(f"Erro na requisição da API: {e}")
-    except ValueError as ve:
-        st.error(f"Erro nos dados da API: {ve}")
-    except Exception as erro:
-        st.error(f"Erro inesperado: {erro}")
-
-    return {"USD": 1.0}  # Retorno padrão para não quebrar o app
+    except Exception as e:
+        st.error(f"Erro ao buscar taxas: {e}")
+        return {"USD": 1.0}  # Fallback básico
 
 # Simuladores simples
 def tela_micro():
@@ -270,24 +243,26 @@ def tela_conv():   #finalizado
     if len(taxas_em_usd) <= 1:
         st.warning("Não foi possível obter as taxas de câmbio. Tente novamente mais tarde.")
         return
-    #armazenando as moedas
+    #armazenando as moedas #via chat gpt
+    # moedas suportadas pela nova API (pegas em https://www.frankfurter.app/docs/#section/Supported-currencies)
     nomes_moedas = {
         "USD": "Dólar (USD)",
         "EUR": "Euro (EUR)",
         "BRL": "Real (BRL)",
         "GBP": "Libra Esterlina (GBP)",
         "JPY": "Iene Japonês (JPY)",
-        "CNY": "Yuan Chinês (CNY)",
         "AUD": "Dólar Australiano (AUD)",
         "CAD": "Dólar Canadense (CAD)",
         "CHF": "Franco Suíço (CHF)",
-        "HKD": "Dólar de Hong Kong (HKD)",
-        "SGD": "Dólar de Singapura (SGD)",
+        "CNY": "Yuan Chinês (CNY)",
+        "MXN": "Peso Mexicano (MXN)",
+        "NOK": "Coroa Norueguesa (NOK)",
         "INR": "Rupia Indiana (INR)",
         "KRW": "Won Sul-Coreano (KRW)",
-        "MXN": "Peso Mexicano (MXN)",
-        "NOK": "Coroa Norueguesa (NOK)"}   #recomendação via chat gpt
-    
+        "HKD": "Dólar de Hong Kong (HKD)",
+        "SGD": "Dólar de Singapura (SGD)",
+    }
+
     moedas = list(nomes_moedas.values())
     siglas = list(nomes_moedas.keys())
 
