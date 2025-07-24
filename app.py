@@ -11,10 +11,15 @@ st.set_page_config(
     layout="wide"
 )
 
-logo = st.image("logo.square.png", width=80)
 #tela inicial 
 def opcoes_menu():  #feito
-    st.title(st.image("logo.square.png", width = 80), ":orange[Fórmula] :orange[Econômica]")
+    col1, col2 = st.columns([1, 8])  # ajuste os pesos conforme necessário
+
+    with col1:
+        st.image("logo.square.png", width=50)  # ou 70, se preferir
+
+    with col2:
+        st.markdown("### :orange[Fórmula] :orange[Econômica]")
     st.header('_Os melhores simuladores e cálculos econômicos estão aqui!_', divider = 'orange')
     #vou criar uma barra lateral para entrarem em contato, informações complementares e deixar o site bonito!
     with st.sidebar:
