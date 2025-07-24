@@ -29,13 +29,13 @@ def opcoes_menu():  #feito
         with col1:
             st.image("logo.square.png", width=90)  # ou 70, se preferir
         with col2:
-            st.title(":orange[Fórmula] :orange[Econômica]")
+            st.markdown(":orange[Fórmula] :orange[Econômica]")
         
         st.markdown("## 🪙 Bem-vindo!")
         st.link_button('Entre em Contato',"https://wa.me/5533998488760?text=Ol%C3%A1%21%20Vim%20pelo%20seu%20site%20F%C3%B3rmula%20Econ%C3%B4mica.%20Gostaria%20de%20mais%20informa%C3%A7%C3%B5es%21")
         st.markdown("---")
         st.caption("Versão 1.0 • 2025")
-        st.caption("© Fórmula Econômica -Todos os direitos reservados")
+        st.caption("© Fórmula Econômica - Todos os direitos reservados")
     opcao = st.selectbox("Escolha um Simulador:", 
                          ["Macroeconômico", "Microeconômico", "Financeiro", "Estatístico", "Conversor de Moeda"])
 
