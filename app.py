@@ -16,7 +16,7 @@ def opcoes_menu():  #feito
     col1, col2 = st.columns([1, 8])  # ajuste os pesos conforme necessário
 
     with col1:
-        st.image("logo.square.png", width=80)  # ou 70, se preferir
+        st.image("logo.square.png", width=90)  # ou 70, se preferir
 
     with col2:
         st.title(":orange[Fórmula] :orange[Econômica]")
