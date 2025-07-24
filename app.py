@@ -11,7 +11,7 @@ st.set_page_config(
     layout="wide"
 )
 
-logo = "logo.square.png"
+logo = st.image("logo.square.png")
 #tela inicial 
 def opcoes_menu():  #feito
     st.title(logo, ":orange[Fórmula] :orange[Econômica]")
