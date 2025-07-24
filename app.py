@@ -195,7 +195,7 @@ def tela_crescimento():
 # Função para obter taxas de câmbio atualizadas via API (via chat gpt ajuda)
 def obter_taxas(): #finalizado com api e gpt
     pares = "USD-BRL,USD-EUR,USD-GBP,USD-JPY,USD-CNY,USD-AUD,USD-CAD,USD-CHF,USD-HKD,USD-SGD,USD-INR,USD-KRW,USD-MXN,USD-NOK"
-    url = f"https://economia.awesomeapi.com.br/json/last/{pares}"
+    url = (f"https://economia.awesomeapi.com.br/json/last/{pares}")
     resposta = requests.get(url).json()
 
     taxas = {
