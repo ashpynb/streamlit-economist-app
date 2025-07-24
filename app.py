@@ -8,7 +8,7 @@ st.set_page_config(
 
 #tela inicial 
 def opcoes_menu():  #feito
-    st.title(':yellow[Fórmula] :yellow [Econômica]:')
+    st.markdown("<h1><span style='color:yellow;'>Fórmula</span> <span style='color:yellow;'>Econômica</span></h1>", unsafe_allow_html=True)
     st.header('_Os melhores simuladores e cálculos econômicos estão aqui!_', divider = 'orange')
     st.write_stream
     st.button
