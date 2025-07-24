@@ -21,10 +21,16 @@ def opcoes_menu():  #feito
     with col2:
         st.image("logo.rectangle.png", width=230)
 
+    
     st.header('_Os melhores simuladores e cálculos econômicos estão aqui!_', divider = 'orange')
     #vou criar uma barra lateral para entrarem em contato, informações complementares e deixar o site bonito!
     with st.sidebar:
-        st.sidebar.image("logo.square.png", width=70)
+        col1, col2 = st.columns([1, 8])
+        with col1:
+            st.image("logo.square.png", width=70)  # ou 70, se preferir
+        with col2:
+            st.title(":orange[Fórmula] :orange[Econômica]")
+        
         st.markdown("## 🪙 Bem-vindo!")
         st.markdown(":orange[Fórmula econômica!]")
         st.link_button('Entre em Contato',"https://wa.me/5533998488760?text=Ol%C3%A1%21%20Vim%20pelo%20seu%20site%20F%C3%B3rmula%20Econ%C3%B4mica.%20Gostaria%20de%20mais%20informa%C3%A7%C3%B5es%21")
@@ -45,8 +51,7 @@ def opcoes_menu():  #feito
             st.session_state.tela = 'est'
         elif opcao == "Conversor de Moeda":
             st.session_state.tela = 'conv'
-    st.write('Feito por Ash Machado')
-    
+
 
 #menu macroeconômico
 def tela_macro(): #feito
