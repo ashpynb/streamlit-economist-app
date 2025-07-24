@@ -19,7 +19,7 @@ def opcoes_menu():  #feito
         st.image("logo.square.png", width=90)  # ou 70, se preferir
 
     with col2:
-        st.title(":orange[Fórmula] :orange[Econômica]")
+        st.image("logo.rectangle.png", width=90)
     st.header('_Os melhores simuladores e cálculos econômicos estão aqui!_', divider = 'orange')
     #vou criar uma barra lateral para entrarem em contato, informações complementares e deixar o site bonito!
     with st.sidebar:
