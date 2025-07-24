@@ -14,6 +14,7 @@ st.set_page_config(
 
 #tela inicial 
 def opcoes_menu():  #feito
+    logo = Image.open("logo.square.png")
     st.image(logo, use_column_width=True)
     st.title(":orange[Fórmula] :orange[Econômica]")
     st.header('_Os melhores simuladores e cálculos econômicos estão aqui!_', divider = 'orange')
