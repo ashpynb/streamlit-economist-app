@@ -319,9 +319,9 @@ def tela_conv():   #finalizado
 def tela_sobre():
     st.header(':orange[Sobre o Projeto]')
     with st.expander():
-        st.write('O projeto foi desenvolvido inteiramente em Python, após a desenvolvedora ter aulas de Python como eletiva na Universidade Federal de Juiz de Fora - Campus Governador Valadares. \n')
-        st.write('Muitas vezes há uma necessidade dos alunos conferirem as respostas de um exercício simples, tanto quanto os professores também em confirmar o gabarito das listas de exercício")
-        st.write('Dessa forma, esse projeto veio como uma ferramenta para auxiliar quaisquer pessoas que precisem dos cálculos econômicos)
+        st.write('O projeto foi desenvolvido inteiramente em Python, após a desenvolvedora ter aulas de Python como eletiva na Universidade Federal de Juiz de Fora - Campus Governador Valadares.')
+        st.write('Muitas vezes há uma necessidade dos alunos conferirem as respostas de um exercício simples, tanto quanto os professores também em confirmar o gabarito das listas de exercício')
+        st.write('Dessa forma, esse projeto veio como uma ferramenta para auxiliar quaisquer pessoas que precisem dos cálculos econômicos')
     if st.button('Voltar ao Menu'):
             st.session_state.tela = 'menu'    
 
