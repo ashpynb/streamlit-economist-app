@@ -256,7 +256,6 @@ def tela_fin():
 def tela_est():
     st.title('Simulador Estatístico')
     st.subheader('Insira seus dados e selecione as análises desejadas', divider='orange')
-    st.markdown('---')
     #inputs aqui
     st.markdown("#### 1. Insira sua amostra de dados") 
     numeros_str = st.text_area(
@@ -269,7 +268,7 @@ def tela_est():
     st.markdown("#### 2. Selecione os cálculos")
     opcoes_selecionadas = st.multiselect(
         "Escolha uma ou mais análises estatísticas para realizar:",
-        opcao_est2 = lista_est,
+        options = lista_est,
         placeholder="Clique para ver as opções"
     )
 
