@@ -1,3 +1,5 @@
 streamlit
 datetime
 requests
+numpy
+pandas
