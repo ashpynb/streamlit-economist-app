@@ -3,7 +3,7 @@ import requests
 from datetime import datetime
 import pandas as pd
 import numpy as np
-import statistics as stats
+import statistics 
 
 st.set_page_config(
     page_title="Fórmula Econômica",
