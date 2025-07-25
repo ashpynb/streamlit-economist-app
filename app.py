@@ -1,6 +1,8 @@
 import streamlit as st
 import requests
 from datetime import datetime
+import pandas as pd
+import numpy as np
 
 st.set_page_config(
     page_title="Fórmula Econômica",
@@ -253,7 +255,19 @@ def tela_fin():
 def tela_est():
     st.title('Simulador Estatístico')
     st.write('Não fiz ainda, desculpa')
+    st.subheader('Calcule as principais fórmulas estatísticas aqui!')
+    st.markdown('---')
+    #aqui adiciona os valores que a pessoa precisa, tanto dos x's, quanto dos y's
+    lista_est = ['Somatório', 'Produtório', 'Média Aritmética', 'Média Ponderada', 'Mediana', 'Moda', 'Amplitude', 'Variância', 'Desvio Padrão', 'Coeficiente de Variação', 'Quartis', 'Coeficiente de Correlação de Pearson (r)', 'Frequência Absoluta', 'Frequência Relativa', 'Distribuição Normal (Z)']
+    opcao_est = st.checkbox(lista_est)
 
+    if st.button("Avançar"):
+        if opcao_est == "Somatório":
+            with st.success('Somatório:'):
+                st.write('cálculo aqui...')
+        elif opcao_est == "Produtório":
+            with st.expander('Produtório:'):
+                st.write('Produtório')
     if st.button('Voltar ao Menu'):
         st.session_state.tela = 'menu'
 
