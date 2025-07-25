@@ -324,7 +324,8 @@ def tela_sobre():
         st.write('Dessa forma, esse projeto veio como uma ferramenta para auxiliar quaisquer pessoas que precisem dos cálculos econômicos, conversor de moedas, ferramentas rápidas e práticas...')
         st.write('É óbvio que pretendo expandir esse aplicativo ao máximo, adicionar outras bibliotecas, fazer com que a maior parte dos cálculos econômicos e vivências desse curso possam ser calculadas aqui')
         st.write('Porém será uma longa jornada de erros, raivas e desafios, e acima de tudo: empenho!')
-        st.caption('Detalhe: apenas 10% do projeto foi utilizado com auxílio de IA. Apenas para ajuda com integração de API, tratamentos básicos de erros e caminhos para que auxiliar e garantir que a lógica seja a melhor possível')
+        st.markdown('---')
+        st.caption('Detalhe: apenas 10% do projeto foi utilizado com auxílio de IA. Apenas para ajuda com integração de API, tratamentos básicos de erros e caminhos para auxiliar e garantir que a lógica da programação seja a melhor possível')
     if st.button('Voltar ao Menu'):
             st.session_state.tela = 'menu'    
 
