@@ -238,21 +238,21 @@ def obter_taxas(): #finalizado com api e gpt
 # Simuladores simples
 def tela_micro():
     st.title('Simulador Microeconômico')
-    st.write('simulador micro...')
+    st.write('Não fiz ainda, desculpa')
 
     if st.button('Voltar ao Menu'):
         st.session_state.tela = 'menu'
 
 def tela_fin():
     st.title('Simulador Financeiro')
-    st.write('simulador financeiro...')
+    st.write('Não fiz ainda, desculpa')
 
     if st.button('Voltar ao Menu'):
         st.session_state.tela = 'menu'
 
 def tela_est():
     st.title('Simulador Estatístico')
-    st.write('simulador estatístico...')
+    st.write('Não fiz ainda, desculpa')
 
     if st.button('Voltar ao Menu'):
         st.session_state.tela = 'menu'
