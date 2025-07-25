@@ -319,11 +319,11 @@ def tela_conv():   #finalizado
 def tela_sobre():
     st.header(':orange[Sobre o Projeto]')
     with st.expander('Comentário da desenvolvedora'):
-        st.write('O projeto foi desenvolvido inteiramente em Python, após a desenvolvedora ter aulas de Python como eletiva na Universidade Federal de Juiz de Fora - Campus Governador Valadares.')
-        st.write('Muitas vezes há uma necessidade dos alunos conferirem as respostas de um exercício simples, tanto quanto os professores também em confirmar o gabarito das listas de exercício')
-        st.write('Dessa forma, esse projeto veio como uma ferramenta para auxiliar quaisquer pessoas que precisem dos cálculos econômicos, conversor de moedas, ferramentas rápidas e práticas...')
-        st.write('É óbvio que pretendo expandir esse aplicativo ao máximo, adicionar outras bibliotecas, fazer com que a maior parte dos cálculos econômicos e vivências desse curso possam ser calculadas aqui')
-        st.write('Porém será uma longa jornada de erros, raivas e desafios, e acima de tudo: empenho!')
+        st.write('🔹 O projeto foi desenvolvido inteiramente em Python, após a desenvolvedora ter aulas de Python como eletiva na Universidade Federal de Juiz de Fora - Campus Governador Valadares.')
+        st.write('🔹 Muitas vezes há uma necessidade dos alunos conferirem as respostas de um exercício simples, tanto quanto os professores também em confirmar o gabarito das listas de exercício')
+        st.write('🔹 Dessa forma, esse projeto veio como uma ferramenta para auxiliar quaisquer pessoas que precisem dos cálculos econômicos, conversor de moedas, ferramentas rápidas e práticas...')
+        st.write('🔹 É óbvio que pretendo expandir esse aplicativo ao máximo, adicionar outras bibliotecas, fazer com que a maior parte dos cálculos econômicos e vivências desse curso possam ser calculadas aqui')
+        st.write('🔹 Porém será uma longa jornada de erros, raivas e desafios, e acima de tudo: empenho!')
         st.markdown('---')
         st.caption('Detalhe: apenas 10% do projeto foi utilizado com auxílio de IA. Apenas para ajuda com integração de API, tratamentos básicos de erros e caminhos para auxiliar e garantir que a lógica da programação seja a melhor possível')
     if st.button('Voltar ao Menu'):
