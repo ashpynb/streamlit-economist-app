@@ -253,18 +253,36 @@ def tela_fin():
     if st.button('Voltar ao Menu'):
         st.session_state.tela = 'menu'
 
-def tela_est():
+def tela_est():  
     st.title('Simulador Estatístico')
     st.subheader('Insira seus dados e selecione as análises desejadas', divider='orange')
     #inputs aqui
     st.markdown("#### 1. Insira sua amostra de dados") 
-    numeros_str = st.text_area(
-        "Cole ou digite seus valores. Separe os números por `espaço`, `vírgula` ou `ponto e vírgula`:",
-        placeholder="Ex: 15.5 22 8 34,7 22 51; 19",
-        height=150
-    )
-    lista_est = [
-        'Somatório', 'Produtório', 'Média Aritmética', 'Média Ponderada', 'Mediana', 'Moda', 'Amplitude', 'Variância', 'Desvio Padrão', 'Coeficiente de Variação', 'Quartis', 'Coeficiente de Correlação de Pearson (r)', 'Frequência Absoluta', 'Frequência Relativa', 'Distribuição Normal (Z)']
+    df = pd.DataFrame([
+       {"X": "500", "Y": "200"},
+        {"X": "600", "Y": "100"},
+        {"X": "...", "Y": "..."}])
+    st.warning("_A tabela Y é opcional_")
+    edited_df = st.data_editor(df, num_rows="dynamic")
+
+    favorite_command = edited_df.loc[edited_df["rating"].idxmax()]["command"]
+    st.markdown(f"Your favorite command is **{favorite_command}** 🎈")
+
+    lista_est = ['Somatório', 
+                 'Produtório', 
+                 'Média Aritmética', 
+                 'Média Ponderada', 
+                 'Mediana', 
+                 'Moda', 
+                 'Amplitude', 
+                 'Variância', 
+                 'Desvio Padrão', 
+                 'Coeficiente de Variação', 
+                 'Quartis', 
+                 'Coeficiente de Correlação de Pearson (r)', 
+                 'Frequência Absoluta', 
+                 'Frequência Relativa', 
+                 'Distribuição Normal (Z)']
     st.markdown("#### 2. Selecione os cálculos")
     opcoes_selecionadas = st.multiselect(
         "Escolha uma ou mais análises estatísticas para realizar:",
@@ -273,71 +291,6 @@ def tela_est():
     )
 
     st.markdown("---")
-
-    if st.button("Calcular"):
-        if not numeros_str or not opcoes_selecionadas:
-            st.warning("Por favor, insira seus dados e selecione pelo menos um cálculo antes de continuar.")
-        else:
-            try:
-                # Limpa e converte a string de entrada para uma lista de números (float)
-                numeros_limpos = numeros_str.replace(',', '.').replace(';', ' ').split()
-                valores = [float(n) for n in numeros_limpos]
-                
-                # Converte para um array NumPy para cálculos eficientes
-                valores_np = np.array(valores)
-                st.subheader("Resultados das Análises", divider="blue")
-
-                # --- LÓGICA DE EXIBIÇÃO ---
-                # Usamos 'if' para cada opção, não 'elif', pois queremos que múltiplos blocos possam ser executados.
-                
-                if 'Quantidade de Elementos (n)' in opcoes_selecionadas:
-                    st.metric(label="Quantidade de Elementos (n)", value=len(valores_np))
-                
-                if 'Somatório' in opcoes_selecionadas:
-                    soma = np.sum(valores_np)
-                    st.metric(label="Somatório (Σx)", value=f"{soma:.2f}")
-
-                if 'Média Aritmética' in opcoes_selecionadas:
-                    media = np.mean(valores_np)
-                    st.metric(label="Média Aritmética", value=f"{media:.2f}")
-
-                if 'Mediana' in opcoes_selecionadas:
-                    mediana = np.median(valores_np)
-                    st.metric(label="Mediana", value=f"{mediana:.2f}")
-                
-                if 'Moda' in opcoes_selecionadas:
-                    try:
-                        moda = statistics.mode(valores)
-                        st.metric(label="Moda", value=f"{moda:.2f}")
-                    except statistics.StatisticsError:
-                        st.metric(label="Moda", value="Amodal (não há moda única)")
-
-                if 'Amplitude Total' in opcoes_selecionadas:
-                    amplitude = np.ptp(valores_np) # ptp = Peak-to-Peak
-                    st.metric(label="Amplitude Total (Máx - Mín)", value=f"{amplitude:.2f}")
-
-                if 'Variância (Amostral)' in opcoes_selecionadas:
-                    # ddof=1 calcula a variância amostral (divisão por n-1), que é a mais comum.
-                    variancia = np.var(valores_np, ddof=1)
-                    st.metric(label="Variância (Amostral)", value=f"{variancia:.4f}")
-
-                if 'Desvio Padrão (Amostral)' in opcoes_selecionadas:
-                    desvio_padrao = np.std(valores_np, ddof=1)
-                    st.metric(label="Desvio Padrão (Amostral)", value=f"{desvio_padrao:.4f}")
-
-                if 'Coeficiente de Variação' in opcoes_selecionadas:
-                    media = np.mean(valores_np)
-                    desvio_padrao = np.std(valores_np, ddof=1)
-                    if media != 0:
-                        cv = (desvio_padrao / media) * 100
-                        st.metric(label="Coeficiente de Variação (CV)", value=f"{cv:.2f}%")
-                    else:
-                        st.metric(label="Coeficiente de Variação (CV)", value="Não calculável (média é zero)")
-
-            except ValueError:
-                st.error("Erro nos dados de entrada. Verifique se você inseriu apenas números válidos.")
-            except Exception as e:
-                st.error(f"Ocorreu um erro inesperado: {e}")
 
     if st.button('Voltar ao Menu'):
         st.session_state.tela = 'menu'
