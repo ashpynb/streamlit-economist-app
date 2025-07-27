@@ -292,15 +292,10 @@ def tela_est():
             return
         st.markdown("### Resultados:")
         if "Somatório" in opcoes:
-            with st.expander:
-                somatoriox = col_x.sum()
-                st.write(f"Somatório: {somatoriox:.2f}")
+            st.write(f"**Somatório X:** {col_x.sum():.2f}")
             if not col_y.empty:
-                with st.expander:
-                    somatoriox = col_x.sum()
-                    somatorioy = col_y.sum()
-                    st.write(f"Somatório X: {somatoriox:.2f}")
-                    st.write(f"Somatório Y: {somatorioy:.2f}")
+                st.write(f"**Somatório Y:** {col_y.sum():.2f}")
+
             
 
     st.markdown("---")
