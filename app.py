@@ -4,6 +4,7 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 import statistics 
+import math
 
 st.set_page_config(
     page_title="Fórmula Econômica",
@@ -293,8 +294,15 @@ def tela_est():
         st.markdown("### Resultados:")
         if "Somatório" in opcoes:
             st.write(f"**Somatório X:** {col_x.sum():.2f}")
+            st.write(f"**Somatório X²:** {(col_x**2).sum():.2f}")
             if not col_y.empty:
                 st.write(f"**Somatório Y:** {col_y.sum():.2f}")
+                st.write(f"**Somatório XY:** {(col_y * col_x).sum():.2f}")
+        if "Produtório" in opcoes:
+            st.write(f"**Produtório X:** {math.prod(col_x):.2f}")
+            if not col_y.empty:
+                st.write(f"**Produtório Y:** {math.prod(col_y):.2f}")
+        
 
             
 
