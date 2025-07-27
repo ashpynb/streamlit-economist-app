@@ -307,7 +307,7 @@ def tela_est():
                 if not col_y.empty:
                     st.write(f"**Produtório Y:** {math.prod(col_y):.2f}")
                     st.write(f"**Produtório Y²:** {math.prod(col_y**2):.2f}")
-                    st.wirte(f"**Produtório de XY:** {math.prod(col_x * col_y):.2f}")
+                    st.write(f"**Produtório de XY:** {math.prod(col_x * col_y):.2f}")
         if "Média Aritmética" in opcoes:
             with st.expander("Médias Aritméticas:"):
                 n_x = (len(col_x))
@@ -474,4 +474,3 @@ def main():
 #loop 
 if __name__ == "__main__":
     main()
-    
