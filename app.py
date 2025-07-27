@@ -293,11 +293,13 @@ def tela_est():
             return
         st.markdown("### Resultados:")
         if "Somatório" in opcoes:
-            st.write(f"**Somatório X:** {col_x.sum():.2f}")
-            st.write(f"**Somatório X²:** {(col_x**2).sum():.2f}")
-            if not col_y.empty:
-                st.write(f"**Somatório Y:** {col_y.sum():.2f}")
-                st.write(f"**Somatório XY:** {(col_y * col_x).sum():.2f}")
+            with st.expander("Somatórios:"):
+                st.write(f"**Somatório X:** {col_x.sum():.2f}")
+                st.write(f"**Somatório X²:** {(col_x**2).sum():.2f}")
+                if not col_y.empty:
+                    st.write(f"**Somatório Y:** {col_y.sum():.2f}")
+                    st.write(f"**Somatório Y²:** {(col_y**2).sum():.2f}")
+                    st.write(f"**Somatório XY:** {(col_y * col_x).sum():.2f}")
         if "Produtório" in opcoes:
             st.write(f"**Produtório X:** {math.prod(col_x):.2f}")
             if not col_y.empty:
