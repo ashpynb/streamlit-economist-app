@@ -293,35 +293,35 @@ def tela_est():
         st.markdown("### Resultados:")
         if "Somatório" in opcoes:
             with st.expander("Somatórios:"):
-                st.metric(f"**Somatório X:** {col_x.sum():.2f}")
-                st.metric(f"**Somatório X²:** {(col_x**2).sum():.2f}")
+                st.metric(f"Somatório X:", f"{col_x.sum():.2f}")
+                st.metric(f"Somatório X²:", f"{(col_x**2).sum():.2f}")
                 if not col_y.empty:
-                    st.metric(f"**Somatório Y:** {col_y.sum():.2f}")
-                    st.metric(f"**Somatório Y²:** {(col_y**2).sum():.2f}")
-                    st.metric(f"**Somatório XY:** {(col_y * col_x).sum():.2f}")
+                    st.metric(f"Somatório Y:", f"{col_y.sum():.2f}")
+                    st.metric(f"Somatório Y²:", f"{(col_y**2).sum():.2f}")
+                    st.metric(f"Somatório XY:", f"{(col_y * col_x).sum():.2f}")
         if "Produtório" in opcoes:
             with st.expander("Produtórios:"):
-                st.metric(f"**Produtório X:** {math.prod(col_x):.2f}")
-                st.metric(f"**Produtório X²:** {math.prod(col_x**2):.2f}")
+                st.metric(f"Produtório X:", f"{math.prod(col_x):.2f}")
+                st.metric(f"Produtório X²:", f"{math.prod(col_x**2):.2f}")
                 if not col_y.empty:
-                    st.metric(f"**Produtório Y:** {math.prod(col_y):.2f}")
-                    st.metric(f"**Produtório Y²:** {math.prod(col_y**2):.2f}")
-                    st.metric(f"**Produtório de XY:** {math.prod(col_x * col_y):.2f}")
+                    st.metric(f"Produtório Y:", f"{math.prod(col_y):.2f}")
+                    st.metric(f"Produtório Y²:", f"{math.prod(col_y**2):.2f}")
+                    st.metric(f"Produtório de XY:", f"{math.prod(col_x * col_y):.2f}")
         if "Média Aritmética" in opcoes:
             with st.expander("Médias Aritméticas:"):
-                st.metric(f"**Média Aritmética de X:** {col_x.mean():.2f}")
+                st.metric(f"Média Aritmética de X: {col_x.mean():.2f}")
                 if not col_y.empty:
-                    st.metric(f"**Média Aritmédica de Y:** {col_y.mean():.2f}")
-                    st.metric(f"**Média Aritmédica de X + Y:** {((col_y.sum() + col_x.sum())/(n_y + n_x)):.2f}")
+                    st.metric(f"Média Aritmédica de Y: {col_y.mean():.2f}")
+                    st.metric(f"Média Aritmédica de X + Y: {((col_y.sum() + col_x.sum())/(n_y + n_x)):.2f}")
         if "Média Ponderada" in opcoes:
             with st.expander('Média Ponderada'):
                 if col_y.empty:
                     st.error("Utiliza-se X como valor e Y como peso")
                 if not col_y.empty:
-                    st.metric(f"**Média Ponderada de X com peso Y:** {(((col_y * col_x).sum())/(col_y).sum()):.2f}")
+                    st.metric(f"Média Ponderada de X com peso Y: {(((col_y * col_x).sum())/(col_y).sum()):.2f}")
         if "Mediana" in opcoes:
             with st.expander("Medianas"):
-                st.metric(f"**Mediana X:** {col_x.median():.2f}")
+                st.metric(f"Mediana X: {col_x.median():.2f}")
                 if not col_y.empty:
                     st.metric(f"**Mediana Y:** {col_y.median():.2f}")
         if "Moda" in opcoes:
