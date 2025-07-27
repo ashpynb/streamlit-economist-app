@@ -258,12 +258,11 @@ def tela_est():
     st.subheader('Insira seus dados e selecione as análises desejadas', divider='orange')
     #inputs aqui
     st.markdown("#### 1. Insira sua amostra de dados") 
-    df = pd.DataFrame([
-       {"X": "500", "Y": ""},
-        {"X": "...", "Y": ""},
-        {"X": "", "Y": ""}])
-    st.warning("_A tabela Y é opcional, porém se certifique que não há nenhum dado nesta coluna_")
-    edited_df = st.data_editor(df)
+    df = pd.DataFrame({
+        "X": [500.0, None, None],
+        "Y": [None, None, None]})
+    st.warning("_A coluna Y é opcional. Se não for usar, deixe em branco._")
+    edited_df = st.data_editor(df, num_rows="dynamic")
     
 
     lista_est = ['Somatório', 
@@ -282,18 +281,27 @@ def tela_est():
                  'Frequência Relativa', 
                  'Distribuição Normal (Z)']
     st.markdown("#### 2. Selecione os cálculos")
-    opcoes_selecionadas = st.multiselect(
-        "Escolha uma ou mais análises estatísticas para realizar:",
-        options = lista_est,
-        placeholder="Clique para ver as opções"
-    )
-    if st.button('Calcular:'):
-        if not opcoes_selecionadas and not edited_df: #caso a pessoa nao tenha selecionado nada na lista est e também não tenha inserido algum dado
-            st.warning('Erro! Certifique-se que preencheu a tabela X toda e selecionou o que deseja calcular:')
-        else:
-            match opcoes_selecionadas:
-                case 'Somátorio':
-                    print()
+    opcoes = st.multiselect("Escolha uma ou mais análises estatísticas para calcular:", lista_est)
+    
+    if st.button('Calcular'):
+        #limpeza
+        col_x = pd.to_numeric(edited_df["X"], errors="coerce").dropna()
+        col_y = pd.to_numeric(edited_df["Y"], errors="coerce").dropna()  #pedi ajuda pro chat gpt ajudar a limpar
+        if col_x.empty:
+            st.error("⚠️ Você precisa preencher ao menos um número válido na coluna X.")
+            return
+        st.markdown("### Resultados:")
+        if "Somatório" in opcoes:
+            with st.expander:
+                somatoriox = col_x.sum()
+                st.write(f"Somatório: {somatoriox:.2f}")
+            if not col_y.empty:
+                with st.expander:
+                    somatoriox = col_x.sum()
+                    somatorioy = col_y.sum()
+                    st.write(f"Somatório X: {somatoriox:.2f}")
+                    st.write(f"Somatório Y: {somatorioy:.2f}")
+            
 
     st.markdown("---")
 
