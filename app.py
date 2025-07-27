@@ -309,8 +309,10 @@ def tela_est():
                     st.metric(f"Produtório de XY:", f"{math.prod(col_x * col_y):.2f}")
         if "Média Aritmética" in opcoes:
             with st.expander("Médias Aritméticas:"):
+                n_x = len(col_x)
                 st.metric(f"Média Aritmética de X:", f"{col_x.mean():.2f}")
                 if not col_y.empty:
+                    n_y = len(col_y)
                     st.metric(f"Média Aritmédica de Y:", f"{col_y.mean():.2f}")
                     st.metric(f"Média Aritmédica de X + Y:", f"{((col_y.sum() + col_x.sum())/(n_y + n_x)):.2f}")
         if "Média Ponderada" in opcoes:
