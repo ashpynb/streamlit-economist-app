@@ -301,10 +301,17 @@ def tela_est():
                     st.write(f"**Somatório Y²:** {(col_y**2).sum():.2f}")
                     st.write(f"**Somatório XY:** {(col_y * col_x).sum():.2f}")
         if "Produtório" in opcoes:
-            st.write(f"**Produtório X:** {math.prod(col_x):.2f}")
-            if not col_y.empty:
-                st.write(f"**Produtório Y:** {math.prod(col_y):.2f}")
-        
+            with st.expander("Produtórios:"):
+                st.write(f"**Produtório X:** {math.prod(col_x):.2f}")
+                st.write(f"**Produtório X²:** {math.prod(col_x**2):.2f}")
+                if not col_y.empty:
+                    st.write(f"**Produtório Y:** {math.prod(col_y):.2f}")
+                    st.write(f"**Produtório Y²:** {math.prod(col_y**2):.2f}")
+                    st.wirte(f"**Produtório de XY:** {math.prod(col_x * col_y):.2f}")
+        if "Média Aritmética" in opcoes:
+            with st.expander("Médias Aritméticas:"):
+                st.write(len(col_x))
+            
 
             
 
@@ -424,3 +431,4 @@ def main():
 #loop 
 if __name__ == "__main__":
     main()
+    
