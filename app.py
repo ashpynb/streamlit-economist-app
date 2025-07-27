@@ -279,8 +279,7 @@ def tela_est():
                  'Quartis', 
                  'Coeficiente de Correlação de Pearson (r)', 
                  'Frequência Absoluta', 
-                 'Frequência Relativa', 
-                 'Distribuição Normal (Z)']
+                 'Frequência Relativa']
     st.markdown("#### 2. Selecione os cálculos")
     opcoes = st.multiselect("Escolha uma ou mais análises estatísticas para calcular:", lista_est)
     
@@ -311,10 +310,10 @@ def tela_est():
         if "Média Aritmética" in opcoes:
             with st.expander("Médias Aritméticas:"):
                 n_x = (len(col_x))
-                st.write(f"**Média Aritmética de X:** {((col_x.sum())/n_x):.2f}")
+                st.write(f"**Média Aritmética de X:** {col_x.mean():.2f}")
                 if not col_y.empty:
                     n_y = (len(col_y))
-                    st.write(f"**Média Aritmédica de Y:** {((col_y.sum())/n_y):.2f}")
+                    st.write(f"**Média Aritmédica de Y:** {col_y.mean():.2f}")
                     st.write(f"**Média Aritmédica de X + Y:** {((col_y.sum() + col_x.sum())/(n_y + n_x)):.2f}")
         if "Média Ponderada" in opcoes:
             with st.expander('Média Ponderada'):
@@ -329,35 +328,46 @@ def tela_est():
                     st.write(f"**Mediana Y:** {col_y.median():.2f}")
         if "Moda" in opcoes:
             with st.expander("Modas"):
+                # CORREÇÃO: Converte a série de modas para uma lista e depois para uma string  #ajuda do chatgpt pq estava retornando lista
                 modax = col_x.mode()
                 if not modax.empty:
-                    st.write(f"**Moda de X: **{modax}")
-                    if not col_y.empty:
-                        moday = col_y.mode()
-                        if not moday.empty:
-                            st.write(f"**Moda de Y:** {moday}")
+                    modax_str = ', '.join([str(v) for v in modax])
+                    st.write(f"**Moda de X:** {modax_str}")
+                if not col_y.empty:
+                    moday = col_y.mode()
+                    if not moday.empty:
+                        moday_str = ', '.join([str(v) for v in moday])
+                        st.write(f"**Moda de Y:** {moday_str}")
+
         if "Amplitude" in opcoes:
             with st.expander("Amplitude"):
-                xmax = col_x.max()
-                xmin = col_x.min()
-                amplitudex = xmax - xmin
+                amplitudex = col_x.max() - col_x.min()
                 st.write(f"**Amplitude de X: {amplitudex:.2f}")
                 if not col_y.empty:
-                    ymax = col_y.max()
-                    ymin = col_y.min()
-                    amplitudey = ymax - ymin
+                    amplitudey = col_y.max() - col_y.min()
                     st.write(f"**Amplitude de Y:** {amplitudey:.2f}")
         if "Variância" in opcoes:
-             with st.expander("Variância:"):
-                variancia_amosx = col_x.var()
-                variancia_popx = col_x.var(ddof = 0)
-                st.write(f"**Variância Amostral de X:**{variancia_amosx:.2f}")
-                st.write(f"**Variância Populacional de X:**{variancia_popx:.2f}")
+             with st.expander("Variâncias"):
+                st.write(f"**Variância Amostral de X:** {col_x.var():.2f}")
+                st.write(f"**Variância Populacional de X:** {col_x.var(ddof=0):.2f}")
                 if not col_y.empty:
-                    variancia_amosy = col_y.var()
-                    variancia_popy = col_y.var(ddof = 0)   
-                    st.write(f"**Variância amostral de Y:**{variancia_amosy:.2f}")
-                    st.write(f"**Variância populacional de Y:**{variancia_popy:.2f}")               
+                    st.write(f"**Variância Amostral de Y** {col_y.var():.2f}")
+                    st.write(f"**Variância Populacional de Y** {col_y.var(ddof=0):.2f}")
+        if 'Desvio Padrão' in opcoes:
+            with st.expander("Desvio Padrão:"):
+                st.metric("Desvio Padrão Amostral de X", f"{col_x.std():.2f}")
+                st.metric("Desvio Padrão Populacional de X", f"{col_x.std(ddof=0):.2f}")
+                if not col_y.empty:
+                    st.metric("Desvio Padrão Amostral de Y", f"{col_y.std():.2f}")
+                    st.metric("Desvio Padrão Populacional de Y", f"{col_y.std(ddof=0):.2f}")
+        if "Coeficiente de Variação" in opcoes:
+            with st.expander("Coeficientes de Variação (%)"):
+                cv_x = (col_x.std() / col_x.mean()) * 100
+                st.metric("CV de X", f"{cv_x:.2f}%")
+                if not col_y.empty and col_y.mean() != 0:
+                    cv_y = (col_y.std() / col_y.mean()) * 100
+                    st.metric("CV de Y", f"{cv_y:.2f}%")
+               
     st.markdown("---")
 
     if st.button('Voltar ao Menu'):
