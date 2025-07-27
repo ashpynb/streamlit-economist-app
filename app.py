@@ -269,7 +269,7 @@ def tela_est():
     lista_est = ['Somatório', 
                  'Produtório', 
                  'Média Aritmética',
-                 'Média Ponderada'
+                 'Média Ponderada',
                  'Mediana', 
                  'Moda', 
                  'Amplitude', 
@@ -474,3 +474,4 @@ def main():
 #loop 
 if __name__ == "__main__":
     main()
+    
