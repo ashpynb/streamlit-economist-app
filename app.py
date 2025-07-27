@@ -309,47 +309,47 @@ def tela_est():
                     st.metric(f"Produtório de XY:", f"{math.prod(col_x * col_y):.2f}")
         if "Média Aritmética" in opcoes:
             with st.expander("Médias Aritméticas:"):
-                st.metric(f"Média Aritmética de X: {col_x.mean():.2f}")
+                st.metric(f"Média Aritmética de X:", f"{col_x.mean():.2f}")
                 if not col_y.empty:
-                    st.metric(f"Média Aritmédica de Y: {col_y.mean():.2f}")
-                    st.metric(f"Média Aritmédica de X + Y: {((col_y.sum() + col_x.sum())/(n_y + n_x)):.2f}")
+                    st.metric(f"Média Aritmédica de Y:", f"{col_y.mean():.2f}")
+                    st.metric(f"Média Aritmédica de X + Y:", f"{((col_y.sum() + col_x.sum())/(n_y + n_x)):.2f}")
         if "Média Ponderada" in opcoes:
             with st.expander('Média Ponderada'):
                 if col_y.empty:
                     st.error("Utiliza-se X como valor e Y como peso")
                 if not col_y.empty:
-                    st.metric(f"Média Ponderada de X com peso Y: {(((col_y * col_x).sum())/(col_y).sum()):.2f}")
+                    st.metric(f"Média Ponderada de X com peso Y:", f"{(((col_y * col_x).sum())/(col_y).sum()):.2f}")
         if "Mediana" in opcoes:
             with st.expander("Medianas"):
-                st.metric(f"Mediana X: {col_x.median():.2f}")
+                st.metric(f"Mediana X:", f"{col_x.median():.2f}")
                 if not col_y.empty:
-                    st.metric(f"**Mediana Y:** {col_y.median():.2f}")
+                    st.metric(f"Mediana Y:", f"{col_y.median():.2f}")
         if "Moda" in opcoes:
             with st.expander("Modas"):
                 # CORREÇÃO: Converte a série de modas para uma lista e depois para uma string  #ajuda do chatgpt pq estava retornando lista
                 modax = col_x.mode()
                 if not modax.empty:
                     modax_str = ', '.join([str(v) for v in modax])
-                    st.metric(f"**Moda de X:** {modax_str}")
+                    st.metric(f"Moda de X:", f"{modax_str}")
                 if not col_y.empty:
                     moday = col_y.mode()
                     if not moday.empty:
                         moday_str = ', '.join([str(v) for v in moday])
-                        st.metric(f"**Moda de Y:** {moday_str}")
+                        st.metric(f"Moda de Y:", f"{moday_str}")
         if "Amplitude" in opcoes:
             with st.expander("Amplitude"):
                 amplitudex = col_x.max() - col_x.min()
-                st.metric(f"**Amplitude de X: {amplitudex:.2f}")
+                st.metric(f"Amplitude de X:", f"{amplitudex:.2f}")
                 if not col_y.empty:
                     amplitudey = col_y.max() - col_y.min()
-                    st.metric(f"**Amplitude de Y:** {amplitudey:.2f}")
+                    st.metric(f"Amplitude de Y:", f"{amplitudey:.2f}")
         if "Variância" in opcoes:
              with st.expander("Variâncias"):
-                st.metric(f"**Variância Amostral de X:** {col_x.var():.2f}")
-                st.metric(f"**Variância Populacional de X:** {col_x.var(ddof=0):.2f}")
+                st.metric(f"Variância Amostral de X:", f"{col_x.var():.2f}")
+                st.metric(f"Variância Populacional de X:", f"{col_x.var(ddof=0):.2f}")
                 if not col_y.empty:
-                    st.metric(f"**Variância Amostral de Y** {col_y.var():.2f}")
-                    st.metric(f"**Variância Populacional de Y** {col_y.var(ddof=0):.2f}")
+                    st.metric(f"Variância Amostral de Y", f"{col_y.var():.2f}")
+                    st.metric(f"Variância Populacional de Y", f"{col_y.var(ddof=0):.2f}")
         if 'Desvio Padrão' in opcoes:
             with st.expander("Desvio Padrão:"):
                 st.metric("Desvio Padrão Amostral de X", f"{col_x.std():.2f}")
