@@ -293,7 +293,7 @@ def tela_est():
         else:
             match opcoes_selecionadas:
                 case 'Somátorio':
-                    for i in range()
+                    print()
 
     st.markdown("---")
 
