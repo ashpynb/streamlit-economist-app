@@ -259,11 +259,12 @@ def tela_est():
     #inputs aqui
     st.markdown("#### 1. Insira sua amostra de dados") 
     df = pd.DataFrame([
-       {"X": "500", "Y": "200"},
-        {"X": "600", "Y": "100"},
-        {"X": "...", "Y": "..."}])
-    st.warning("_A tabela Y é opcional_")
-    edited_df = st.data_editor(df, num_rows="dynamic")
+       {"X": "500", "Y": ""},
+        {"X": "...", "Y": ""},
+        {"X": "", "Y": ""}])
+    st.warning("_A tabela Y é opcional, porém se certifique que não há nenhum dado nesta coluna_")
+    edited_df = st.data_editor(df)
+    
 
     lista_est = ['Somatório', 
                  'Produtório', 
@@ -286,6 +287,13 @@ def tela_est():
         options = lista_est,
         placeholder="Clique para ver as opções"
     )
+    if st.button('Calcular:'):
+        if not opcoes_selecionadas and not edited_df: #caso a pessoa nao tenha selecionado nada na lista est e também não tenha inserido algum dado
+            st.warning('Erro! Certifique-se que preencheu a tabela X toda e selecionou o que deseja calcular:')
+        else:
+            match opcoes_selecionadas:
+                case 'Somátorio':
+                    for i in range()
 
     st.markdown("---")
 
