@@ -268,8 +268,8 @@ def tela_est():
 
     lista_est = ['Somatório', 
                  'Produtório', 
-                 'Média Aritmética', 
-                 'Média Ponderada', 
+                 'Média Aritmética',
+                 'Média Ponderada'
                  'Mediana', 
                  'Moda', 
                  'Amplitude', 
@@ -310,11 +310,54 @@ def tela_est():
                     st.wirte(f"**Produtório de XY:** {math.prod(col_x * col_y):.2f}")
         if "Média Aritmética" in opcoes:
             with st.expander("Médias Aritméticas:"):
-                st.write(len(col_x))
-            
-
-            
-
+                n_x = (len(col_x))
+                st.write(f"**Média Aritmética de X:** {((col_x.sum())/n_x):.2f}")
+                if not col_y.empty:
+                    n_y = (len(col_y))
+                    st.write(f"**Média Aritmédica de Y:** {((col_y.sum())/n_y):.2f}")
+                    st.write(f"**Média Aritmédica de X + Y:** {((col_y.sum() + col_x.sum())/(n_y + n_x)):.2f}")
+        if "Média Ponderada" in opcoes:
+            with st.expander('Média Ponderada'):
+                if col_y.empty:
+                    st.error("Utiliza-se X como valor e Y como peso")
+                if not col_y.empty:
+                    st.write(f"**Média Ponderada de X com peso Y:** {(((col_y * col_x).sum())/(col_y).sum()):.2f}")
+        if "Mediana" in opcoes:
+            with st.expander("Medianas"):
+                st.write(f"**Mediana X:** {col_x.median():.2f}")
+                if not col_y.empty:
+                    st.write(f"**Mediana Y:** {col_y.median():.2f}")
+        if "Moda" in opcoes:
+            with st.expander("Modas"):
+                modax = col_x.mode()
+                if not modax.empty:
+                    st.write(f"**Moda de X: **{modax}")
+                    if not col_y.empty:
+                        moday = col_y.mode()
+                        if not moday.empty:
+                            st.write(f"**Moda de Y:** {moday}")
+        if "Amplitude" in opcoes:
+            with st.expander("Amplitude"):
+                xmax = col_x.max()
+                xmin = col_x.min()
+                amplitudex = xmax - xmin
+                st.write(f"**Amplitude de X: {amplitudex:.2f}")
+                if not col_y.empty:
+                    ymax = col_y.max()
+                    ymin = col_y.min()
+                    amplitudey = ymax - ymin
+                    st.write(f"**Amplitude de Y:** {amplitudey:.2f}")
+        if "Variância" in opcoes:
+             with st.expander("Variância:"):
+                variancia_amosx = col_x.var()
+                variancia_popx = col_x.var(ddof = 0)
+                st.write(f"**Variância Amostral de X:**{variancia_amosx:.2f}")
+                st.write(f"**Variância Populacional de X:**{variancia_popx:.2f}")
+                if not col_y.empty:
+                    variancia_amosy = col_y.var()
+                    variancia_popy = col_y.var(ddof = 0)   
+                    st.write(f"**Variância amostral de Y:**{variancia_amosy:.2f}")
+                    st.write(f"**Variância populacional de Y:**{variancia_popy:.2f}")               
     st.markdown("---")
 
     if st.button('Voltar ao Menu'):
@@ -431,4 +474,3 @@ def main():
 #loop 
 if __name__ == "__main__":
     main()
-    
