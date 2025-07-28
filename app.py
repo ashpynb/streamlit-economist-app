@@ -396,19 +396,20 @@ def tela_est():
                     freq_abs_x.columns = ['Valor', 'Frequência']
                     st.dataframe(freq_abs_x, use_container_width=True)
         if "Frequência Relativa" in opcoes:
-            st.write("Porcentagem de cada valor em X:")
-            #usa normalize=True para obter a proporção
-            freq_rel_x = col_x.value_counts(normalize=True).reset_index()
-            freq_rel_x.columns = ['Valor', 'Frequência (%)']
-            #multiplica por 100 e formata para exibição
-            freq_rel_x['Frequência (%)'] *= 100
-            st.dataframe(freq_rel_x.style.format({'Frequência (%)': '{:.2f}%'}),use_container_width=True)
-            if not col_y.empty:
-                st.write("Porcentagem de cada valor em Y:")
-                freq_rel_y = col_y.value_counts(normalize=True).reset_index()
-                freq_rel_y.columns = ['Valor', 'Frequência (%)']
-                freq_rel_y['Frequência (%)'] *= 100
-                st.dataframe(freq_rel_y.style.format({'Frequência (%)': '{:.2f}%'}), use_container_width=True)
+            with st.expander("Frequência relativa:"):
+                st.write("Porcentagem de cada valor em X:")
+                #usa normalize=True para obter a proporção
+                freq_rel_x = col_x.value_counts(normalize=True).reset_index()
+                freq_rel_x.columns = ['Valor', 'Frequência (%)']
+                #multiplica por 100 e formata para exibição
+                freq_rel_x['Frequência (%)'] *= 100
+                st.dataframe(freq_rel_x.style.format({'Frequência (%)': '{:.2f}%'}),use_container_width=True)
+                if not col_y.empty:
+                    st.write("Porcentagem de cada valor em Y:")
+                    freq_rel_y = col_y.value_counts(normalize=True).reset_index()
+                    freq_rel_y.columns = ['Valor', 'Frequência (%)']
+                    freq_rel_y['Frequência (%)'] *= 100
+                    st.dataframe(freq_rel_y.style.format({'Frequência (%)': '{:.2f}%'}), use_container_width=True)
 
     st.markdown("---")
 
