@@ -387,21 +387,29 @@ def tela_est():
             with st.expander("Frequência Absoluta"):
                 st.write("Contagem de cada valor de X:")
                 freq_abs_x = col_x.value_counts().reset_index()
-                freq_abs_x.columns = ['Valor', 'Frequência']
-                st.dataframe(freq_abs_x, use_container_width=True)
-                #st.dataframe(col_x.value_counts().reset_index())
+                freq_abs_x.columns = ['Valor', 'Frequência'] #era isso que eu pedi ajuda pro chat gpt, em relação a como mudar o nome das colunas
+                st.dataframe(freq_abs_x, use_container_width=True) 
+                #st.dataframe(col_x.value_counts().reset_index())   #eu tinha feito assim, mas pedi ajuda pro chat gpt sobre como deixar a tabela mais bonita, então considerei o codigo bonito
                 if not col_y.empty:
                     st.write("Contagem de cada valor de Y:")
                     freq_abs_x = col_x.value_counts().reset_index()
                     freq_abs_x.columns = ['Valor', 'Frequência']
                     st.dataframe(freq_abs_x, use_container_width=True)
-
-                    #st.dataframe(col_y.value_counts().reset_index)
         if "Frequência Relativa" in opcoes:
-            with st.expander("Frequência Relativa"):
-                st.metric(f"Frequência Absoluta de X", f"{col_x.value_counts(normalize=True)}%")
-                if not col_y.empty:
-                    st.metric(f"Frequência Absoluta de Y", f"{col_y.value_counts(normalize=True)}%")
+            st.write("Porcentagem de cada valor em X:")
+            #usa normalize=True para obter a proporção
+            freq_rel_x = col_x.value_counts(normalize=True).reset_index()
+            freq_rel_x.columns = ['Valor', 'Frequência (%)']
+            #multiplica por 100 e formata para exibição
+            freq_rel_x['Frequência (%)'] *= 100
+            st.dataframe(freq_rel_x.style.format({'Frequência (%)': '{:.2f}%'}),use_container_width=True)
+            if not col_y.empty:
+                st.write("Porcentagem de cada valor em Y:")
+                freq_rel_y = col_y.value_counts(normalize=True).reset_index()
+                freq_rel_y.columns = ['Valor', 'Frequência (%)']
+                freq_rel_y['Frequência (%)'] *= 100
+                st.dataframe(freq_rel_y.style.format({'Frequência (%)': '{:.2f}%'}), use_container_width=True)
+
     st.markdown("---")
 
     if st.button('Voltar ao Menu'):
