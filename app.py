@@ -368,15 +368,15 @@ def tela_est():
                     st.metric(f"CV de Y", f"{cv_y:.2f}%")
         if "Quartis" in opcoes:
             with st.expander("Quartis"):
-                st.metric(f"Primeiro Quartil(Q1) de X", f"{col_x * [0.25]:.2f}")
-                st.metric(f"Segundo Quartil(Q2)/Mediana de X", f"{col_x * [0.50]:.2f}")
-                st.metric(f"Terceiro Quartil(Q3) de X", f"{col_x * [0.75]:.2f}")
-                st.metric(f"Amplitude Interquartil (IQR = Q3 - Q1) de X", value=f"{(col_x * [0.75] - col_x * [0.25]) :.2f}")
+                st.metric(f"Primeiro Quartil(Q1) de X", f"{col_x.quantile(0.25):.2f}")
+                st.metric(f"Segundo Quartil(Q2)/Mediana de X", f"{col_x.quantile(0.50):.2f}")
+                st.metric(f"Terceiro Quartil(Q3) de X", f"{col_x.quantile(0.75):.2f}")
+                st.metric(f"Amplitude Interquartil (IQR = Q3 - Q1) de X", f"{(col_x.quantile(0.75) - col_x.quantile(0.25)) :.2f}")
                 if not col_y.empty:
-                    st.metric(f"Primeiro Quartil(Q1) de Y", f"{col_y * [0.25]:.2f}")
-                    st.metric(f"Segundo Quartil(Q2)/Mediana de Y", f"{col_y * [0.50]:.2f}")
-                    st.metric(f"Terceiro Quartil(Q3) de Y", f"{col_y * [0.75]:.2f}")
-                    st.metric(f"Amplitude Interquartil (IQR = Q3 - Q1) de Y", value=f"{(col_y * [0.75] - col_y * [0.25]) :.2f}")
+                    st.metric(f"Primeiro Quartil(Q1) de Y", f"{col_y.quantile(0.25):.2f}")
+                    st.metric(f"Segundo Quartil(Q2)/Mediana de Y", f"{col_y.quantile(0.50):.2f}")
+                    st.metric(f"Terceiro Quartil(Q3) de Y", f"{col_y.quantile(0.75):.2f}")
+                    st.metric(f"Amplitude Interquartil (IQR = Q3 - Q1) de Y", value=f"{(col_y.quantile(0.75) - col_y.quantile(0.25)) :.2f}")
         if "Coeficiente de Correlação de Pearson (r)" in opcoes:
             with st.expander("Coeficiente de Correlação de Pearson (r)"):
                 if col_y.empty:
