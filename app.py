@@ -327,7 +327,7 @@ def tela_est():
                 if not col_y.empty:
                     st.metric(f"Mediana Y:", f"{col_y.median():.2f}")
         if "Moda" in opcoes:
-            with st.expander("Modas"):
+            with st.expander("Modas"):  #deu problema
                 # CORREÇÃO: Converte a série de modas para uma lista e depois para uma string  #ajuda do chatgpt pq estava retornando lista
                 modax = col_x.mode()
                 if not modax.empty:
@@ -360,13 +360,39 @@ def tela_est():
                     st.metric("Desvio Padrão Amostral de Y", f"{col_y.std():.2f}")
                     st.metric("Desvio Padrão Populacional de Y", f"{col_y.std(ddof=0):.2f}")
         if "Coeficiente de Variação" in opcoes:
-            with st.expander("Coeficientes de Variação (%)"):
+            with st.expander("Coeficientes de Variação (%)"):  #desvio padrão dividido pela media * 100
                 cv_x = (col_x.std() / col_x.mean()) * 100
-                st.metric("CV de X", f"{cv_x:.2f}%")
-                if not col_y.empty and col_y.mean() != 0:
+                st.metric(f"CV de X", f"{cv_x:.2f}%")
+                if not col_y.empty and col_y.mean() != 0:   #nao pode ter divisão por zero
                     cv_y = (col_y.std() / col_y.mean()) * 100
-                    st.metric("CV de Y", f"{cv_y:.2f}%")
-               
+                    st.metric(f"CV de Y", f"{cv_y:.2f}%")
+        if "Quartis" in opcoes:
+            with st.expander("Quartis"):
+                st.metric(f"Primeiro Quartil(Q1) de X", f"{col_x * [0.25]:.2f}")
+                st.metric(f"Segundo Quartil(Q2)/Mediana de X", f"{col_x * [0.50]:.2f}")
+                st.metric(f"Terceiro Quartil(Q3) de X", f"{col_x * [0.75]:.2f}")
+                st.metric(f"Amplitude Interquartil (IQR = Q3 - Q1) de X", value=f"{(col_x * [0.75] - col_x * [0.25]) :.2f}")
+                if not col_y.empty:
+                    st.metric(f"Primeiro Quartil(Q1) de Y", f"{col_y * [0.25]:.2f}")
+                    st.metric(f"Segundo Quartil(Q2)/Mediana de Y", f"{col_y * [0.50]:.2f}")
+                    st.metric(f"Terceiro Quartil(Q3) de Y", f"{col_y * [0.75]:.2f}")
+                    st.metric(f"Amplitude Interquartil (IQR = Q3 - Q1) de Y", value=f"{(col_y * [0.75] - col_y * [0.25]) :.2f}")
+        if "Coeficiente de Correlação de Pearson (r)" in opcoes:
+            with st.expander("Coeficiente de Correlação de Pearson (r)"):
+                if col_y.empty:
+                    st.warning("Por favor preencha os dados da coluna Y para obter o R!")
+                if not col_y.empty:
+                    st.metric(f"(r):", (col_x.corr(col_y)) )
+        if "Frequência Absoluta" in opcoes:
+            with st.expander("Frequência Absoluta"):
+                st.metric(f"Frequência Absoluta de X", f"{col_x.counts()}%")
+                if not col_y.empty:
+                    st.metric(f"Frequência Absoluta de Y", f"{col_y.counts()}%")
+        if "Frequência Relativa" in opcoes:
+            with st.expander("Frequência Relativa"):
+                st.metric(f"Frequência Absoluta de X", f"{col_x.counts(normalize=True)}%")
+                if not col_y.empty:
+                    st.metric(f"Frequência Absoluta de Y", f"{col_y.counts(normalize=True)}%")
     st.markdown("---")
 
     if st.button('Voltar ao Menu'):
@@ -483,4 +509,3 @@ def main():
 #loop 
 if __name__ == "__main__":
     main()
-    
