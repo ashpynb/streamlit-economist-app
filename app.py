@@ -385,9 +385,11 @@ def tela_est():
                     st.metric(f"(r):", (col_x.corr(col_y)) )
         if "Frequência Absoluta" in opcoes:
             with st.expander("Frequência Absoluta"):
-                st.dataframe(f"Frequência Absoluta de X", f"{col_x.value_counts()}%")
+                st.write("Contagem de cada valor de X:")
+                st.dataframe(col_x.value_counts())
                 if not col_y.empty:
-                    st.dataframe(f"Frequência Absoluta de Y", f"{col_y.value_counts()}%")
+                    st.write("Contagem de cada valor de Y:")
+                    st.dataframe(col_y.value_counts())
         if "Frequência Relativa" in opcoes:
             with st.expander("Frequência Relativa"):
                 st.metric(f"Frequência Absoluta de X", f"{col_x.value_counts(normalize=True)}%")
@@ -509,4 +511,3 @@ def main():
 #loop 
 if __name__ == "__main__":
     main()
-    
