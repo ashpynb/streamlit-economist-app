@@ -386,10 +386,14 @@ def tela_est():
         if "Frequência Absoluta" in opcoes:
             with st.expander("Frequência Absoluta"):
                 st.write("Contagem de cada valor de X:")
-                st.dataframe(col_x.value_counts())
+                freq_abs_x = col_x.value_counts().reset_index()
+                freq_abs_x.columns = ['Valor', 'Frequência']
+            # 3. Usa st.dataframe para exibir a tabela
+            #st.dataframe(freq_abs_x, use_container_width=True)
+                st.dataframe(col_x.value_counts().reset_index())
                 if not col_y.empty:
                     st.write("Contagem de cada valor de Y:")
-                    st.dataframe(col_y.value_counts())
+                    st.dataframe(col_y.value_counts().reset_index)
         if "Frequência Relativa" in opcoes:
             with st.expander("Frequência Relativa"):
                 st.metric(f"Frequência Absoluta de X", f"{col_x.value_counts(normalize=True)}%")
