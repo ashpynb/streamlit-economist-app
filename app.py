@@ -243,14 +243,29 @@ def obter_taxas(): #finalizado com api e gpt
 def tela_micro():
     st.title('Simulador Microeconômico')
     st.write('Não fiz ainda, desculpa')
-
     if st.button('Voltar ao Menu'):
         st.session_state.tela = 'menu'
 
 def tela_fin():
     st.title('Simulador Financeiro')
-    st.write('Não fiz ainda, desculpa')
-
+    st.subheader('_Todos os cálculos de Matemática Financeira aqui!_', divider='orange')
+    lista_fin = ['Juros Simples', 'Descontos Simples','Juros Compostos','Taxa Real de Juros', 'Equivalência de Capitais', 'Sequências Uniformes e Não Uniformes', 'Amortização']
+    opcoes = st.selectbox("Escolha o tópico:", lista_fin)
+    if st.button("Avançar"):
+        if opcoes == 'Juros Simples':
+            lista_fin_jurossimples = ['Juros Simples', 'Taxas Equivalentes', 'Juro Exato', 'Juro Comercial', 'Operações com Hot Money', 'Valor Nominal', 'Valor Atual']
+            opcoes_js = st.selectbox("Escolha qual opção deseja calcular:", lista_fin_jurossimples)
+            if st.button("Calcular"):
+                if opcoes_js == 'Juros Simples':
+                    lista_fin_jurossimples2 = ['Montante', 'Capital', 'Juros', 'Prazo']
+                    opcoes_js2 = st.selectbox("Escolha o que precisa calcular:", lista_fin_jurossimples2)
+                    if opcoes_js2 == 'Montante':
+                        capital = st.number_input('Capital:')
+                        prazo = st.number_input('Prazo:')   
+                        taxa_juros_simples = ((st.number_input('Taxa de juros:')).replace(",", "."))
+                        montante = (capital * (1 + prazo * taxa_juros_simples)).round().replace(',', '_').replace('.', ',').replace('_', '.')
+                        st.metric(f"Montante Juros Simples", f"{montante}")
+    st.markdown("---")
     if st.button('Voltar ao Menu'):
         st.session_state.tela = 'menu'
 
@@ -264,7 +279,6 @@ def tela_est():
         "Y": [None, None, None]})
     st.warning("_A coluna Y é opcional. Se não for usar, deixe em branco._")
     edited_df = st.data_editor(df, num_rows="dynamic")
-    
 
     lista_est = ['Somatório', 
                  'Produtório', 
@@ -396,7 +410,7 @@ def tela_est():
                     freq_abs_x.columns = ['Valor', 'Frequência']
                     st.dataframe(freq_abs_x, use_container_width=True)
         if "Frequência Relativa" in opcoes:
-            with st.expander("Frequência relativa:"):
+            with st.expander("Frequência relativa"):
                 st.write("Porcentagem de cada valor em X:")
                 #usa normalize=True para obter a proporção
                 freq_rel_x = col_x.value_counts(normalize=True).reset_index()
