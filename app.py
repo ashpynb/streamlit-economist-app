@@ -253,18 +253,20 @@ def tela_fin():
     opcoes = st.selectbox("Escolha o tópico:", lista_fin)
     if st.button("Avançar"):
         if opcoes == 'Juros Simples':
-            lista_fin_jurossimples = ['Juros Simples', 'Taxas Equivalentes', 'Juro Exato', 'Juro Comercial', 'Operações com Hot Money', 'Valor Nominal', 'Valor Atual']
-            opcoes_js = st.selectbox("Escolha qual opção deseja calcular:", lista_fin_jurossimples)
-            if st.button("Calcular"):
-                if opcoes_js == 'Juros Simples':
-                    lista_fin_jurossimples2 = ['Montante', 'Capital', 'Juros', 'Prazo']
-                    opcoes_js2 = st.selectbox("Escolha o que precisa calcular:", lista_fin_jurossimples2)
-                    if opcoes_js2 == 'Montante':
-                        capital = st.number_input('Capital:')
-                        prazo = st.number_input('Prazo:')   
-                        taxa_juros_simples = ((st.number_input('Taxa de juros:')).replace(",", "."))
-                        montante = (capital * (1 + prazo * taxa_juros_simples)).round().replace(',', '_').replace('.', ',').replace('_', '.')
-                        st.metric(f"Montante Juros Simples", f"{montante}")
+            st.session_state.tela = 'juros_simples'
+        elif opcoes == 'Descontos Simples':
+            st.session_state.tela = 'descontos_simples'
+        elif opcoes == 'Juros Compostos':
+            st.session_state.tela = 'juros_compostos'
+        elif opcoes == 'Taxa Real de Juros':
+            st.session_state.tela = 'taxa_real'
+        elif opcoes == 'Equivalência de Capitais':
+            st.session_state.tela = 'equival_capitais'
+        elif opcoes == 'Sequências Uniformes e Não Uniformes':
+            st.session_state.tela = 'sequencias'
+        elif opcoes == 'Amortização':
+            st.session_state.tela = 'amortizacao'
+            
     st.markdown("---")
     if st.button('Voltar ao Menu'):
         st.session_state.tela = 'menu'
@@ -502,6 +504,31 @@ def tela_sobre():
     if st.button('Voltar ao Menu'):
             st.session_state.tela = 'menu'    
 
+def tela_juross():
+            lista_fin_jurossimples = ['Juros Simples', 'Taxas Equivalentes', 'Juro Exato', 'Juro Comercial', 'Operações com Hot Money', 'Valor Nominal', 'Valor Atual']
+            opcoes_js = st.selectbox("Escolha qual opção deseja calcular:", lista_fin_jurossimples)
+            if st.button("Calcular"):
+                if opcoes_js == 'Juros Simples':
+                    lista_fin_jurossimples2 = ['Montante', 'Capital', 'Juros', 'Prazo']
+                    opcoes_js2 = st.selectbox("Escolha o que precisa calcular:", lista_fin_jurossimples2)
+                    if opcoes_js2 == 'Montante':
+                        capital = st.number_input('Capital:')
+                        prazo = st.number_input('Prazo:')   
+                        taxa_juros_simples = ((st.number_input('Taxa de juros:')).replace(",", "."))
+                        montante = (capital * (1 + prazo * taxa_juros_simples)).round().replace(',', '_').replace('.', ',').replace('_', '.')
+                        st.metric(f"Montante Juros Simples", f"{montante}")
+def tela_descontos_simples():
+    st.write('descontos simples')
+def tela_juroscompostos():
+    st.write('juros compostos')
+def tela_taxa_real():
+    st.write('taxa real')
+def tela_equivalencia_capitais():
+    st.write('equivalencia de capitais')
+def tela_sequencias():
+    st.write('sequencias uniformes e não uniformes')
+def tela_amortizacao():
+    st.write('amortização')
 
 # Menu (main)
 def main():
@@ -523,6 +550,20 @@ def main():
             tela_micro()
         case 'fin':
             tela_fin()
+        case 'juros_simples':
+            tela_juross()
+        case 'descontos_simples':
+            tela_descontos_simples()
+        case 'juros_compostos':
+            tela_juroscompostos()
+        case 'taxa_real':
+            tela_taxa_real()
+        case 'equival_capitais':
+            tela_equivalencia_capitais()
+        case 'sequencias':
+            tela_sequencias()
+        case 'amortizacao':
+            tela_amortizacao()
         case 'est':
             tela_est()
         case 'conv':
