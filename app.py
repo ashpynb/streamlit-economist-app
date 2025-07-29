@@ -505,18 +505,73 @@ def tela_sobre():
             st.session_state.tela = 'menu'    
 
 def tela_juross():
-            lista_fin_jurossimples = ['Juros Simples', 'Taxas Equivalentes', 'Juro Exato', 'Juro Comercial', 'Operações com Hot Money', 'Valor Nominal', 'Valor Atual']
-            opcoes_js = st.selectbox("Escolha qual opção deseja calcular:", lista_fin_jurossimples)
-            if st.button("Calcular"):
-                if opcoes_js == 'Juros Simples':
-                    lista_fin_jurossimples2 = ['Montante', 'Capital', 'Juros', 'Prazo']
-                    opcoes_js2 = st.selectbox("Escolha o que precisa calcular:", lista_fin_jurossimples2)
-                    if opcoes_js2 == 'Montante':
-                        capital = st.number_input('Capital:')
-                        prazo = st.number_input('Prazo:')   
-                        taxa_juros_simples = ((st.number_input('Taxa de juros:')).replace(",", "."))
-                        montante = (capital * (1 + prazo * taxa_juros_simples)).round().replace(',', '_').replace('.', ',').replace('_', '.')
-                        st.metric(f"Montante Juros Simples", f"{montante}")
+    '''Vamos dividir sua tela_juross() em etapas com controle por variáveis de sessão. Assim:
+
+            Passo a passo:
+            Etapa 1: selecionar tipo de cálculo (Juros Simples, Hot Money, etc)
+
+            Etapa 2: selecionar variável a calcular (Montante, Capital, etc)
+
+            Etapa 3: mostrar os inputs'''
+
+    # Inicializando estados
+    if 'js_etapa1_ok' not in st.session_state:
+        st.session_state.js_etapa1_ok = False
+    if 'js_etapa2_ok' not in st.session_state:
+        st.session_state.js_etapa2_ok = False
+    if 'js_tipo' not in st.session_state:
+        st.session_state.js_tipo = None
+    if 'js_objetivo' not in st.session_state:
+        st.session_state.js_objetivo = None
+
+    # Etapa 1: tipo de cálculo
+    if not st.session_state.js_etapa1_ok:
+        tipo = st.selectbox("Escolha qual opção deseja calcular:", [
+                'Juros Simples', 'Taxas Equivalentes', 'Juro Exato', 'Juro Comercial',
+                'Operações com Hot Money', 'Valor Nominal', 'Valor Atual' ])
+        if st.button("Avançar para escolha da variável"):
+            st.session_state.js_tipo = tipo
+            st.session_state.js_etapa1_ok = True
+
+    # Etapa 2: o que calcular
+    if st.session_state.js_etapa1_ok and not st.session_state.js_etapa2_ok:
+        objetivo = st.selectbox("Escolha o que precisa calcular:", ['Montante', 'Capital', 'Juros', 'Prazo'])
+        if st.button("Avançar para os dados"):
+            st.session_state.js_objetivo = objetivo
+            st.session_state.js_etapa2_ok = True    
+    # Etapa 3: mostrar inputs e calcular
+    if st.session_state.js_etapa1_ok and st.session_state.js_etapa2_ok:
+        st.subheader(f"Cálculo: {st.session_state.js_tipo} - {st.session_state.js_objetivo}")
+
+        if st.session_state.js_objetivo == 'Montante':
+            capital = st.number_input('Capital (C):', min_value=0.0)
+            prazo = st.number_input('Prazo (t):', min_value=0.0)
+            taxa = st.number_input('Taxa de juros (%):', min_value=0.0)
+            if st.button("Calcular Montante"):
+                montante = capital * (1 + (prazo * taxa / 100))
+                st.metric("Montante (M)", f"R$ {montante:.2f}")
+
+        elif st.session_state.js_objetivo == 'Capital':
+            montante = st.number_input('Montante (M):', min_value=0.0)
+            prazo = st.number_input('Prazo (t):', min_value=0.0)
+            taxa = st.number_input('Taxa de juros (%):', min_value=0.0)
+            if st.button("Calcular Capital"):
+                capital = montante / (1 + (prazo * taxa / 100))
+                st.metric("Capital (C)", f"R$ {capital:.2f}")
+    # Botões de voltar
+    if st.session_state.js_etapa2_ok:
+        if st.button("⬅️ Voltar para escolha da variável"):
+            st.session_state.js_etapa2_ok = False
+
+    elif st.session_state.js_etapa1_ok:
+        if st.button("⬅️ Voltar para escolha do tipo"):
+            st.session_state.js_etapa1_ok = False
+
+    if st.button("🏠 Voltar ao menu financeiro"):
+        st.session_state.tela = 'fin'
+
+        
+                        
 def tela_descontos_simples():
     st.write('descontos simples')
 def tela_juroscompostos():
