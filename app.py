@@ -2,8 +2,7 @@ import streamlit as st
 import requests
 from datetime import datetime
 import pandas as pd
-import numpy as np
-import statistics 
+import numpy as np 
 import math
 
 st.set_page_config(
@@ -287,7 +286,6 @@ def tela_est():
                  'Média Aritmética',
                  'Média Ponderada',
                  'Mediana', 
-                 'Moda', 
                  'Amplitude', 
                  'Variância', 
                  'Desvio Padrão', 
@@ -329,8 +327,8 @@ def tela_est():
                 st.metric(f"Média Aritmética de X:", f"{col_x.mean():.2f}")
                 if not col_y.empty:
                     n_y = len(col_y)
-                    st.metric(f"Média Aritmédica de Y:", f"{col_y.mean():.2f}")
-                    st.metric(f"Média Aritmédica de X + Y:", f"{((col_y.sum() + col_x.sum())/(n_y + n_x)):.2f}")
+                    st.metric(f"Média Aritmética de Y:", f"{col_y.mean():.2f}")
+                    st.metric(f"Média Aritmética de X + Y:", f"{((col_y.sum() + col_x.sum())/(n_y + n_x)):.2f}")
         if "Média Ponderada" in opcoes:
             with st.expander('Média Ponderada'):
                 if col_y.empty:
@@ -342,18 +340,6 @@ def tela_est():
                 st.metric(f"Mediana X:", f"{col_x.median():.2f}")
                 if not col_y.empty:
                     st.metric(f"Mediana Y:", f"{col_y.median():.2f}")
-        if "Moda" in opcoes:
-            with st.expander("Modas"):  #deu problema
-                # CORREÇÃO: Converte a série de modas para uma lista e depois para uma string  #ajuda do chatgpt pq estava retornando lista
-                modax = col_x.mode()
-                if not modax.empty:
-                    modax_str = ', '.join([str(v) for v in modax])
-                    st.metric(f"Moda de X:", f"{modax_str}")
-                if not col_y.empty:
-                    moday = col_y.mode()
-                    if not moday.empty:
-                        moday_str = ', '.join([str(v) for v in moday])
-                        st.metric(f"Moda de Y:", f"{moday_str}")
         if "Amplitude" in opcoes:
             with st.expander("Amplitude"):
                 amplitudex = col_x.max() - col_x.min()
