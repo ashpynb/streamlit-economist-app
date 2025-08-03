@@ -64,7 +64,7 @@ def tela_macro(): #feito
     if st.button("Avançar"):
         if opcao == "Cálculo PIB":
             st.session_state.tela = 'pib'
-        elif opcao == "Índice de Preços, Quantidade e Inflação":
+        elif opcao == "Índice de Preços e Inflação":
             st.session_state.tela = 'indices'
         elif opcao == "Crescimento Econômico":
             st.session_state.tela = 'crescimento'
@@ -75,8 +75,16 @@ def tela_macro(): #feito
 #opcoes do selectbox macroeconômico, criam outras telas dentro:
 def tela_PIB(): #feito
     st.title("Cálculo do PIB")
+    if 'pib_opcao' not in st.session_state:
+        st.session_state.pib_opcao = None
+
+    #ETAPA 1: SELECIONAR O QUE DESEJA CALCULAR
+    
     opcao_PIB = st.selectbox("Selecione o modo que deseja calcular o PIB:", ['PIB Real, Nominal e Deflator', 'PIB pela Demanda', 'PIB pela Oferta', 'PIB pela Renda'])
+
     if st.button("Avançar"):
+        st.session_state.pib_opcao = opcao_PIB
+        
         if opcao_PIB == 'PIB Real, Nominal e Deflator':
             st.session_state.tela = 'pib_nom_real_defl'
         elif opcao_PIB == 'PIB pela Demanda':
@@ -94,7 +102,7 @@ def tela_PIBS_nom_real_defl():  #Preciso apenas refinar, corrigir, foi o primeir
     st.title('Calcule aqui os PIBs reais, nominais e deflator do PIB')
 
     #percebi que msm com um botao avançar, não havia um controle para determinar se o usuário acabou ou não, dava muuuito erro
-    #então pedi ajuda pro amigo chat aqui:
+    #então pedi ajuda pro chatgpt aqui:
 
     # Controle para mostrar os inputs depois do clique
     if 'pib_produtos_ok' not in st.session_state:
@@ -196,11 +204,19 @@ def tela_PIBS_nom_real_defl():  #Preciso apenas refinar, corrigir, foi o primeir
                     st.write(f"Deflator do PIB (Paasche de Quantidade): {deflator_pib:.5f} %")
 
 def tela_PIB_demanda(): 
-    print()
+    st.warning('EM DESENVOLVIMENTO')
+    if st.button("Voltar ao Menu Principal"):
+        st.session_state.tela = 'menu'
+
 def tela_PIB_oferta():
-    print()
+    st.warning('EM DESENVOLVIMENTO')
+    if st.button("Voltar ao Menu Principal"):
+        st.session_state.tela = 'menu'
+
 def tela_PIB_renda():
-    print()
+    st.warning('EM DESENVOLVIMENTO')
+    if st.button("Voltar ao Menu Principal"):
+        st.session_state.tela = 'menu'
 
 def tela_indices():
     st.title("Índices de Preços e Inflação")
