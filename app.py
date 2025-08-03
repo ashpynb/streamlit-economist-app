@@ -75,16 +75,19 @@ def tela_macro(): #feito
 #opcoes do selectbox macroeconômico, criam outras telas dentro:
 def tela_PIB(): #feito
     st.title("Cálculo do PIB")
+    if 'pib_etapa1_ok' not in st.session_state:
+        st.session_state.pib_etapa1_ok = False
     if 'pib_opcao' not in st.session_state:
         st.session_state.pib_opcao = None
 
     #ETAPA 1: SELECIONAR O QUE DESEJA CALCULAR
-    
-    opcao_PIB = st.selectbox("Selecione o modo que deseja calcular o PIB:", ['PIB Real, Nominal e Deflator', 'PIB pela Demanda', 'PIB pela Oferta', 'PIB pela Renda'])
+    if not st.session_state.pib_etapa1_ok:
+        opcao_PIB = st.selectbox("Selecione o modo que deseja calcular o PIB:", ['PIB Real, Nominal e Deflator', 'PIB pela Demanda', 'PIB pela Oferta', 'PIB pela Renda'])
 
     if st.button("Avançar"):
         st.session_state.pib_opcao = opcao_PIB
-        
+        st.session_state.pib_etapa1_ok = True
+
         if opcao_PIB == 'PIB Real, Nominal e Deflator':
             st.session_state.tela = 'pib_nom_real_defl'
         elif opcao_PIB == 'PIB pela Demanda':
