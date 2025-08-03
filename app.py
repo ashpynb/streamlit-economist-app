@@ -538,7 +538,7 @@ def tela_juross():
 
     # Etapa 2: o que calcular
     if st.session_state.js_etapa1_ok and not st.session_state.js_etapa2_ok:
-        if tipo == 'Juros Simples':  #coloquei um if aqui para eu fazer posteriormente o código dos outros simuladores, como taxas equivalentes...
+        if st.session_state.js_tipo == 'Juros Simples': #coloquei um if aqui para eu fazer posteriormente o código dos outros simuladores, como taxas equivalentes...
             objetivo = st.selectbox("Escolha o que precisa calcular:", ['Montante', 'Capital', 'Juros', 'Prazo'])
             if st.button("Avançar para os dados"):
                 st.session_state.js_objetivo = objetivo
@@ -596,8 +596,8 @@ def tela_juross():
         if st.button("⬅️ Escolher outra conta financeira"):
             st.session_state.js_etapa1_ok = False
 
-    if st.button("Menu financeiro"):
-        st.session_state.tela = 'fin'
+    if st.button("Menu"):
+        st.session_state.tela = 'menu'
                  
 def tela_descontos_simples():   #AINDA NÃO DESENVOLVIDO
     st.write('descontos simples')
