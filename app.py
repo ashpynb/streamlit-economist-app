@@ -345,14 +345,18 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                 case 'Montante':
                                     #ENTRADAS
                                     st.write("Insira os dados:")
-                                    st.session_state.capital = st.number_input("Capital:",  min_value=0.0)
-                                    st.session_state.juros = st.number_input("Porcentagem da taxa de juros:",  min_value=0.0)
-                                    st.session_state.prazo = st.number_input("Prazo:",  min_value=0.0)
+                                    capital = st.number_input("Capital:",  min_value=0.0, key="capital")
+                                    juros = st.number_input("Porcentagem da taxa de juros:",  min_value=0.0, key="juros")
+                                    prazo = st.number_input("Prazo:",  min_value=0.0, key="prazo")
                                     st.warning("O período da taxa deve ser compatível com o prazo!")
                                                          
                                     if st.button("Calcular", key="btn_calcular_montante"):
                                         #PROCESSAMENTO 
-                                        montante = st.session_state.capital * (1 + st.session_state.juros * st.session_state.prazo / 100)
+                                        capital = st.session_state.capital
+                                        juros = st.session_state.juros
+                                        prazo = st.session_state.prazo
+                                        montante = capital * (1 + juros/100 * prazo)
+                                                                            
                                         with st.expander("Resultado"):
                                             #SAIDA
                                             st.metric(label = 'Montante', value = f"R$ {montante:,.2f}")
