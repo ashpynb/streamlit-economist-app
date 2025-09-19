@@ -300,13 +300,15 @@ def tela_fin(): # EM DESENVOLVIMENTO
   
     with col2:
         st.write("II.")
-        match opcoes:
+        if (col_1ok == True):
+            match opcoes:
                 case 'Juros Simples':
                     LISTA_TOPICOII = ['Juros Simples', 'Taxas Equivalentes', 'Juro Exato', 'Juro Comercial', 'Operações com Hot Money', 'Valor Nominal', 'Valor Atual']
                     opcoes2 = st.selectbox("Escolha o tópico II: ", LISTA_TOPICOII)
                     if st.button("Pronto"):
                         var_pronto = True
                         col_2ok = True
+                        col_1ok = True
     st.markdown("---")
     if (col_1ok == True and col_2ok == True):
         #st.subheader("Determine a variável a ser calculada:")
