@@ -306,7 +306,8 @@ def tela_fin(): # EM DESENVOLVIMENTO
                     LISTA_TOPICOII = ['Juros Simples', 'Taxas Equivalentes', 'Juro Exato', 'Juro Comercial', 'Operações com Hot Money', 'Valor Nominal', 'Valor Atual']
                     opcoes2 = st.selectbox("Escolha o tópico II: ", LISTA_TOPICOII)
                     if st.button("Pronto"):
-                        var_pronto = True and col_2ok = True
+                        var_pronto = True
+                        col_2ok = True
     st.markdown("---")
     if (var_pronto == True and col_2ok == True):
         #st.subheader("Determine a variável a ser calculada:")
