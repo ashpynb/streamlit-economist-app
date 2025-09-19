@@ -339,6 +339,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                         st.subheader("Determine a variável a ser calculada:")
                         lista_js_js = ['Montante', 'Capital', 'Juros', 'Prazo']
                         st.session_state.opcao3 = st.selectbox(" ",lista_js_js)
+                        st.markdown("---")
                         match st.session_state.opcao3:
                                 case 'Montante':
                                     #ENTRADAS
