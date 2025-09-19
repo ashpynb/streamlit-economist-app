@@ -299,11 +299,11 @@ def tela_fin(): # EM DESENVOLVIMENTO
     if "capital" not in st.session_state:
         st.session_state.capital = 0
     if "montante" not in st.session_state:
-        st.session_state.capital = 0
+        st.session_state.montante = 0
     if "juros" not in st.session_state:
-        st.session_state.capital = 0
+        st.session_state.juros = 0
     if "prazo" not in st.session_state:
-        st.session_state.capital = 0
+        st.session_state.prazo = 0
 
 
 
