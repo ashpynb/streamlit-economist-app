@@ -297,14 +297,13 @@ def tela_fin(): # EM DESENVOLVIMENTO
     if "opcoes3" not in st.session_state:
         st.session_state.opcoes3 = None
     if "capital" not in st.session_state:
-        st.session_state.capital = None
-    if "montante" not in st.session_state:
-        st.session_state.montante = None
+        st.session_state.capital = 0.0
     if "juros" not in st.session_state:
-        st.session_state.juros = None
+        st.session_state.juros = 0.0
     if "prazo" not in st.session_state:
-        st.session_state.prazo = None
-
+        st.session_state.prazo = 0.0
+    if "montante" not in st.session_state:
+        st.session_state.montante = 0.0
 
 
     col1, col2 = st.columns(2)  #divide em duas colunas
@@ -345,22 +344,18 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                 case 'Montante':
                                     #ENTRADAS
                                     st.write("Insira os dados:")
-                                    capital = st.number_input("Capital:",  min_value=0.0, key="input_capital")
-                                    juros = st.number_input("Porcentagem da taxa de juros:",  min_value=0.0, key="input_juros")
-                                    prazo = st.number_input("Prazo:",  min_value=0.0, key="input_prazo")
+                                    st.session_state.capital = st.number_input("Capital:", min_value=0.0, value=st.session_state.capital, key="input_capital")
+                                    st.session_state.juros = st.number_input("Taxa de juros (%):", min_value=0.0, value=st.session_state.juros, key="input_juros")
+                                    st.session_state.prazo = st.number_input("Prazo:", min_value=0.0, value=st.session_state.prazo, key="input_prazo")
                                     st.warning("O período da taxa deve ser compatível com o prazo!")
-
-                                    # Atualiza session_state
-                                    st.session_state.capital = capital
-                                    st.session_state.juros = juros
-                                    st.session_state.prazo = prazo             
-                                    if st.button("Calcular", key="btn_calcular_montante"):
+           
+                                    if st.button("Calcular"):
                                         #PROCESSAMENTO 
-                                        montante = capital * (1 + juros/100 * prazo)
+                                        st.session_state.montante = st.session_state.capital * (1 + st.session_state.juros/100 * st.session_state.prazo)
                                                                             
                                         with st.expander("Resultado"):
                                             #SAIDA
-                                            st.metric(label = 'Montante', value = f"R$ {montante:,.2f}")
+                                            st.metric(label = 'Montante', value = f"R$ {st.session_state.montante:,.2f}")
 
 
 def tela_est():  #DESENVOLVIDO
