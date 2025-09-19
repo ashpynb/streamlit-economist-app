@@ -296,6 +296,16 @@ def tela_fin(): # EM DESENVOLVIMENTO
         st.session_state.opcoes2 = None
     if "opcoes3" not in st.session_state:
         st.session_state.opcoes3 = None
+    if "capital" not in st.session_state:
+        st.session_state.capital = 0
+    if "montante" not in st.session_state:
+        st.session_state.capital = 0
+    if "juros" not in st.session_state:
+        st.session_state.capital = 0
+    if "prazo" not in st.session_state:
+        st.session_state.capital = 0
+
+
 
     col1, col2 = st.columns(2)  #divide em duas colunas
 
@@ -323,7 +333,6 @@ def tela_fin(): # EM DESENVOLVIMENTO
 #------------- FORA DA COLUNA ------------------------------------
     st.markdown("---")
     if (st.session_state.col_1ok and st.session_state.col_2ok):
-        #st.subheader("Determine a variável a ser calculada:")
         match st.session_state.opcoes:
             case 'Juros Simples':
                 match st.session_state.opcoes2:
@@ -336,15 +345,16 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                 case 'Montante':
                                     #ENTRADAS
                                     st.write("Insira os dados:")
+                                    st.session_state.capital = st.number_input("Capital:", value = st.session_state.capital)
+                                    st.session_state.juros = st.number_input("Porcentagem da taxa de juros:", value = st.session_state.juros)
+                                    st.session_state.prazo = st.number_input("Prazo:", value = st.session_state.prazo)
                                     st.warning("O período da taxa deve ser compatível com o prazo!")
-                                    capital = st.number_input("Capital:", min_value=0.0)
-                                    juros = st.number_input("Porcentagem da taxa de juros:", min_value=0.0)
-                                    prazo = st.number_input("Prazo:", min_value=0.0)
-                                    #PROCESSAMENTO
-                                    montante = capital * (1 + juros * prazo / 100)
-                                    #SAIDA
+                                                         
                                     if st.button("Calcular"):
+                                        #PROCESSAMENTO 
+                                        montante = st.session_state.capital * (1 + st.session_state.juros * st.session_state.prazo / 100)
                                         with st.expander("Resultado"):
+                                            #SAIDA
                                             st.metric(label = 'Montante', value = f"R$ {montante:,.2f}")
 
 
