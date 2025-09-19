@@ -300,8 +300,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
   
     with col2:
         st.write("II.")
-        if (col_1ok == True):
-            match opcoes:
+        match opcoes:
                 case 'Juros Simples':
                     LISTA_TOPICOII = ['Juros Simples', 'Taxas Equivalentes', 'Juro Exato', 'Juro Comercial', 'Operações com Hot Money', 'Valor Nominal', 'Valor Atual']
                     opcoes2 = st.selectbox("Escolha o tópico II: ", LISTA_TOPICOII)
