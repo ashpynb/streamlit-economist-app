@@ -285,7 +285,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
     st.title('Simulador Financeiro')
     st.subheader('_Todos os cálculos de Matemática Financeira aqui!_', divider='orange')
     col1, col2 = st.columns(2)  #divide em duas colunas
-    col_1ok = True
+    col_1ok= False
     col_2ok = False
     var_pronto = False
 
@@ -294,13 +294,13 @@ def tela_fin(): # EM DESENVOLVIMENTO
         lista_fin = ['Juros Simples', 'Descontos Simples','Juros Compostos','Taxa Real de Juros', 'Equivalência de Capitais', 'Sequências Uniformes e Não Uniformes', 'Amortização']
         opcoes = st.selectbox("Escolha o tópico I:", lista_fin)
         if st.button("Avançar"):
-            col_2ok = True
+            col_1ok = True
         if st.button("Voltar ao Menu"):
             st.session_state.tela = 'menu'
   
     with col2:
         st.write("II.")
-        if (col_2ok == True):
+        if (col_1ok == True):
             match opcoes:
                 case 'Juros Simples':
                     LISTA_TOPICOII = ['Juros Simples', 'Taxas Equivalentes', 'Juro Exato', 'Juro Comercial', 'Operações com Hot Money', 'Valor Nominal', 'Valor Atual']
@@ -309,7 +309,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                         var_pronto = True
                         col_2ok = True
     st.markdown("---")
-    if (var_pronto == True and col_2ok == True):
+    if (col_1ok == True and col_2ok == True):
         #st.subheader("Determine a variável a ser calculada:")
         match opcoes:
             case 'Juros Simples':
