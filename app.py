@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 #tela inicial 
-def opcoes_menu():  #feito
+def opcoes_menu():  #DESENVOLVIDO
     col1, col2 = st.columns([1, 8])  # ajuste os pesos conforme necessário
 
     with col1:
@@ -54,7 +54,7 @@ def opcoes_menu():  #feito
             st.session_state.tela = 'conv'
 
 #menu macroeconômico
-def tela_macro(): #feito
+def tela_macro(): #DESENVOLVIDO
     st.title('Simulador Macroeconômico')
     st.subheader('Simule e analise os principais indicadores da economia', divider = True)
 
@@ -73,7 +73,7 @@ def tela_macro(): #feito
         st.session_state.tela = 'menu'
 
 #opcoes do selectbox macroeconômico, criam outras telas dentro:
-def tela_PIB(): #feito
+def tela_PIB(): #DESENVOLVIDO
     st.title("Cálculo do PIB")
     if 'pib_etapa1_ok' not in st.session_state:
         st.session_state.pib_etapa1_ok = False
@@ -101,7 +101,7 @@ def tela_PIB(): #feito
         st.session_state.tela = 'macro'
 
 #funções dentro da tela do pib   
-def tela_PIBS_nom_real_defl():  #Preciso apenas refinar, corrigir, foi o primeiro que eu fiz
+def tela_PIBS_nom_real_defl():  #EM REFINAMENTO / DESENVOLVIDO
     st.title('Calcule aqui os PIBs reais, nominais e deflator do PIB')
 
     #percebi que msm com um botao avançar, não havia um controle para determinar se o usuário acabou ou não, dava muuuito erro
@@ -206,29 +206,29 @@ def tela_PIBS_nom_real_defl():  #Preciso apenas refinar, corrigir, foi o primeir
                     st.write(f"PIB Nominal: {pib_nominal:4f}")
                     st.write(f"Deflator do PIB (Paasche de Quantidade): {deflator_pib:.5f} %")
 
-def tela_PIB_demanda(): 
+def tela_PIB_demanda():  #NÃO DESENVOLVIDO
     st.warning('EM DESENVOLVIMENTO')
     if st.button("Voltar ao Menu Principal"):
         st.session_state.tela = 'menu'
 
-def tela_PIB_oferta():
+def tela_PIB_oferta():  #NÃO DESENVOLVIDO
     st.warning('EM DESENVOLVIMENTO')
     if st.button("Voltar ao Menu Principal"):
         st.session_state.tela = 'menu'
 
-def tela_PIB_renda():
+def tela_PIB_renda(): #NÃO DESENVOLVIDO
     st.warning('EM DESENVOLVIMENTO')
     if st.button("Voltar ao Menu Principal"):
         st.session_state.tela = 'menu'
 
-def tela_indices():
+def tela_indices(): #NÃO DESENVOLVIDO
     st.title("Índices de Preços e Inflação")
     st.selectbox("Selecione o modo que deseja calcular os Índices: ")
 
     if st.button("Voltar para Macroeconômico"):
         st.session_state.tela = 'macro'
 
-def tela_crescimento():
+def tela_crescimento(): #NÃO DESENVOLVIDO
     st.title("Crescimento Econômico")
     st.write("Simulação de crescimento com base em dados anuais...")
 
@@ -238,7 +238,7 @@ def tela_crescimento():
 @st.cache_data(ttl=86400)  # cache diário (86400 segundos = 24 horas)     #via chat gpt
 
 # Função para obter taxas de câmbio atualizadas via API (via chat gpt ajuda)
-def obter_taxas(): #finalizado com api e gpt
+def obter_taxas(): #DESENVOLVIDO com api e gpt
     try:
         url = "https://api.frankfurter.app/latest?from=USD"
         resposta = requests.get(url, timeout=10)
@@ -257,7 +257,7 @@ def obter_taxas(): #finalizado com api e gpt
         return {"USD": 1.0}  # Fallback básico
 
 # Simuladores simples
-def tela_micro():  #pretendo integrar MATPLOTLIB para simular os gráficos
+def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para simular os gráficos
     st.title('Simulador Microeconômico')
     st.subheader('Simule aqui suas principais necessidades microeconômicas', divider = True)
     opcao = st.selectbox("Escolha uma operação:", 
@@ -281,32 +281,60 @@ def tela_micro():  #pretendo integrar MATPLOTLIB para simular os gráficos
     if st.button('Voltar ao Menu'):
         st.session_state.tela = 'menu'
 
-def tela_fin():
+def tela_fin(): # EM DESENVOLVIMENTO
     st.title('Simulador Financeiro')
     st.subheader('_Todos os cálculos de Matemática Financeira aqui!_', divider='orange')
-    lista_fin = ['Juros Simples', 'Descontos Simples','Juros Compostos','Taxa Real de Juros', 'Equivalência de Capitais', 'Sequências Uniformes e Não Uniformes', 'Amortização']
-    opcoes = st.selectbox("Escolha o tópico:", lista_fin)
-    if st.button("Avançar"):
-        if opcoes == 'Juros Simples':
-            st.session_state.tela = 'juros_simples'
-        elif opcoes == 'Descontos Simples':
-            st.session_state.tela = 'descontos_simples'
-        elif opcoes == 'Juros Compostos':
-            st.session_state.tela = 'juros_compostos'
-        elif opcoes == 'Taxa Real de Juros':
-            st.session_state.tela = 'taxa_real'
-        elif opcoes == 'Equivalência de Capitais':
-            st.session_state.tela = 'equival_capitais'
-        elif opcoes == 'Sequências Uniformes e Não Uniformes':
-            st.session_state.tela = 'sequencias'
-        elif opcoes == 'Amortização':
-            st.session_state.tela = 'amortizacao'
-            
-    st.markdown("---")
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
+    col1, col2 = st.columns(2)  #divide em duas colunas
+    col_1ok = True
+    col_2ok = False
+    var_pronto = False
 
-def tela_est():  
+    with col1:  
+        st.write("I.")
+        lista_fin = ['Juros Simples', 'Descontos Simples','Juros Compostos','Taxa Real de Juros', 'Equivalência de Capitais', 'Sequências Uniformes e Não Uniformes', 'Amortização']
+        opcoes = st.selectbox("Escolha o tópico I:", lista_fin)
+        if st.button("Avançar"):
+            col_2ok = True
+        if st.button("Voltar ao Menu"):
+            st.session_state.tela = 'menu'
+  
+    with col2:
+        st.write("II")
+        if (col_2ok == True):
+            match opcoes:
+                case 'Juros Simples':
+                    LISTA_TOPICOII = ['Juros Simples', 'Taxas Equivalentes', 'Juro Exato', 'Juro Comercial', 'Operações com Hot Money', 'Valor Nominal', 'Valor Atual']
+                    opcoes2 = st.selectbox("Escolha o tópico II: ", LISTA_TOPICOII)
+                    if st.button("Pronto"):
+                        var_pronto = True
+    st.markdown("---")
+    if (var_pronto == True):
+        #st.subheader("Determine a variável a ser calculada:")
+        match opcoes:
+            case 'Juros Simples':
+                match opcoes2:
+                    case 'Juros Simples':
+                        st.subheader("Determine a variável a ser calculada:")
+                        lista_js_js = ['Montante', 'Capital', 'Juros', 'Prazo']
+                        opcao3 = st.selectbox(lista_js_js)
+                        if st.button('OK'):
+                            match opcao3:
+                                case 'Montante':
+                                    #ENTRADAS
+                                    st.write("Insira os dados:")
+                                    st.warning("O período da taxa deve ser compatível com o prazo!")
+                                    capital = st.number_input("Capital:", min_value=0.0)
+                                    juros = st.number_input("Porcentagem da taxa de juros:", min_value=0.0)
+                                    prazo = st.number_input("Prazo:", min_value=0.0)
+                                    #PROCESSAMENTO
+                                    montante = capital * (1 + juros * prazo / 100)
+                                    #SAIDA
+                                    if st.button("Calcular"):
+                                        with st.expander():
+                                            st.metric(montante)
+
+
+def tela_est():  #DESENVOLVIDO
     st.title('Simulador Estatístico')
     st.subheader('Insira seus dados e selecione as análises desejadas', divider='orange')
     #inputs aqui
@@ -454,7 +482,7 @@ def tela_est():
     if st.button('Voltar ao Menu'):
         st.session_state.tela = 'menu'
 
-def tela_conv():   #finalizado
+def tela_conv():   #DESENVOLVIDO
     st.title('Conversor de Moeda💲')
     st.subheader('Converta para mais de 13 moedas!')
     taxas_em_usd = obter_taxas()
@@ -513,7 +541,7 @@ def tela_conv():   #finalizado
             except Exception as e:
                 st.error(f"Erro inesperado: {e}")   
 
-def tela_sobre():
+def tela_sobre(): #DESENVOLVIDO
     st.header(':orange[Sobre o Projeto]')
     with st.expander('Comentário da desenvolvedora'):
         st.write('🔹 O projeto foi desenvolvido inteiramente em Python, após a desenvolvedora ter aulas de Python como eletiva na Universidade Federal de Juiz de Fora - Campus Governador Valadares.')
@@ -525,134 +553,6 @@ def tela_sobre():
         st.caption('Detalhe: apenas 10% do projeto foi utilizado com auxílio de IA. Apenas para ajuda com integração de API, tratamentos básicos de erros e caminhos para auxiliar e garantir que a lógica da programação seja a melhor possível')
     if st.button('Voltar ao Menu'):
             st.session_state.tela = 'menu'    
-
-def tela_juross():
-    '''Vamos dividir sua tela_juross() em etapas com controle por variáveis de sessão. Assim:
-
-            Passo a passo:
-            Etapa 1: selecionar tipo de cálculo (Juros Simples, Hot Money, etc)
-
-            Etapa 2: selecionar variável a calcular (Montante, Capital, etc)
-
-            Etapa 3: mostrar os inputs'''  #pedi ajuda ao chat gpt pois a tela não estava se fixando ao selecionar os números para input
-
-    # Inicializando estados
-    if 'js_etapa1_ok' not in st.session_state:
-        st.session_state.js_etapa1_ok = False
-    if 'js_etapa2_ok' not in st.session_state:
-        st.session_state.js_etapa2_ok = False
-    if 'js_tipo' not in st.session_state:
-        st.session_state.js_tipo = None
-    if 'js_objetivo' not in st.session_state:
-        st.session_state.js_objetivo = None
-
-    # Etapa 1: tipo de cálculo
-    if not st.session_state.js_etapa1_ok:
-        tipo = st.selectbox("Escolha qual opção deseja calcular:", [
-                'Juros Simples', 'Taxas Equivalentes', 'Juro Exato', 'Juro Comercial',
-                'Operações com Hot Money', 'Valor Nominal', 'Valor Atual' ])
-        if st.button("Avançar para escolha da variável"):
-            st.session_state.js_tipo = tipo
-            st.session_state.js_etapa1_ok = True
-
-    # Etapa 2: o que calcular
-    if st.session_state.js_etapa1_ok and not st.session_state.js_etapa2_ok:
-        if st.session_state.js_tipo == 'Juros Simples': #coloquei um if aqui para eu fazer posteriormente o código dos outros simuladores, como taxas equivalentes...
-            objetivo = st.selectbox("Escolha o que precisa calcular:", ['Montante', 'Capital', 'Juros', 'Prazo'])
-            if st.button("Avançar para os dados"):
-                st.session_state.js_objetivo = objetivo
-                st.session_state.js_etapa2_ok = True    
-        else:
-            st.warning('EM CONSTRUÇÃO, VOLTE DEPOIS...')
-            if st.button("Voltar"):
-                st.session_state.tela = 'fin'
-
-    # Etapa 3: mostrar inputs e calcular
-    if st.session_state.js_etapa1_ok and st.session_state.js_etapa2_ok:
-        st.subheader(f"Cálculo: {st.session_state.js_tipo} - {st.session_state.js_objetivo}")
-        if st.session_state.js_objetivo == 'Montante':  # o restante foi desenvolvido por mim
-            capital = st.number_input('Capital (C):', min_value=0.0)
-            prazo = st.number_input('Prazo (t):', min_value=0.0)
-            taxa = st.number_input('Taxa de juros (%):', min_value=0.0)
-            if st.button("Calcular Montante"):
-                montante = capital * (1 + (prazo * taxa / 100))
-                st.metric("Montante (M)", f"R$ {montante:.2f}")
-
-        elif st.session_state.js_objetivo == 'Capital':
-            montante = st.number_input('Montante (M):', min_value=0.0)
-            prazo = st.number_input('Prazo (t):', min_value=0.0)
-            taxa = st.number_input('Taxa de juros (%):', min_value=0.0)
-            if st.button("Calcular Capital"):
-                capital = montante / (1 + (prazo * taxa / 100))
-                st.metric("Capital (C)", f"R$ {capital:.2f}")
-
-        elif st.session_state.js_objetivo == 'Juros':
-            montante = st.number_input('Montante (M):', min_value=0.0)
-            capital = st.number_input('Capital (C):', min_value=0.0)
-            prazo = st.number_input('Prazo (t):', min_value=0.0)
-            if st.button("Calcular Juros"):
-                if capital > 0 and prazo > 0:
-                    taxa = ((montante / capital) - 1)/ prazo
-                    st.metric("Taxa de Juros (i)", f"{taxa * 100:.2f}%")
-                else: 
-                    st.warning("Capital e Prazo devem ser maiores que zero")
-        elif st.session_state.js_objetivo == 'Prazo':
-            montante = st.number_input('Montante (M):', min_value=0.0)
-            capital = st.number_input('Capital (C):', min_value=0.0)
-            taxa = st.number_input('Taxa de juros (%):', min_value=0.0)
-            if st.button("Calcular Prazo"):
-                if capital > 0 and taxa > 0:
-                    prazo = ((montante / capital) - 1)/ taxa
-                    st.metric("Prazo (n)", f"{prazo:.2f}")
-                else: 
-                    st.warning("Capital e Taxa devem ser maiores que zero")
-    # Botões de voltar
-    if st.session_state.js_etapa2_ok:
-        if st.button("⬅️ Escolher outra variável"):
-            st.session_state.js_etapa2_ok = False
-
-    elif st.session_state.js_etapa1_ok:
-        if st.button("⬅️ Escolher outra conta financeira"):
-            st.session_state.js_etapa1_ok = False
-
-    if st.button("Menu"):
-        st.session_state.tela = 'menu'
-                 
-def tela_descontos_simples():   #AINDA NÃO DESENVOLVIDO
-    st.write('descontos simples')
-    st.write('EM CONSTRUÇÃO...')
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
-
-def tela_juroscompostos(): #AINDA NÃO DESENVOLVIDO
-    st.write('juros compostos')
-    st.write('EM CONSTRUÇÃO...')
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
-
-def tela_taxa_real(): #AINDA NÃO DESENVOLVIDO
-    st.write('taxa real')
-    st.write('EM CONSTRUÇÃO...')
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
-
-def tela_equivalencia_capitais(): #AINDA NÃO DESENVOLVIDO
-    st.write('equivalencia de capitais')
-    st.write('EM CONSTRUÇÃO...')
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
-
-def tela_sequencias(): #AINDA NÃO DESENVOLVIDO
-    st.write('sequencias uniformes e não uniformes')
-    st.write('EM CONSTRUÇÃO...')
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
-
-def tela_amortizacao(): #AINDA NÃO DESENVOLVIDO
-    st.write('amortização')
-    st.write('EM CONSTRUÇÃO...')
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
 
 def tela_linha_orcamentaria(): #AINDA NÃO DESENVOLVIDO
     st.write('EM CONSTRUÇÃO...')
@@ -709,20 +609,6 @@ def main(): #DESENVOLVIDO
             tela_micro()
         case 'fin':
             tela_fin()
-        case 'juros_simples':
-            tela_juross()
-        case 'descontos_simples':
-            tela_descontos_simples()
-        case 'juros_compostos':
-            tela_juroscompostos()
-        case 'taxa_real':
-            tela_taxa_real()
-        case 'equival_capitais':
-            tela_equivalencia_capitais()
-        case 'sequencias':
-            tela_sequencias()
-        case 'amortizacao':
-            tela_amortizacao()
         case 'est':
             tela_est()
         case 'conv':
