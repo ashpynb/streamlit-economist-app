@@ -284,43 +284,55 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
 def tela_fin(): # EM DESENVOLVIMENTO
     st.title('Simulador Financeiro')
     st.subheader('_Todos os cálculos de Matemática Financeira aqui!_', divider='orange')
-    col1, col2 = st.columns(2)  #divide em duas colunas
-    col_1ok= False
-    col_2ok = False
-    var_pronto = False
 
+    #para não dar rerun
+    if "col_1ok" not in st.session_state:
+        st.session_state.col_1ok = False
+    if "col_2ok" not in st.session_state:
+        st.session_state.col_2ok = False
+    if "opcoes" not in st.session_state:
+        st.session_state.opcoes = None
+    if "opcoes2" not in st.session_state:
+        st.session_state.opcoes2 = None
+    if "opcoes3" not in st.session_state:
+        st.session_state.opcoes3 = None
+
+    col1, col2 = st.columns(2)  #divide em duas colunas
+
+# ---------------COLUNA 1 ----------------------
     with col1:  
         st.write("I.")
         lista_fin = ['Juros Simples', 'Descontos Simples','Juros Compostos','Taxa Real de Juros', 'Equivalência de Capitais', 'Sequências Uniformes e Não Uniformes', 'Amortização']
-        opcoes = st.selectbox("Escolha o tópico I:", lista_fin)
+        st.session_state.opcoes = st.selectbox("Escolha o tópico I:", lista_fin)
         if st.button("Avançar"):
-            col_1ok = True
+            st.session_state.col_1ok = True
         if st.button("Voltar ao Menu"):
             st.session_state.tela = 'menu'
   
+#----------------COLUNA 2-----------------------
     with col2:
         st.write("II.")
-        if (col_1ok == True):
-            match opcoes:
+        if st.session_state.col_1ok:
+            match st.session_state.opcoes:
                 case 'Juros Simples':
                     LISTA_TOPICOII = ['Juros Simples', 'Taxas Equivalentes', 'Juro Exato', 'Juro Comercial', 'Operações com Hot Money', 'Valor Nominal', 'Valor Atual']
-                    opcoes2 = st.selectbox("Escolha o tópico II: ", LISTA_TOPICOII)
+                    st.session_state.opcoes2 = st.selectbox("Escolha o tópico II: ", LISTA_TOPICOII)
                     if st.button("Pronto"):
-                        var_pronto = True
-                        col_2ok = True
-                        col_1ok = True
+                        st.session_state.col_2ok = True
+
+#------------- FORA DA COLUNA ------------------------------------
     st.markdown("---")
-    if (col_1ok == True and col_2ok == True):
+    if (st.session_state.col_1ok and st.session_state.col_2ok):
         #st.subheader("Determine a variável a ser calculada:")
-        match opcoes:
+        match st.session_state.opcoes:
             case 'Juros Simples':
-                match opcoes2:
+                match st.session_state.opcoes2:
                     case 'Juros Simples':
                         st.subheader("Determine a variável a ser calculada:")
                         lista_js_js = ['Montante', 'Capital', 'Juros', 'Prazo']
-                        opcao3 = st.selectbox(lista_js_js)
+                        st.session_state.opcao3 = st.selectbox(" ",lista_js_js)
                         if st.button('OK'):
-                            match opcao3:
+                            match st.session_state.opcao3:
                                 case 'Montante':
                                     #ENTRADAS
                                     st.write("Insira os dados:")
@@ -332,8 +344,8 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                     montante = capital * (1 + juros * prazo / 100)
                                     #SAIDA
                                     if st.button("Calcular"):
-                                        with st.expander():
-                                            st.metric(montante)
+                                        with st.expander("Resultado"):
+                                            st.metric(label = 'Montante', value = f"R$ {montante:,.2f}")
 
 
 def tela_est():  #DESENVOLVIDO
