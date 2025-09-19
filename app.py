@@ -359,7 +359,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                 case 'Capital':
                                     #ENTRADAS
                                     st.write("Insira os dados:")
-                                    st.session_state.montante = st.number_input("montante:", min_value=0.0, value=st.session_state.capital, key="input_montante")
+                                    st.session_state.montante = st.number_input("Montante:", min_value=0.0, value=st.session_state.capital, key="input_montante")
                                     st.session_state.juros = st.number_input("Taxa de juros (%):", min_value=0.00001, value=st.session_state.juros, key="input_juros")
                                     st.session_state.prazo = st.number_input("Prazo:", min_value=0.00001, value=st.session_state.prazo, key="input_prazo")
                                     st.warning("O período da taxa deve ser compatível com o prazo!")
@@ -371,6 +371,36 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                         with st.expander("Resultado"):
                                             #SAIDA
                                             st.metric(label = 'Capital', value = f"R$ {st.session_state.capital:,.2f}")
+                                case 'Juros':
+                                    #ENTRADAS
+                                    st.write("Insira os dados:")
+                                    st.session_state.montante = st.number_input("Montante:", min_value=0.0, value=st.session_state.capital, key="input_montante")
+                                    st.session_state.capital = st.number_input("Capital:", min_value=0.00001, value=st.session_state.juros, key="input_capital")
+                                    st.session_state.prazo = st.number_input("Prazo:", min_value=0.00001, value=st.session_state.prazo, key="input_prazo")
+                                    st.warning("O período da taxa deve ser compatível com o prazo!")
+           
+                                    if st.button("Calcular"):
+                                        #PROCESSAMENTO 
+                                        st.session_state.juros = ((st.session_state.montante / st.session_state.capital) - 1)/st.session_state.prazo
+                                                                            
+                                        with st.expander("Resultado"):
+                                            #SAIDA
+                                            st.metric(label = 'Juros', value = f"{st.session_state.juros:,.2f}%")
+                                case 'Prazo':
+                                    #ENTRADAS
+                                    st.write("Insira os dados:")
+                                    st.session_state.montante = st.number_input("Montante:", min_value=0.0, value=st.session_state.capital, key="input_montante")
+                                    st.session_state.capital = st.number_input("Capital:", min_value=0.00001, value=st.session_state.juros, key="input_capital")
+                                    st.session_state.prazo = st.number_input("Prazo:", min_value=0.00001, value=st.session_state.prazo, key="input_prazo")
+                                    st.warning("O período da taxa deve ser compatível com o prazo!")
+           
+                                    if st.button("Calcular"):
+                                        #PROCESSAMENTO 
+                                        st.session_state.prazo = ((st.session_state.montante / st.session_state.capital) - 1)/st.session_state.juros
+                                                                            
+                                        with st.expander("Resultado"):
+                                            #SAIDA
+                                            st.metric(label = 'Prazo', value = f"{st.session_state.prazo:,.2f}")
 
 
 def tela_est():  #DESENVOLVIDO
