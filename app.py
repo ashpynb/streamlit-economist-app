@@ -297,13 +297,13 @@ def tela_fin(): # EM DESENVOLVIMENTO
     if "opcoes3" not in st.session_state:
         st.session_state.opcoes3 = None
     if "capital" not in st.session_state:
-        st.session_state.capital = 0
+        st.session_state.capital = None
     if "montante" not in st.session_state:
-        st.session_state.montante = 0
+        st.session_state.montante = None
     if "juros" not in st.session_state:
-        st.session_state.juros = 0
+        st.session_state.juros = None
     if "prazo" not in st.session_state:
-        st.session_state.prazo = 0
+        st.session_state.prazo = None
 
 
 
@@ -345,12 +345,12 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                 case 'Montante':
                                     #ENTRADAS
                                     st.write("Insira os dados:")
-                                    st.session_state.capital = st.number_input("Capital:", value = st.session_state.capital)
-                                    st.session_state.juros = st.number_input("Porcentagem da taxa de juros:", value = st.session_state.juros)
-                                    st.session_state.prazo = st.number_input("Prazo:", value = st.session_state.prazo)
+                                    st.session_state.capital = st.number_input("Capital:",  min_value=0.0, key="capital")
+                                    st.session_state.juros = st.number_input("Porcentagem da taxa de juros:",  min_value=0.0, key="juros")
+                                    st.session_state.prazo = st.number_input("Prazo:",  min_value=0.0, key="prazo")
                                     st.warning("O período da taxa deve ser compatível com o prazo!")
                                                          
-                                    if st.button("Calcular"):
+                                    if st.button("Calcular", key="btn_calcular_montante"):
                                         #PROCESSAMENTO 
                                         montante = st.session_state.capital * (1 + st.session_state.juros * st.session_state.prazo / 100)
                                         with st.expander("Resultado"):
