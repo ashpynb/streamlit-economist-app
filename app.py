@@ -457,7 +457,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                 if st.session_state.calcular_prazo is not None:
                                     st.markdown("---")
                                     with st.expander("Resultado"):
-                                        st.metric("Prazo Equivalente", f"{st.session_state.calcular_prazo:.2f} {periodo_destino}")
+                                        st.metric("Prazo Equivalente", f"{st.session_state.calcular_prazo:.2f}")
 
                                         
 
