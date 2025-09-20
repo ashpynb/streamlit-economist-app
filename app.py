@@ -464,18 +464,22 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                 periodo_origem = st.selectbox("Digite o período de origem:", list(dict_taxas.keys()), key="p_origem")
                                 
                                 if st.button("Calcular Prazo Equivalente", key="btn_taxa_equivalente_prazo"):
-                                    # 1. calcular prazo em anos
-                                    prazo_anos = (juros_fim / juros) * dict_taxas[periodo_origem]
-
-                                    # 2. arredondar se próximo de 1 ano
-                                    if abs(prazo_anos - 1) < 0.01:
-                                        prazo_formatado = "1 ano"
+                                    #tratamento de erro:
+                                    if juros== 0 or juros_fim == 0:
+                                        st.warning("Por favor insira valores maiores que 0 para os juros!")
                                     else:
-                                        # converter para dias para exibir valor exato
-                                        prazo_dias = prazo_anos * 360
-                                        prazo_formatado = f"{prazo_dias:.0f} dias ({prazo_anos:.2f} anos)"
-                                    
-                                    st.session_state.calcular_prazo = prazo_formatado
+                                        # 1. calcular prazo em anos
+                                        prazo_anos = (juros_fim / juros) * dict_taxas[periodo_origem]
+
+                                        # 2. arredondar se próximo de 1 ano
+                                        if abs(prazo_anos - 1) < 0.01:
+                                            prazo_formatado = "1 ano"
+                                        else:
+                                            # converter para dias para exibir valor exato
+                                            prazo_dias = prazo_anos * 360
+                                            prazo_formatado = f"{prazo_dias:.0f} dias ({prazo_anos:.2f} anos)"
+                                        
+                                        st.session_state.calcular_prazo = prazo_formatado
 
                                 if st.session_state.calcular_prazo is not None:
                                     st.markdown("---")
