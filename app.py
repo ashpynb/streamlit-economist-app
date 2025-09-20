@@ -402,6 +402,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                             #SAIDA
                                             st.metric(label = 'Prazo', value = f"{st.session_state.prazo:,.2f}")
             case 'Taxas Equivalentes':
+                st.subheader("Determine a variável a ser calculada:")
                 st.warning("No caso de Juros Simples, sabe-se que o prazo deve ser expresso na mesma unidade que a taxa. Então é preciso converter estas taxas para que sejam equivalentes.")
                 dict_taxas = {
                     "ao dia": 1/360,
@@ -412,10 +413,9 @@ def tela_fin(): # EM DESENVOLVIMENTO
                     "ao semestre": 180/360,
                     "ao ano": 360/360
                 }
-
                 #session.state para nao dar RERUN
                 if "tipo_conversao" not in st.session_state:
-                    st.session_state.tipo_conversao = None
+                    st.session_state.tipo_conversao = False
                 if "mostrar_inputs" not in st.session_state:
                     st.session_state.mostrar_inputs = False
                 if "calcular_taxas" not in st.session_state:
@@ -424,11 +424,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                     st.session_state.calcular_prazo = None
 
                 #ENTRADA
-                st.session_state.tipo_conversao = st.radio(
-                    "O que você deseja converter?",
-                    ["Taxa de Juros", "Prazo"],
-                    index=0
-                )
+                st.session_state.tipo_conversao = st.selectbox("O que você deseja converter?", ["Taxa de Juros", "Prazo"])           
                 if st.button("Avançar"):
                     st.session_state.mostrar_inputs = True
 
