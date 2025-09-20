@@ -401,59 +401,61 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                         with st.expander("Resultado"):
                                             #SAIDA
                                             st.metric(label = 'Prazo', value = f"{st.session_state.prazo:,.2f}")
-            case 'Taxas Equivalentes':
-                st.subheader("Determine a variável a ser calculada:")
-                st.warning("No caso de Juros Simples, sabe-se que o prazo deve ser expresso na mesma unidade que a taxa. Então é preciso converter estas taxas para que sejam equivalentes.")
-                dict_taxas = {
-                    "ao dia": 1/360,
-                    "ao mês": 30/360,
-                    "ao bimestre": 60/360,
-                    "ao trimestre": 90/360,
-                    "ao quadrimestre": 120/360,
-                    "ao semestre": 180/360,
-                    "ao ano": 360/360
-                }
-                #session.state para nao dar RERUN
-                if "tipo_conversao" not in st.session_state:
-                    st.session_state.tipo_conversao = False
-                if "mostrar_inputs" not in st.session_state:
-                    st.session_state.mostrar_inputs = False
-                if "calcular_taxas" not in st.session_state:
-                    st.session_state.calcular_taxas = None
-                if "calcular_prazo" not in st.session_state:
-                    st.session_state.calcular_prazo = None
+        match st.session_state.opcoes:
+            case 'Juros Simples':
+                match st.session_state.opcoes2:        
+                    case 'Taxas Equivalentes':
+                        st.subheader("Determine a variável a ser calculada:")
+                        st.warning("No caso de Juros Simples, sabe-se que o prazo deve ser expresso na mesma unidade que a taxa. Então é preciso converter estas taxas para que sejam equivalentes.")
+                        dict_taxas = {
+                            "ao dia": 1/360,
+                            "ao mês": 30/360,
+                            "ao bimestre": 60/360,
+                            "ao trimestre": 90/360,
+                            "ao quadrimestre": 120/360,
+                            "ao semestre": 180/360,
+                            "ao ano": 360/360
+                        }
+                        #session.state para nao dar RERUN
+                        if "tipo_conversao" not in st.session_state:
+                            st.session_state.tipo_conversao = False
+                        if "mostrar_inputs" not in st.session_state:
+                            st.session_state.mostrar_inputs = False
+                        if "calcular_taxas" not in st.session_state:
+                            st.session_state.calcular_taxas = None
+                        if "calcular_prazo" not in st.session_state:
+                            st.session_state.calcular_prazo = None
 
-                #ENTRADA
-                st.session_state.tipo_conversao = st.selectbox("O que você deseja converter?", ["Taxa de Juros", "Prazo"])           
-                if st.button("Avançar", key = "btn_taxa_equivalente"):
-                    st.session_state.mostrar_inputs = True
+                        #ENTRADA
+                        st.session_state.tipo_conversao = st.selectbox("O que você deseja converter?", ["Taxa de Juros", "Prazo"])           
+                        if st.button("Avançar", key = "btn_taxa_equivalente"):
+                            st.session_state.mostrar_inputs = True
 
-                st.markdown("---")
-                if st.session_state.mostrar_inputs:
-                    if st.session_state.tipo_conversao == "Taxa de Juros":
-                        juros = st.number_input("Digite a taxa de juros (%):", min_value = 0.0)
-                        periodo_origem = st.selectbox("Período de origem:",list(dict_taxas.keys()))
-                        periodo_destino = st.selectbox("Converter para:",list(dict_taxas.keys()))
-                        if st.button("Calcular", key = "btn_taxa_equivalente_juros"):
-                            st.session_state.calcular_taxas = juros * (dict_taxas[periodo_origem] / dict_taxas[periodo_destino])
+                        st.markdown("---")
+                        if st.session_state.mostrar_inputs:
+                            if st.session_state.tipo_conversao == "Taxa de Juros":
+                                juros = st.number_input("Digite a taxa de juros (%):", min_value = 0.0)
+                                periodo_origem = st.selectbox("Período de origem:",list(dict_taxas.keys()))
+                                periodo_destino = st.selectbox("Converter para:",list(dict_taxas.keys()))
+                                if st.button("Calcular", key = "btn_taxa_equivalente_juros"):
+                                    st.session_state.calcular_taxas = juros * (dict_taxas[periodo_origem] / dict_taxas[periodo_destino])
 
-                        if st.session_state.calcular_taxas is not None:
-                            st.markdown("---")
-                            with st.expander("Resultado"):
-                                st.metric("Taxa Equivalente", f"{st.session_state.calcular_taxas:.4f}% {periodo_destino}")
+                                if st.session_state.calcular_taxas is not None:
+                                    st.markdown("---")
+                                    with st.expander("Resultado"):
+                                        st.metric("Taxa Equivalente", f"{st.session_state.calcular_taxas:.4f}% {periodo_destino}")
 
+                            elif st.session_state.tipo_conversao == "Prazo":
+                                prazo = st.number_input("Digite o prazo:", min_value=0.0)
+                                periodo_origem = st.selectbox("Prazo em:", list(dict_taxas.keys()), key="p_origem")
+                                periodo_destino = st.selectbox("Converter para:", list(dict_taxas.keys()), key="p_destino")
+                                if st.button("Calcular Prazo Equivalente", key = "btn_taxa_equivalente_prazo"):
+                                    st.session_state.calcular_prazo = prazo * (dict_taxas[periodo_origem] / dict_taxas[periodo_destino])
 
-                    elif st.session_state.tipo_conversao == "Prazo":
-                        prazo = st.number_input("Digite o prazo:", min_value=0.0)
-                        periodo_origem = st.selectbox("Prazo em:", list(dict_taxas.keys()), key="p_origem")
-                        periodo_destino = st.selectbox("Converter para:", list(dict_taxas.keys()), key="p_destino")
-                        if st.button("Calcular Prazo Equivalente", key = "btn_taxa_equivalente_prazo"):
-                            st.session_state.calcular_prazo = prazo * (dict_taxas[periodo_origem] / dict_taxas[periodo_destino])
-
-                        if st.session_state.calcular_prazo is not None:
-                            st.markdown("---")
-                            with st.expander("Resultado"):
-                                st.metric("Prazo Equivalente", f"{st.session_state.calcular_prazo:.2f} {periodo_destino}")
+                                if st.session_state.calcular_prazo is not None:
+                                    st.markdown("---")
+                                    with st.expander("Resultado"):
+                                        st.metric("Prazo Equivalente", f"{st.session_state.calcular_prazo:.2f} {periodo_destino}")
 
                                         
 
