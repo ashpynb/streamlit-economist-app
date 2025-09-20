@@ -328,7 +328,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                     st.session_state.opcoes2 = st.selectbox("Escolha o tópico II: ", LISTA_TOPICOII)
                     if st.button("Pronto", key="btn_col2"):
                         st.session_state.col_2ok = True
-                case 'Descontos simples':
+                case 'Descontos Simples':
                     LISTA_TOPICOII = ['Desconto comercial', 'Taxa de desconto X Taxa de juros']
                     st.session_state.opcoes2 = st.selectbox("Escolha o tópico II: ", LISTA_TOPICOII)
                     if st.button("Pronto", key="btn_col2"):
