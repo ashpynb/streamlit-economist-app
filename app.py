@@ -447,7 +447,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                         prazo = st.number_input("Digite o prazo:", min_value=0.0)
                         periodo_origem = st.selectbox("Prazo em:", list(dict_taxas.keys()), key="p_origem")
                         periodo_destino = st.selectbox("Converter para:", list(dict_taxas.keys()), key="p_destino")
-                        if st.button("Calcular Prazo Equivalente"), key = "btn_taxa_equivalente_prazo":
+                        if st.button("Calcular Prazo Equivalente", key = "btn_taxa_equivalente_prazo"):
                             st.session_state.calcular_prazo = prazo * (dict_taxas[periodo_origem] / dict_taxas[periodo_destino])
 
                         if st.session_state.calcular_prazo is not None:
