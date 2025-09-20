@@ -338,7 +338,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                     st.session_state.opcoes2 = st.selectbox("Escolha o tópico II: ", LISTA_TOPICOII)
                     if st.button("Pronto", key="btn_col2"):
                         st.session_state.col_2ok = True
-                case 'Taxa real de juros':
+                case 'Taxa Real de Juros':
                     LISTA_TOPICOII = ['Índice de preços', 'Taxa Acumulada', 'IPCA', 'Taxa Real de Juros']
                     st.session_state.opcoes2 = st.selectbox("Escolha o tópico II: ", LISTA_TOPICOII)
                     if st.button("Pronto", key="btn_col2"):
