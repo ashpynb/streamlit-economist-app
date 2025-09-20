@@ -459,18 +459,12 @@ def tela_fin(): # EM DESENVOLVIMENTO
 
                             elif st.session_state.tipo_conversao == "Prazo":
                                 st.warning("Utilize esta ferramenta quando se sabe a taxa de início, sabe a taxa final, mas não sabe quala período ela se transformou!")
-                                juros = st.number_input("Digite a taxa de juros inicial", min_value=0.0)
-                                juros_fim = st.number_input("Digite a taxa de juros final", min_value=0.0)
+                                juros = st.number_input("Digite a taxa de juros inicial (%)", min_value=0.0)
+                                juros_fim = st.number_input("Digite a taxa de juros final (%)", min_value=0.0)
                                 periodo_origem = st.selectbox("Digite o período de origem:", list(dict_taxas.keys()), key="p_origem")
                                 if st.button("Calcular Prazo Equivalente", key = "btn_taxa_equivalente_prazo"):
                                     prazo = juros_fim/juros * (dict_taxas[periodo_origem])
-                                    # converter prazo para ano, se próximo de 1
-                                    if abs(prazo - 1) < 0.01:  # tolerância de 0,01
-                                        prazo_display = "1 ano"
-                                    else:
-                                        # para mostrar em unidades do período original
-                                        prazo_display = f"{prazo:.2f} {periodo_origem}"
-                                    st.session_state.calcular_prazo = prazo_display
+                                    st.session_state.calcular_prazo = (f"{prazo:.2f} {periodo_origem}")
 
                                 if st.session_state.calcular_prazo is not None:
                                     st.markdown("---")
