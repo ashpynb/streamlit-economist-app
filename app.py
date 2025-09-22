@@ -302,7 +302,7 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                         st.subheader("Linha de Restrição Orçamentária")
                         #dividir mais duas colunas aqui
                         col1_lrc, col2_lrc = st.columns(2)
-                        with col1_lrc:
+                        with col2_lrc:
                             st.write("Aqui ficará o gráfico!")
                             if st.session_state.calcular_plot:
                                 #Plot
@@ -316,11 +316,11 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                                 ax.scatter([st.session_state.q1_max], [0], color="red", label="Máximo Bem A")
                                 ax.scatter([0], [st.session_state.q2_max], color="blue", label="Máximo Bem B")
                                 st.pyplot(fig)
-                        with col2_lrc:
+                        with col1_lrc:
                             #entradas
-                            renda_input = st.number_input("Renda do Consumidor:", min_value=0.01, value=st.session_state.get('renda',0.0), key="input_renda")
-                            precoa_input = st.number_input("Preço do bem A:", min_value=0.01, value=st.session_state.get('precoa',0.0), key="input_precoa")
-                            precob_input = st.number_input("Preço do bem B:", min_value=0.01, value=st.session_state.get('precob',0.0), key="input_precob")
+                            renda_input = st.number_input("Renda do Consumidor:", min_value=0.0, value=st.session_state.get('renda',0.0), key="input_renda")
+                            precoa_input = st.number_input("Preço do bem A:", min_value=0.0, value=st.session_state.get('precoa',0.0), key="input_precoa")
+                            precob_input = st.number_input("Preço do bem B:", min_value=0.0, value=st.session_state.get('precob',0.0), key="input_precob")
                             #formula = q2 = (R/p2) - (p1/p2)*q1
                             st.session_state.renda = renda_input
                             st.session_state.precoa = precoa_input
