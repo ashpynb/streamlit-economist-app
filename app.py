@@ -4,6 +4,7 @@ from datetime import datetime
 import pandas as pd
 import numpy as np 
 import math
+import matplotlib as plt
 
 st.set_page_config(
     page_title="Fórmula Econômica",
@@ -259,27 +260,90 @@ def obter_taxas(): #DESENVOLVIDO com api e gpt
 # Simuladores simples
 def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para simular os gráficos
     st.title('Simulador Microeconômico')
-    st.subheader('Simule aqui suas principais necessidades microeconômicas', divider = True)
-    opcao = st.selectbox("Escolha uma operação:", 
-                         ["Linha de Restrição Orçamentária", "Curva de indiferença", "Equilíbrio do Consumidor", "Curva de Demanda Individual", "Maximização de Utilidade", "Elasticidades", "Excedente do Consumidor"])
-    if st.button("Avançar"):
-        if opcao == "Linha de Restrição Orçamentária":
-            st.session_state.tela = 'linha_orcamentaria'
-        elif opcao == "Curva de indiferença":
-            st.session_state.tela = 'curva_indiferenca'
-        elif opcao == "Equilíbrio do Consumidor":
-            st.session_state.tela = 'equilibrio_consumidor'
-        elif opcao == "Curva de Demanda Individual":
-            st.session_state.tela = 'curva_demanda_indiv'
-        elif opcao == "Maximização de Utilidade":
-            st.session_state.tela = 'maximizacao_utilidade'
-        elif opcao == "Elasticidades":
-            st.session_state.tela = 'elasticidades'
-        elif opcao == "Excedente do Consumidor":
-            st.session_state.tela = 'excedentes_consumidor'
-    st.write('EM CONSTRUÇÃO, VOLTE DEPOIS...')
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
+    st.subheader('_Simule aqui suas principais necessidades microeconômicas_', divider = 'orange')
+    col1, col2 = st.columns(2)
+    if "col_1ok_micro" not in st.session_state:
+        st.session_state.col_1ok_micro = False
+    if "col_2ok_micro" not in st.session_state:
+        st.session_state.col_2ok_micro = False
+    if "opcoes_micro" not in st.session_state:
+        st.session_state.opcoes_micro = None
+    if "opcoes_2_micro" not in st.session_state:
+        st.session_state.opcoes_2_micro = None
+    if "calcular_plot" not in st.session_state:
+        st.session_state.calcular_plot = False
+    
+    #---------------------COLUNA 1 ----------------------------------------
+    with col1:
+        st.write('I.')
+        LISTA_MICRO = ['Micro I', 'Micro II', 'Micro III']
+        st.session_state.opcoes_micro = st.selectbox("Selecione a matéria: ", LISTA_MICRO)
+        if st.button('OK', key = "btn_micro"):
+            st.session_state.col_1ok_micro = True
+        if st.button("Voltar ao Menu", key = "btn_menu"):
+            st.session_state.tela = 'menu'
+    #----------------------COLUNA 2 ---------------------------------------
+    with col2:
+        st.write('II.')
+        if st.session_state.col_1ok_micro == True:
+            if st.session_state.opcoes_micro == 'Micro I':
+                LISTA_MICROI = ["Linha de Restrição Orçamentária", "Curva de indiferença", "Equilíbrio do Consumidor", "Curva de Demanda Individual", "Maximização de Utilidade", "Elasticidades", "Excedente do Consumidor"]
+                st.session_state.opcoes_2_micro = st.selectbox("Selecione o tópico:", LISTA_MICROI)
+                if st.button('Avançar', key = 'btn_avanc_micro'):
+                    st.session_state.col_2ok_micro = True
+
+    #------------------------------- TELA ---------------------------------
+    if (st.session_state.col_2ok_micro and st.session_state.col_1ok_micro):
+        match st.session_state.opcoes_micro:
+            case 'Micro I':
+                st.warning("A desenvolvedora ainda está atualizando essa matéria! Aguarde novas funcionalidades")
+                match st.session_state.opcoes_2_micro:
+                    case "Linha de Restrição Orçamentária":
+                        st.subheader("Linha de Restrição Orçamentária")
+                        #dividir mais duas colunas aqui
+                        col1_lrc, col2_lrc = st.columns(2)
+                        with col1_lrc:
+                            st.write("Aqui ficará o gráfico!")
+                            if st.session_state.calcular_plot:
+                                #Plot
+                                fig, ax = plt.subplots()
+                                ax.plot(st.session_state.q1_micro, st.session_state.q2_micro, label="Restrição Orçamentária")
+                                ax.set_xlabel("Quantidade do Bem A")
+                                ax.set_ylabel("Quantidade do Bem B")
+                                ax.set_title("Linha de Restrição Orçamentária")
+                                ax.legend()
+                                ax.grid(True)
+                                ax.scatter([st.session_state.q1_max], [0], color="red", label="Máximo Bem A")
+                                ax.scatter([0], [st.session_state.q2_max], color="blue", label="Máximo Bem B")
+                                st.pyplot(fig)
+                        with col2_lrc:
+                            #entradas
+                            renda_input = st.number_input("Renda do Consumidor:", min_value=0.01, value=st.session_state.get('renda',0.0), key="input_renda")
+                            precoa_input = st.number_input("Preço do bem A:", min_value=0.01, value=st.session_state.get('precoa',0.0), key="input_precoa")
+                            precob_input = st.number_input("Preço do bem B:", min_value=0.01, value=st.session_state.get('precob',0.0), key="input_precob")
+                            #formula = q2 = (R/p2) - (p1/p2)*q1
+                            st.session_state.renda = renda_input
+                            st.session_state.precoa = precoa_input
+                            st.session_state.precob = precob_input
+                            if (renda_input == 0 or precoa_input == 0 or precob_input == 0):
+                                st.error("Preencha com dados acima de zero!")
+                            else:
+                                if st.button("Calcular:", key = "btn_micro_lro"):
+                                    #quantidade maxima
+                                    st.session_state.q2_max = (st.session_state.renda/st.session_state.precob)
+                                    st.session_state.q1_max = (st.session_state.renda/st.session_state.precoa)
+                                    #comando para gerar 50 pontos igualmente espaçados entre 0 até o max
+                                    q1 = np.linspace(0, st.session_state.q1_max, 50) #cria uma lista
+                                    q2 = (renda_input/precob_input) - (precoa_input/precob_input)*q1
+                                    st.session_state.q1_micro = q1
+                                    st.session_state.q2_micro = q2
+                                    st.session_state.calcular_plot = True
+
+            case 'Micro II':
+                st.warning("A desenvolvedora ainda está aprendendo essa matéria! Volte daqui uns meses para possível atualização!")
+            case 'Micro III':
+                st.warning("A desenvolvedora irá ainda aprender essa matéria! Volte daqui uns meses para possível atualização!")
+                
 
 def tela_fin(): # EM DESENVOLVIMENTO
     st.title('Simulador Financeiro')
@@ -324,7 +388,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
         if st.session_state.col_1ok:
             match st.session_state.opcoes:
                 case 'Juros Simples':
-                    LISTA_TOPICOII = ['Juros Simples', 'Taxas Equivalentes', 'Juro Exato', 'Juro Comercial', 'Operações com Hot Money', 'Valor Nominal', 'Valor Atual']
+                    LISTA_TOPICOII = ['Juros Simples', 'Taxas Equivalentes', 'Juro Exato x Juro Comercial', 'Operações com Hot Money', 'Valor Nominal', 'Valor Atual']
                     st.session_state.opcoes2 = st.selectbox("Escolha o tópico II: ", LISTA_TOPICOII)
                     if st.button("Pronto", key="btn_col2"):
                         st.session_state.col_2ok = True
@@ -383,6 +447,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                     else:
                                         st.session_state.prazo = prazo_input
                                         st.session_state.juros = juros_input
+                                        st.session_state.capital = capital_input
                                         capital_input = st.number_input("Capital:", min_value=0.00001, value=st.session_state.get('capital', 0.0), key="input_capital")
                                         
                                         if st.button("Calcular"):
@@ -423,7 +488,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                         st.error('Por favor insira um valor válido e diferente de zero!')
                                     else:                           
                                         st.session_state.capital = capital_input
-                                        st.session_state.montante = juros_input
+                                        st.session_state.montante = montante_input
                                         st.session_state.prazo = prazo_input
                                         if st.button("Calcular"):
                                             #PROCESSAMENTO 
@@ -525,12 +590,64 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                     st.markdown("---")
                                     with st.expander("Resultado"):
                                         st.metric("Prazo Equivalente", st.session_state.calcular_prazo)
-                    case 'Juro Exato':
+                    case 'Juro Exato x Juro Comercial':
+                        st.subheader("Definição de Juro Exato x Juro Comercial")
+                        st.warning('Os juros exatos consideram o ano civil, que tem 365 dias e cada mês com o número real de dias. Já os juros comerciais consideram o ano comercial, que tem 360 dias e cada mês com 30 dias.')
+                        #Para não dar rerun
+                        if "tempo_juros" not in st.session_state:
+                            st.session_state.tempo_juros = False
+                        if "tempo_prazo" not in st.session_state:
+                            st.session_state.tempo_prazo = False
+
+                        dict_taxas = {
+                            "ao dia": 1/360,
+                            "ao mês": 30/360,
+                            "ao bimestre": 60/360,
+                            "ao trimestre": 90/360,
+                            "ao quadrimestre": 120/360,
+                            "ao semestre": 180/360,
+                            "ao ano": 1
+                        }
+                        #ENTRADAS
+                        juros_input = st.number_input("Taxa de Juros(%):", min_value=0.0, value=st.session_state.get('juros',0.0), key="input_juros")
+                        st.session_state.tempo_juros = st.selectbox("Selecione o período da Taxa de Juros(%)", dict_taxas.keys())
+                        capital_input = st.number_input("Capital:", min_value=0.0, value=st.session_state.get('capital', 0.0), key="input_capital")
+                        prazo_input = st.number_input("Prazo:", min_value=0.0, value=st.session_state.get('prazo', 0.0), key="input_prazo")
+                        st.session_state.tempo_prazo = st.selectbox("Selecione o período de aplicação:", dict_taxas.keys())
+                        st.warning("O período da taxa deve ser compatível com o prazo!")        
+                        if (capital_input == 0 or prazo_input == 0 or juros_input == 0):
+                            st.error('Por favor insira um valor válido e diferente de zero!')
+                        else:                           
+                            st.session_state.capital = capital_input
+                            st.session_state.juros = juros_input
+                            st.session_state.prazo = prazo_input
+                            if st.button("Calcular"):
+                            #PROCESSAMENTO 
+                            # tempo em anos (já considerando o período selecionado)
+                                tempo_anos = st.session_state.prazo * dict_taxas[st.session_state.tempo_prazo]
+
+                                tempo_comercial = tempo_anos * 360   # em dias comerciais
+                                tempo_exato = tempo_anos * 365       # em dias exatos
+
+                            # Transformar taxa de juros para base anual
+                                taxa_anual = (st.session_state.juros / 100) / dict_taxas[st.session_state.tempo_juros]
+
+                            # Cálculo dos juros
+                                st.session_state.juros_comercial = st.session_state.capital * (taxa_anual/360) * tempo_comercial
+                                st.session_state.juros_exato = st.session_state.capital * (taxa_anual/365) * tempo_exato                                              
+                                with st.expander("Juro Comercial"):
+                                    #SAIDA
+                                    st.metric(label = 'Juros Comercial', value = f"R${st.session_state.juros_comercial:,.2f}")
+                                with st.expander("Juro Exato"):
+                                    #SAIDA
+                                    st.metric(label = 'Juros Exato', value = f"R${st.session_state.juros_exato:,.2f}")
+                    case 'Operações com Hot Money':
                         st.write('oi')
-
-
-                                        
-
+                    case 'Valor Nominal':
+                        st.write('oi')
+                    case 'Valor Atual':
+                        st.write('oi')
+                                    
 def tela_est():  #DESENVOLVIDO
     st.title('Simulador Estatístico')
     st.subheader('Insira seus dados e selecione as análises desejadas', divider='orange')
