@@ -297,13 +297,13 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
         match st.session_state.opcoes_micro:
             case 'Micro I':
                 st.warning("A desenvolvedora ainda está atualizando essa matéria! Aguarde novas funcionalidades")
+                st.markdown("---")
                 match st.session_state.opcoes_2_micro:
                     case "Linha de Restrição Orçamentária":
                         st.subheader("Linha de Restrição Orçamentária")
                         #dividir mais duas colunas aqui
                         col1_lrc, col2_lrc = st.columns(2)
                         with col2_lrc:
-                            st.write("Aqui ficará o gráfico!")
                             if st.session_state.calcular_plot:
                                 #Plot
                                 fig, ax = plt.subplots()
