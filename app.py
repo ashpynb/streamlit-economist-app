@@ -368,9 +368,9 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                             st.session_state.opcoes_ci = st.selectbox("Escolha sua função de Utilidade:", lista_ci)
                             match st.session_state.opcoes_ci:
                                 case "Cobb-Douglas: U(x,y)=x^a* y^b":
-                                    a = st.slider("Expoente do bem X (a)", 0.1, 1.0, 0.5, 0.1)
-                                    b = st.slider("Expoente do bem Y (b)", 0.1, 1.0, 0.5, 0.1)
-                                    U = st.slider("Nível de Utilidade (U)", 5, 100, 25, 5)
+                                    a = st.slider("Expoente do bem X (a)", 0.1, 1.0, 0.5, 0.01)
+                                    b = st.slider("Expoente do bem Y (b)", 0.1, 1.0, 0.5, 0.01)
+                                    U = st.slider("Nível de Utilidade (U)", 1, 10000, 25, 5)
                                     st.session_state.acb = a
                                     st.session_state.bcb = b
                                     st.session_state.ucb = U
