@@ -5,6 +5,9 @@ import pandas as pd
 import numpy as np 
 import math
 import matplotlib.pyplot as plt
+from bokeh.models import HoverTool
+from bokeh.plotting import figure          # isso cria gráficos Bokeh
+from streamlit_bokeh import streamlit_bokeh  # insere o gráfico no Streamlit
 
 st.set_page_config(
     page_title="Fórmula Econômica",
@@ -272,6 +275,23 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
         st.session_state.opcoes_2_micro = None
     if "calcular_plot" not in st.session_state:
         st.session_state.calcular_plot = False
+    if "opcoes_ci" not in st.session_state:
+        st.session_state.opcoes_ci = None
+    if "col_1ok_ci" not in st.session_state:
+        st.session_state.col_1ok_ci = False
+    if "col_2ok_ci" not in st.session_state:
+        st.session_state.col_2ok_ci = False
+    if "opcoes_1_ci" not in st.session_state:
+        st.session_state.opcoes_1_ci = None
+    if "opcoes_2_ci" not in st.session_state:
+        st.session_state.opcoes_2_ci = None
+    if "acb" not in st.session_state:
+        st.session_state.acb = None
+    if "bcb" not in st.session_state:
+        st.session_state.bcb = None
+    if "ucb" not in st.session_state:
+        st.session_state.ucb = None
+    
     
     #---------------------COLUNA 1 ----------------------------------------
     with col1:
@@ -328,7 +348,7 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                             if (renda_input == 0 or precoa_input == 0 or precob_input == 0):
                                 st.error("Preencha com dados acima de zero!")
                             else:
-                                if st.button("Calcular:", key = "btn_micro_lro"):
+                                if st.button("Calcular", key = "btn_micro_lro"):
                                     #quantidade maxima
                                     st.session_state.q2_max = (st.session_state.renda/st.session_state.precob)
                                     st.session_state.q1_max = (st.session_state.renda/st.session_state.precoa)
@@ -338,6 +358,58 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                                     st.session_state.q1_micro = q1
                                     st.session_state.q2_micro = q2
                                     st.session_state.calcular_plot = True
+                    case "Curva de indiferença":
+                        st.subheader("Curva de indiferença")
+                        st.warning("Curva que representa todas as combinações de cestas de mercado que geram o mesmo nível de satisfação para um consumidor. (Robert S. Pindyck,  Daniel L. Rubinfeld,  Eleutério Prado,  Thelma Guimarães, Microeconomia)")
+                        col1_ci, col2_ci = st.columns(2)
+                        with col1_ci:
+                            st.write("")
+                            lista_ci = ["Cobb-Douglas: U(x,y)=x^a* y^b", "Perfeitos substitutos: U(x,y)=ax+by"]
+                            st.session_state.opcoes_ci = st.selectbox("Escolha sua função de Utilidade:", lista_ci)
+                            match st.session_state.opcoes_ci:
+                                case "Cobb-Douglas: U(x,y)=x^a* y^b":
+                                    a = st.slider("Expoente do bem X (a)", 0.1, 1.0, 0.5, 0.1)
+                                    b = st.slider("Expoente do bem Y (b)", 0.1, 1.0, 0.5, 0.1)
+                                    U = st.slider("Nível de Utilidade (U)", 5, 100, 25, 5)
+                                    st.session_state.acb = a
+                                    st.session_state.bcb = b
+                                    st.session_state.ucb = U
+                                    # Dados
+                                    x = np.linspace(1, 50, 300)
+                                    y = (U / (x**a))**(1/b)
+
+                                    # Criar gráfico Bokeh
+                                    p = figure(title=f"Curva de Indiferença U={U}",
+                                            x_axis_label="Bem X",
+                                            y_axis_label="Bem Y",
+                                            width=700, height=500,
+                                            tools="pan,wheel_zoom,reset,save")
+
+                                    p.line(x, y, line_width=2, color="navy", legend_label=f"U={U}")
+                                    p.add_tools(HoverTool(tooltips=[("X", "$x"), ("Y", "$y")]))
+
+                                    if st.button("Criar gráfico", key = "btn_ci_cd"):
+                                        st.session_state.col_1ok_ci = True
+                                        st.session_state.opcoes_1_ci = True
+
+                                    
+                                case "Perfeitos substitutos: U(x,y)=ax+by":
+                                    a_input = st.number_input("Defina a:", value=st.session_state.get('a',0.0), key="input_a")
+                                    b_input = st.number_input("Defina b:", value=st.session_state.get('b',0.0), key="input_b")
+                                    st.session_state.a = a_input
+                                    st.session_state.b = b_input
+                                    if st.button("Criar gráfico", key = "btn_ci_cd"):
+                                        st.session_state.col_1ok_ci = True
+                                        st.session_state.opcoes_2_ci = True
+                        with col2_ci:
+                            st.write("Aqui ficará o gráfico")
+                            if st.session_state.col_1ok_ci== True:
+                                if st.session_state.opcoes_1_ci == True: #caso for opção 1
+                                    st.write("Aqui é a opção 1")
+                                    streamlit_bokeh(p, use_container_width=True, theme="streamlit", key="indiferenca")
+                                if st.session_state.opcoes_2_ci == True: #opção 2
+                                    st.write("Aqui é a opção 2")
+
 
             case 'Micro II':
                 st.warning("A desenvolvedora ainda está aprendendo essa matéria! Volte daqui uns meses para possível atualização!")
