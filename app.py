@@ -291,6 +291,17 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
         st.session_state.bcb = None
     if "ucb" not in st.session_state:
         st.session_state.ucb = None
+    if "aro" not in st.session_state:
+        st.session_state.aro = None
+    if "bro" not in st.session_state:
+        st.session_state.bro = None
+    if "rro" not in st.session_state:
+        st.session_state.rro = None
+    if "q1" not in st.session_state:
+        st.session_state.q1 = None
+    if "q2" not in st.session_state:
+        st.session_state.q2 = None
+
     
     
     #---------------------COLUNA 1 ----------------------------------------
@@ -326,38 +337,36 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                         with col2_lrc:
                             if st.session_state.calcular_plot:
                                 #Plot
-                                fig, ax = plt.subplots()
-                                ax.plot(st.session_state.q1_micro, st.session_state.q2_micro, label="Restrição Orçamentária")
-                                ax.set_xlabel("Quantidade do Bem A")
-                                ax.set_ylabel("Quantidade do Bem B")
-                                ax.set_title("Linha de Restrição Orçamentária")
-                                ax.legend()
-                                ax.grid(True)
-                                ax.scatter([st.session_state.q1_max], [0], color="red", label="Máximo Bem A")
-                                ax.scatter([0], [st.session_state.q2_max], color="blue", label="Máximo Bem B")
-                                st.pyplot(fig)
+                                streamlit_bokeh(p, use_container_width=True, theme="streamlit", key="restricao_orcamentaria")
                         with col1_lrc:
                             #entradas
-                            renda_input = st.number_input("Renda do Consumidor:", min_value=0.0, value=st.session_state.get('renda',0.0), key="input_renda")
-                            precoa_input = st.number_input("Preço do bem A:", min_value=0.0, value=st.session_state.get('precoa',0.0), key="input_precoa")
-                            precob_input = st.number_input("Preço do bem B:", min_value=0.0, value=st.session_state.get('precob',0.0), key="input_precob")
-                            #formula = q2 = (R/p2) - (p1/p2)*q1
-                            st.session_state.renda = renda_input
-                            st.session_state.precoa = precoa_input
-                            st.session_state.precob = precob_input
-                            if (renda_input == 0 or precoa_input == 0 or precob_input == 0):
-                                st.error("Preencha com dados acima de zero!")
-                            else:
-                                if st.button("Calcular", key = "btn_micro_lro"):
-                                    #quantidade maxima
-                                    st.session_state.q2_max = (st.session_state.renda/st.session_state.precob)
-                                    st.session_state.q1_max = (st.session_state.renda/st.session_state.precoa)
-                                    #comando para gerar 50 pontos igualmente espaçados entre 0 até o max
-                                    q1 = np.linspace(0, st.session_state.q1_max, 50) #cria uma lista
-                                    q2 = (renda_input/precob_input) - (precoa_input/precob_input)*q1
-                                    st.session_state.q1_micro = q1
-                                    st.session_state.q2_micro = q2
-                                    st.session_state.calcular_plot = True
+                            a = st.slider("Preço do bem A: (a)", 1, 1000, 1, 1)
+                            b = st.slider("Preço do bem B (b)", 1, 1000, 1, 1)
+                            R = st.slider("Renda(R)", 1, 2000, 25, 1)
+                            st.session_state.aro = a
+                            st.session_state.bro = b
+                            st.session_state.rro = R
+                            
+                            if st.button("Calcular", key = "btn_micro_lro"):
+                                                # Dados: formula q2 = (R/p2) - (p1/p2)*q1
+                                st.session_state.q2_max = (st.session_state.rro/st.session_state.bro)
+                                st.session_state.q1_max = (st.session_state.rro/st.session_state.aro)
+                                q1 = np.linspace(0, st.session_state.q1_max, 50)
+                                q2 = (R / b) - ((a/b) * q1)
+                                st.session_state.q1 = q1
+                                st.session_state.q2 = q2
+                                
+                                        # Criar gráfico Bokeh
+                                p = figure(title=f"Linha de Restrição Orçamentária {R}",
+                                x_axis_label="Bem A",
+                                y_axis_label="Bem B",
+                                width=700, height=500,
+                                tools="pan,wheel_zoom,reset,save")
+                                p.line(q1, q2, line_width=2, color="navy", legend_label=f"R={R}")
+                                p.add_tools(HoverTool(tooltips=[("A", "$A"), ("B", "$b")]))
+                                st.session_state.q1_micro = q1
+                                st.session_state.q2_micro = q2
+                                st.session_state.calcular_plot = True
                     case "Curva de indiferença":
                         st.subheader("Curva de indiferença")
                         st.warning("Curva que representa todas as combinações de cestas de mercado que geram o mesmo nível de satisfação para um consumidor. (Robert S. Pindyck,  Daniel L. Rubinfeld,  Eleutério Prado,  Thelma Guimarães, Microeconomia)")
