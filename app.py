@@ -751,9 +751,13 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                 #PROCESSAMENTO 
                                 # tempo em anos (já considerando o período selecionado)
                                 tempo_anos = st.session_state.prazo * dict_taxas[st.session_state.tempo_prazo]
+                                # tempo em dias
+                                tempo_comercial = prazo_input * dict_taxas[st.session_state.tempo_prazo] * 360
+                                tempo_exato = prazo_input * dict_taxas[st.session_state.tempo_prazo] * 365
 
-                                tempo_comercial = tempo_anos * 360   # em dias comerciais
-                                tempo_exato = tempo_anos * 365    # em dias exatos
+                                # juros simples
+                                juros_comercial = capital_input * (juros_input / 100) * (tempo_comercial / 360)
+                                juros_exato = capital_input * (juros_input / 100) * (tempo_exato / 365)
 
                                 # Transformar taxa de juros para base anual
                                 taxa_anual = (st.session_state.juros / 100) / dict_taxas[st.session_state.tempo_juros]
