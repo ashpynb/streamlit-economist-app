@@ -336,6 +336,11 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                         col1_lrc, col2_lrc = st.columns(2)
                         with col1_lrc:
                             #entradas
+                            # Criar fonte de dados
+                            source = ColumnDataSource(data=dict(
+                                q1=st.session_state.q1,
+                                q2=st.session_state.q2
+                            ))
                             a = st.slider("Preço do bem A: (a)", 1, 1000, 1, 1)
                             b = st.slider("Preço do bem B (b)", 1, 1000, 1, 1)
                             R = st.slider("Renda(R)", 1, 2000, 25, 1)
