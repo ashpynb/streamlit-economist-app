@@ -419,21 +419,41 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
 
                                     
                                 case "Perfeitos substitutos: U(x,y)=ax+by":
-                                    a_input = st.number_input("Defina a:", value=st.session_state.get('a',0.0), key="input_a")
-                                    b_input = st.number_input("Defina b:", value=st.session_state.get('b',0.0), key="input_b")
-                                    st.session_state.a = a_input
-                                    st.session_state.b = b_input
-                                    if st.button("Criar gráfico", key = "btn_ci_cd"):
+                                    a = st.slider("Coeficiente do bem X (a)", 0.1, 200, 1.0, 0.1)
+                                    b = st.slider("Coeficiente do bem Y (b)", 0.1, 200, 1.0, 0.1)
+                                    U = st.slider("Nível de Utilidade (U)", 1, 500, 20, 1)
+
+                                    st.session_state.a_ps = a
+                                    st.session_state.b_ps = b
+                                    st.session_state.u_ps = U
+
+                                    # Dados
+                                    x = np.linspace(0, 50, 300)
+                                    y = (U - a * x) / b
+                                    y = np.where(y >= 0, y, np.nan)  # evita valores negativos no gráfico
+
+                                    # Criar gráfico Bokeh
+                                    p = figure(
+                                        title=f"Curva de Indiferença (U={U})",
+                                        x_axis_label="Bem X",
+                                        y_axis_label="Bem Y",
+                                        width=700, height=500,
+                                        tools="pan,wheel_zoom,reset,save"
+                                    )
+
+                                    p.line(x, y, line_width=2, color="navy", legend_label=f"U={U}")
+                                    p.add_tools(HoverTool(tooltips=[("X", "$x"), ("Y", "$y")]))
+
+                                    if st.button("Criar gráfico", key="btn_ci_ps"):
                                         st.session_state.col_1ok_ci = True
                                         st.session_state.opcoes_2_ci = True
                         with col2_ci:
                             st.write("Aqui ficará o gráfico")
                             if st.session_state.col_1ok_ci== True:
                                 if st.session_state.opcoes_1_ci == True: #caso for opção 1
-                                    st.write("Aqui é a opção 1")
-                                    streamlit_bokeh(p, use_container_width=True, theme="streamlit", key="indiferenca")
+                                    streamlit_bokeh(p, use_container_width=True, theme="streamlit", key="indiferencacd")
                                 if st.session_state.opcoes_2_ci == True: #opção 2
-                                    st.write("Aqui é a opção 2")
+                                    streamlit_bokeh(p, use_container_width=True, theme="streamlit", key="indiferencasp")
 
 
             case 'Micro II':
