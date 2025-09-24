@@ -332,11 +332,6 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                 match st.session_state.opcoes_2_micro:
                     case "Linha de Restrição Orçamentária":
                         st.subheader("Linha de Restrição Orçamentária")
-                        #criei fonte de dados para facilitar
-                        source = ColumnDataSource(data=dict(
-                            q1=st.session_state.q1,
-                            q2=st.session_state.q2
-                        ))
                         #dividir mais duas colunas aqui
                         col1_lrc, col2_lrc = st.columns(2)
                         with col1_lrc:
@@ -348,27 +343,39 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                             st.session_state.bro = b
                             st.session_state.rro = R
                             
+                            a = float(st.session_state.aro)   
+                            b = float(st.session_state.bro)   
+                            R = float(st.session_state.rro)   
                             if st.button("Calcular", key = "btn_micro_lro"):
                                                 # Dados: formula q2 = (R/p2) - (p1/p2)*q1
-                                st.session_state.q2_max = (st.session_state.rro/st.session_state.bro)
-                                st.session_state.q1_max = (st.session_state.rro/st.session_state.aro)
-                                q1 = np.linspace(0, st.session_state.q1_max, 50)
+                                q2_max = (R/b)
+                                q1_max = (R/a)
+                                q1 = np.linspace(0, q1_max, 200)
                                 q2 = (R / b) - ((a/b) * q1)
+                                q2 = np.clip(q2, 0, None)   #garante que não teremos valores negativos por float
+                                # ColumnDataSource para hover funcionar com @q1 e @q2
+                                source = ColumnDataSource(data=dict(q1=q1, q2=q2))
                                 st.session_state.q1 = q1
                                 st.session_state.q2 = q2
                                 st.session_state.calcular_plot = True
                         with col2_lrc:
                             if st.session_state.calcular_plot:
                                         # Criar gráfico Bokeh
-                                ro_p = figure(title=f"Linha de Restrição Orçamentária, R: {R}",
+                                ro_p = figure(title=f"Linha de Restrição Orçamentária, R: {int(R)}",
                                 x_axis_label="Bem A",
                                 y_axis_label="Bem B",
                                 width=700, height=500,
                                 tools="pan,wheel_zoom,reset,save")
 
-                                ro_p.line("q1", "q2", source=source, line_width=2, color="navy", legend_label=f"R={R}")
-                                hover = HoverTool(tooltips=[("Bem A", "@q1{0.00}"), ("Bem B", "@q2{0.00}")])
+                                ro_p.line("q1", "q2", source=source, line_width=3, color="navy", legend_label=f"R={int(R)}")
+                                hover = HoverTool(tooltips=[("Bem A", "@q1{0.00}"), ("Bem B", "@q2{0.00}")], mode = "mouse")
                                 ro_p.add_tools(hover)
+                                
+                                #forçar range para garantir que apareça q1_max e q2_max
+                                ro_p.x_range.start = 0
+                                ro_p.x_range.end = q1_max * 1.05
+                                ro_p.y_range.start = 0
+                                ro_p.y_range.end = q2_max * 1.05
                                 #Plotar grafico agora!
                                 streamlit_bokeh(ro_p, use_container_width=True, theme="streamlit", key="restricao_orcamentaria")
                     case "Curva de indiferença":
