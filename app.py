@@ -431,8 +431,8 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
 
                                     
                                 case "Perfeitos substitutos: U(x,y)=ax+by":
-                                    a = st.slider("Coeficiente do bem X (a)", 0.1, 200, 1.0, 0.1)
-                                    b = st.slider("Coeficiente do bem Y (b)", 0.1, 200, 1.0, 0.1)
+                                    a = st.slider("Coeficiente do bem X (a)", 0.1, 200.0, 1.0, 0.1)
+                                    b = st.slider("Coeficiente do bem Y (b)", 0.1, 200.0, 1.0, 0.1)
                                     U = st.slider("Nível de Utilidade (U)", 1, 500, 20, 1)
 
                                     st.session_state.a_ps = a
@@ -469,9 +469,9 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
 
 
             case 'Micro II':
-                st.warning("A desenvolvedora ainda está aprendendo essa matéria! Volte daqui uns meses para possível atualização!")
+                st.write("")
             case 'Micro III':
-                st.warning("A desenvolvedora irá ainda aprender essa matéria! Volte daqui uns meses para possível atualização!")
+                st.write("")
                 
 
 def tela_fin(): # EM DESENVOLVIMENTO
