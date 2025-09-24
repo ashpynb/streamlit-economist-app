@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np 
 import math
 import matplotlib.pyplot as plt
-from bokeh.models import HoverTool
+from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.plotting import figure          # isso cria gráficos Bokeh
 from streamlit_bokeh import streamlit_bokeh  # insere o gráfico no Streamlit
 
@@ -332,6 +332,11 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                 match st.session_state.opcoes_2_micro:
                     case "Linha de Restrição Orçamentária":
                         st.subheader("Linha de Restrição Orçamentária")
+                        #criei fonte de dados para facilitar
+                        source = ColumnDataSource(data=dict(
+                            q1=st.session_state.q1,
+                            q2=st.session_state.q2
+                        ))
                         #dividir mais duas colunas aqui
                         col1_lrc, col2_lrc = st.columns(2)
                         with col1_lrc:
@@ -355,14 +360,16 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                         with col2_lrc:
                             if st.session_state.calcular_plot:
                                         # Criar gráfico Bokeh
-                                ro_p = figure(title=f"Linha de Restrição Orçamentária {R}",
+                                ro_p = figure(title=f"Linha de Restrição Orçamentária, R: {R}",
                                 x_axis_label="Bem A",
                                 y_axis_label="Bem B",
                                 width=700, height=500,
                                 tools="pan,wheel_zoom,reset,save")
-                                ro_p.line(st.session_state.q1, st.session_state.q2, line_width=2, color="navy", legend_label=f"R={R}")
-                                ro_p.add_tools(HoverTool(tooltips=[("A", "$A"), ("B", "$b")]))
-                                #Plot
+
+                                ro_p.line("q1", "q2", source=source, line_width=2, color="navy", legend_label=f"R={R}")
+                                hover = HoverTool(tooltips=[("Bem A", "@q1{0.00}"), ("Bem B", "@q2{0.00}")])
+                                ro_p.add_tools(hover)
+                                #Plotar grafico agora!
                                 streamlit_bokeh(ro_p, use_container_width=True, theme="streamlit", key="restricao_orcamentaria")
                     case "Curva de indiferença":
                         st.subheader("Curva de indiferença")
