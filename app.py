@@ -336,8 +336,16 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                         col1_lrc, col2_lrc = st.columns(2)
                         with col2_lrc:
                             if st.session_state.calcular_plot:
+                                        # Criar gráfico Bokeh
+                                ro_p = figure(title=f"Linha de Restrição Orçamentária {R}",
+                                x_axis_label="Bem A",
+                                y_axis_label="Bem B",
+                                width=700, height=500,
+                                tools="pan,wheel_zoom,reset,save")
+                                ro_p.line(st.session_state.q1, st.session_state.q2, line_width=2, color="navy", legend_label=f"R={R}")
+                                ro_p.add_tools(HoverTool(tooltips=[("A", "$A"), ("B", "$b")]))
                                 #Plot
-                                streamlit_bokeh(p, use_container_width=True, theme="streamlit", key="restricao_orcamentaria")
+                                streamlit_bokeh(ro_p, use_container_width=True, theme="streamlit", key="restricao_orcamentaria")
                         with col1_lrc:
                             #entradas
                             a = st.slider("Preço do bem A: (a)", 1, 1000, 1, 1)
@@ -355,17 +363,6 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                                 q2 = (R / b) - ((a/b) * q1)
                                 st.session_state.q1 = q1
                                 st.session_state.q2 = q2
-                                
-                                        # Criar gráfico Bokeh
-                                p = figure(title=f"Linha de Restrição Orçamentária {R}",
-                                x_axis_label="Bem A",
-                                y_axis_label="Bem B",
-                                width=700, height=500,
-                                tools="pan,wheel_zoom,reset,save")
-                                p.line(q1, q2, line_width=2, color="navy", legend_label=f"R={R}")
-                                p.add_tools(HoverTool(tooltips=[("A", "$A"), ("B", "$b")]))
-                                st.session_state.q1_micro = q1
-                                st.session_state.q2_micro = q2
                                 st.session_state.calcular_plot = True
                     case "Curva de indiferença":
                         st.subheader("Curva de indiferença")
