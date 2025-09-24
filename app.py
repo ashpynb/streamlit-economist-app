@@ -318,7 +318,7 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
         st.write('II.')
         if st.session_state.col_1ok_micro == True:
             if st.session_state.opcoes_micro == 'Micro I':
-                LISTA_MICROI = ["Linha de Restrição Orçamentária", "Curva de indiferença", "Equilíbrio do Consumidor", "Curva de Demanda Individual", "Maximização de Utilidade", "Elasticidades", "Excedente do Consumidor"]
+                LISTA_MICROI = ["Linha de Restrição Orçamentária", "Curva de indiferença", "Equilíbrio do Consumidor", "Maximização de Utilidade", "Elasticidades"]
                 st.session_state.opcoes_2_micro = st.selectbox("Selecione o tópico:", LISTA_MICROI)
                 if st.button('Avançar', key = 'btn_avanc_micro'):
                     st.session_state.col_2ok_micro = True
@@ -438,7 +438,6 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                                     st.session_state.a_ps = a
                                     st.session_state.b_ps = b
                                     st.session_state.u_ps = U
-
                                     # Dados
                                     x = np.linspace(0, 50, 300)
                                     y = (U - a * x) / b
@@ -466,8 +465,6 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                                     streamlit_bokeh(p, use_container_width=True, theme="streamlit", key="indiferencacd")
                                 if st.session_state.opcoes_2_ci == True: #opção 2
                                     streamlit_bokeh(p, use_container_width=True, theme="streamlit", key="indiferencasp")
-
-
             case 'Micro II':
                 st.write("")
             case 'Micro III':
@@ -756,7 +753,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                 tempo_anos = st.session_state.prazo * dict_taxas[st.session_state.tempo_prazo]
 
                                 tempo_comercial = tempo_anos * 360   # em dias comerciais
-                                tempo_exato = tempo_anos * 365       # em dias exatos
+                                tempo_exato = tempo_anos * 365/360       # em dias exatos
 
                             # Transformar taxa de juros para base anual
                                 taxa_anual = (st.session_state.juros / 100) / dict_taxas[st.session_state.tempo_juros]
