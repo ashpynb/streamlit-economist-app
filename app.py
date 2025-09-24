@@ -366,31 +366,31 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                             if st.session_state.calcular_plot:
                                 source = ColumnDataSource(data=dict(q1=st.session_state.q1, q2=st.session_state.q2))
                                                 # Criar gráfico Bokeh
-                            ro_p = figure(
-                                title=f"Linha de Restrição Orçamentária (R={int(st.session_state.rro)})",
-                                x_axis_label="Bem A",
-                                y_axis_label="Bem B",
-                                width=700,
-                                height=500,
-                                tools="pan,wheel_zoom,reset,save"
-                            )
+                                ro_p = figure(
+                                    title=f"Linha de Restrição Orçamentária (R={int(st.session_state.rro)})",
+                                    x_axis_label="Bem A",
+                                    y_axis_label="Bem B",
+                                    width=700,
+                                    height=500,
+                                    tools="pan,wheel_zoom,reset,save"
+                                )
 
-                            # Linha da restrição
-                            ro_p.line("q1", "q2", source=source, line_width=3, color="navy",
-                                    legend_label=f"R={int(st.session_state.rro)}")
+                                # Linha da restrição
+                                ro_p.line("q1", "q2", source=source, line_width=3, color="navy",
+                                        legend_label=f"R={int(st.session_state.rro)}")
 
-                            # Hover para mostrar coordenadas
-                            hover = HoverTool(tooltips=[("Bem A", "@q1{0.00}"), ("Bem B", "@q2{0.00}")], mode="mouse")
-                            ro_p.add_tools(hover)
+                                # Hover para mostrar coordenadas
+                                hover = HoverTool(tooltips=[("Bem A", "@q1{0.00}"), ("Bem B", "@q2{0.00}")], mode="mouse")
+                                ro_p.add_tools(hover)
 
-                            # Ajuste de ranges para caber os interceptos
-                            ro_p.x_range.start = 0
-                            ro_p.x_range.end = st.session_state.q1_max * 1.05
-                            ro_p.y_range.start = 0
-                            ro_p.y_range.end = st.session_state.q2_max * 1.05
+                                # Ajuste de ranges para caber os interceptos
+                                ro_p.x_range.start = 0
+                                ro_p.x_range.end = st.session_state.q1_max * 1.05
+                                ro_p.y_range.start = 0
+                                ro_p.y_range.end = st.session_state.q2_max * 1.05
 
-                            # Renderizar no Streamlit
-                            streamlit_bokeh(ro_p, use_container_width=True, theme="streamlit", key="restricao_orcamentaria")
+                                # Renderizar no Streamlit
+                                streamlit_bokeh(ro_p, use_container_width=True, theme="streamlit", key="restricao_orcamentaria")
                     case "Curva de indiferença":
                         st.subheader("Curva de indiferença")
                         st.warning("Curva que representa todas as combinações de cestas de mercado que geram o mesmo nível de satisfação para um consumidor. (Robert S. Pindyck,  Daniel L. Rubinfeld,  Eleutério Prado,  Thelma Guimarães, Microeconomia)")
