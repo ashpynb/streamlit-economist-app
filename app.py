@@ -322,6 +322,10 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                 st.session_state.opcoes_2_micro = st.selectbox("Selecione o tópico:", LISTA_MICROI)
                 if st.button('Avançar', key = 'btn_avanc_micro'):
                     st.session_state.col_2ok_micro = True
+            if st.session_state.opcoes_micro == 'Micro II':
+                st.warning("A desenvolvedora ainda está aprendendo essa matéria! Volte daqui uns meses para possível atualização!")
+            if st.session_state.opcoes_micro == 'Micro III':
+                st.warning("A desenvolvedora ainda está aprendendo essa matéria! Volte daqui uns meses para possível atualização!")
 
     #------------------------------- TELA ---------------------------------
     if (st.session_state.col_2ok_micro and st.session_state.col_1ok_micro):
