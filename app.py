@@ -334,18 +334,6 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                         st.subheader("Linha de Restrição Orçamentária")
                         #dividir mais duas colunas aqui
                         col1_lrc, col2_lrc = st.columns(2)
-                        with col2_lrc:
-                            if st.session_state.calcular_plot:
-                                        # Criar gráfico Bokeh
-                                ro_p = figure(title=f"Linha de Restrição Orçamentária {R}",
-                                x_axis_label="Bem A",
-                                y_axis_label="Bem B",
-                                width=700, height=500,
-                                tools="pan,wheel_zoom,reset,save")
-                                ro_p.line(st.session_state.q1, st.session_state.q2, line_width=2, color="navy", legend_label=f"R={R}")
-                                ro_p.add_tools(HoverTool(tooltips=[("A", "$A"), ("B", "$b")]))
-                                #Plot
-                                streamlit_bokeh(ro_p, use_container_width=True, theme="streamlit", key="restricao_orcamentaria")
                         with col1_lrc:
                             #entradas
                             a = st.slider("Preço do bem A: (a)", 1, 1000, 1, 1)
@@ -364,6 +352,18 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                                 st.session_state.q1 = q1
                                 st.session_state.q2 = q2
                                 st.session_state.calcular_plot = True
+                        with col2_lrc:
+                            if st.session_state.calcular_plot:
+                                        # Criar gráfico Bokeh
+                                ro_p = figure(title=f"Linha de Restrição Orçamentária {R}",
+                                x_axis_label="Bem A",
+                                y_axis_label="Bem B",
+                                width=700, height=500,
+                                tools="pan,wheel_zoom,reset,save")
+                                ro_p.line(st.session_state.q1, st.session_state.q2, line_width=2, color="navy", legend_label=f"R={R}")
+                                ro_p.add_tools(HoverTool(tooltips=[("A", "$A"), ("B", "$b")]))
+                                #Plot
+                                streamlit_bokeh(ro_p, use_container_width=True, theme="streamlit", key="restricao_orcamentaria")
                     case "Curva de indiferença":
                         st.subheader("Curva de indiferença")
                         st.warning("Curva que representa todas as combinações de cestas de mercado que geram o mesmo nível de satisfação para um consumidor. (Robert S. Pindyck,  Daniel L. Rubinfeld,  Eleutério Prado,  Thelma Guimarães, Microeconomia)")
