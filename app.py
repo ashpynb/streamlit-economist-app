@@ -345,7 +345,7 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                             # Sliders de entrada
                             a = st.slider("Preço do bem A (a)", 1, 1000, 40, 1)
                             b = st.slider("Preço do bem B (b)", 1, 1000, 20, 1)
-                            R = st.slider("Renda (R)", 1, 2000, 200, 10)
+                            R = st.slider("Renda (R)", 1, 2000, 200, 1)
                             st.session_state.aro = a
                             st.session_state.bro = b
                             st.session_state.rro = R 
