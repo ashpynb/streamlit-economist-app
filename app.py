@@ -332,57 +332,65 @@ def tela_micro():  #EM DESENVOLVIMENTO --- pretendo integrar MATPLOTLIB para sim
                 match st.session_state.opcoes_2_micro:
                     case "Linha de Restrição Orçamentária":
                         st.subheader("Linha de Restrição Orçamentária")
+                        # Inicializar variáveis no session_state (para evitar erro)
+                        if "q1" not in st.session_state:
+                            st.session_state.q1 = []
+                        if "q2" not in st.session_state:
+                            st.session_state.q2 = []
+                        if "calcular_plot" not in st.session_state:
+                            st.session_state.calcular_plot = False
                         #dividir mais duas colunas aqui
                         col1_lrc, col2_lrc = st.columns(2)
                         with col1_lrc:
-                            #entradas
-                            # Criar fonte de dados
-                            source = ColumnDataSource(data=dict(
-                                q1=st.session_state.q1,
-                                q2=st.session_state.q2
-                            ))
-                            a = st.slider("Preço do bem A: (a)", 1, 1000, 1, 1)
-                            b = st.slider("Preço do bem B (b)", 1, 1000, 1, 1)
-                            R = st.slider("Renda(R)", 1, 2000, 25, 1)
+                            # Sliders de entrada
+                            a = st.slider("Preço do bem A (a)", 1, 1000, 40, 1)
+                            b = st.slider("Preço do bem B (b)", 1, 1000, 20, 1)
+                            R = st.slider("Renda (R)", 1, 2000, 200, 10)
                             st.session_state.aro = a
                             st.session_state.bro = b
-                            st.session_state.rro = R
-                            
-                            a = float(st.session_state.aro)   
-                            b = float(st.session_state.bro)   
-                            R = float(st.session_state.rro)   
+                            st.session_state.rro = R 
                             if st.button("Calcular", key = "btn_micro_lro"):
-                                                # Dados: formula q2 = (R/p2) - (p1/p2)*q1
-                                q2_max = (R/b)
-                                q1_max = (R/a)
+                            # Fórmulas: q2 = (R/p2) - (p1/p2)*q1
+                                q1_max = R / a
+                                q2_max = R / b
                                 q1 = np.linspace(0, q1_max, 200)
-                                q2 = (R / b) - ((a/b) * q1)
-                                q2 = np.clip(q2, 0, None)   #garante que não teremos valores negativos por float
-                                # ColumnDataSource para hover funcionar com @q1 e @q2
-                                source = ColumnDataSource(data=dict(q1=q1, q2=q2))
+                                q2 = (R / b) - ((a / b) * q1)
+                                q2 = np.clip(q2, 0, None)  # Garante não-negativo
+                                 # Salvar no session_state
                                 st.session_state.q1 = q1
                                 st.session_state.q2 = q2
+                                st.session_state.q1_max = q1_max
+                                st.session_state.q2_max = q2_max
                                 st.session_state.calcular_plot = True
                         with col2_lrc:
                             if st.session_state.calcular_plot:
-                                        # Criar gráfico Bokeh
-                                ro_p = figure(title=f"Linha de Restrição Orçamentária, R: {int(R)}",
+                                source = ColumnDataSource(data=dict(q1=st.session_state.q1, q2=st.session_state.q2))
+                                                # Criar gráfico Bokeh
+                            ro_p = figure(
+                                title=f"Linha de Restrição Orçamentária (R={int(st.session_state.rro)})",
                                 x_axis_label="Bem A",
                                 y_axis_label="Bem B",
-                                width=700, height=500,
-                                tools="pan,wheel_zoom,reset,save")
+                                width=700,
+                                height=500,
+                                tools="pan,wheel_zoom,reset,save"
+                            )
 
-                                ro_p.line("q1", "q2", source=source, line_width=3, color="navy", legend_label=f"R={int(R)}")
-                                hover = HoverTool(tooltips=[("Bem A", "@q1{0.00}"), ("Bem B", "@q2{0.00}")], mode = "mouse")
-                                ro_p.add_tools(hover)
-                                
-                                #forçar range para garantir que apareça q1_max e q2_max
-                                ro_p.x_range.start = 0
-                                ro_p.x_range.end = q1_max * 1.05
-                                ro_p.y_range.start = 0
-                                ro_p.y_range.end = q2_max * 1.05
-                                #Plotar grafico agora!
-                                streamlit_bokeh(ro_p, use_container_width=True, theme="streamlit", key="restricao_orcamentaria")
+                            # Linha da restrição
+                            ro_p.line("q1", "q2", source=source, line_width=3, color="navy",
+                                    legend_label=f"R={int(st.session_state.rro)}")
+
+                            # Hover para mostrar coordenadas
+                            hover = HoverTool(tooltips=[("Bem A", "@q1{0.00}"), ("Bem B", "@q2{0.00}")], mode="mouse")
+                            ro_p.add_tools(hover)
+
+                            # Ajuste de ranges para caber os interceptos
+                            ro_p.x_range.start = 0
+                            ro_p.x_range.end = st.session_state.q1_max * 1.05
+                            ro_p.y_range.start = 0
+                            ro_p.y_range.end = st.session_state.q2_max * 1.05
+
+                            # Renderizar no Streamlit
+                            streamlit_bokeh(ro_p, use_container_width=True, theme="streamlit", key="restricao_orcamentaria")
                     case "Curva de indiferença":
                         st.subheader("Curva de indiferença")
                         st.warning("Curva que representa todas as combinações de cestas de mercado que geram o mesmo nível de satisfação para um consumidor. (Robert S. Pindyck,  Daniel L. Rubinfeld,  Eleutério Prado,  Thelma Guimarães, Microeconomia)")
