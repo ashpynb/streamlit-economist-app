@@ -793,23 +793,19 @@ def tela_fin(): # EM DESENVOLVIMENTO
                             st.session_state.prazo = prazo_input
 
                             if st.button("Calcular"):
-                                # Convertendo a taxa para base anual simples
-                                taxa_juros = juros_input / 100
-
-                                # Tempo em dias, respeitando período do prazo
+                                # Tempo em dias
                                 dias_comercial = prazo_input * dict_taxas[tempo_prazo] * 360
                                 dias_exato = prazo_input * dict_taxas[tempo_prazo] * 365
 
-                                # Ajustando a taxa de acordo com o período da taxa de juros
-                                fator_periodo = dict_taxas[tempo_juros]
-                                taxa_comercial = taxa_juros / fator_periodo
-                                taxa_exato = taxa_juros / fator_periodo
+                                # Juros simples
+                                juros_comercial = capital_input * (juros_input / 100) * (dias_comercial / 360)
+                                juros_exato = capital_input * (juros_input / 100) * (dias_exato / 365)
 
-                                # Cálculo de juros simples
-                                st.session_state.juros_comercial = capital_input * (taxa_comercial / 360) * dias_comercial
-                                st.session_state.juros_exato = capital_input * (taxa_exato / 365) * dias_exato
+                                # Armazenando no session_state
+                                st.session_state.juros_comercial = juros_comercial
+                                st.session_state.juros_exato = juros_exato
 
-                                # Exibição
+                                # Exibição dos resultados
                                 with st.expander("Juro Comercial"):
                                     st.metric(
                                         label="Juros Comercial",
@@ -821,6 +817,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                         label="Juros Exato",
                                         value=f"R${st.session_state.juros_exato:,.2f}"
                                     )
+
                     case 'Operações com Hot Money':
                         st.write('oi')
                     case 'Valor Nominal':
