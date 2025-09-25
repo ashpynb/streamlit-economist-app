@@ -757,7 +757,6 @@ def tela_fin(): # EM DESENVOLVIMENTO
                         tempo_juros = st.selectbox(
                             "Selecione o período da Taxa de Juros (%)",
                             list(dict_taxas.keys()),
-                            index=list(dict_taxas.keys()).index(st.session_state.tempo_juros),
                             key="tempo_juros"
                         )
 
@@ -778,7 +777,6 @@ def tela_fin(): # EM DESENVOLVIMENTO
                         tempo_prazo = st.selectbox(
                             "Selecione o período de aplicação:",
                             list(dict_taxas.keys()),
-                            index=list(dict_taxas.keys()).index(st.session_state.tempo_prazo),
                             key="tempo_prazo"
                         )
 
