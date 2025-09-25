@@ -723,19 +723,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                             "Os juros comerciais consideram o ano comercial (360 dias) e cada mês com 30 dias."
                         )
 
-                        # Inicialização de session_state
-                        if "juros" not in st.session_state:
-                            st.session_state.juros = 0.0
-                        if "capital" not in st.session_state:
-                            st.session_state.capital = 0.0
-                        if "prazo" not in st.session_state:
-                            st.session_state.prazo = 0.0
-                        if "tempo_juros" not in st.session_state:
-                            st.session_state.tempo_juros = None
-                        if "tempo_prazo" not in st.session_state:
-                            st.session_state.tempo_prazo = None
-
-                        # Dicionário de períodos
+                        # Dicionário de períodos (fração do ano)
                         dict_taxas = {
                             "ao dia": 1/360,
                             "ao mês": 30/360,
@@ -746,35 +734,55 @@ def tela_fin(): # EM DESENVOLVIMENTO
                             "ao ano": 1
                         }
 
+                        # Inicialização segura do session_state
+                        if "juros" not in st.session_state:
+                            st.session_state.juros = 0.0
+                        if "capital" not in st.session_state:
+                            st.session_state.capital = 0.0
+                        if "prazo" not in st.session_state:
+                            st.session_state.prazo = 0.0
+                        if "tempo_juros" not in st.session_state or st.session_state.tempo_juros not in dict_taxas:
+                            st.session_state.tempo_juros = "ao mês"
+                        if "tempo_prazo" not in st.session_state or st.session_state.tempo_prazo not in dict_taxas:
+                            st.session_state.tempo_prazo = "ao mês"
+
                         # Entradas
                         juros_input = st.number_input(
                             "Taxa de Juros (%):",
                             min_value=0.0,
                             value=st.session_state.juros,
-                            key="input_juros")
+                            key="input_juros"
+                        )
+
                         tempo_juros = st.selectbox(
-                        "Selecione o período da Taxa de Juros (%)",
-                        list(dict_taxas.keys()),
-                        index=list(dict_taxas.keys()).index(st.session_state.get("tempo_juros", "ao mês")),
-                        key="tempo_juros")
+                            "Selecione o período da Taxa de Juros (%)",
+                            list(dict_taxas.keys()),
+                            index=list(dict_taxas.keys()).index(st.session_state.tempo_juros),
+                            key="tempo_juros"
+                        )
+
                         capital_input = st.number_input(
                             "Capital:",
                             min_value=0.0,
                             value=st.session_state.capital,
-                            key="input_capital")
+                            key="input_capital"
+                        )
+
                         prazo_input = st.number_input(
                             "Prazo:",
                             min_value=0.0,
                             value=st.session_state.prazo,
-                            key="input_prazo")
+                            key="input_prazo"
+                        )
+
                         tempo_prazo = st.selectbox(
                             "Selecione o período de aplicação:",
                             list(dict_taxas.keys()),
                             index=list(dict_taxas.keys()).index(st.session_state.tempo_prazo),
-                            key="tempo_prazo")
+                            key="tempo_prazo"
+                        )
+
                         st.warning("O período da taxa deve ser compatível com o prazo!")
-                        tempo_juros = st.session_state.tempo_juros
-                        tempo_prazo = st.session_state.tempo_prazo
 
                         # Validação de zero
                         if capital_input == 0 or juros_input == 0 or prazo_input == 0:
@@ -785,15 +793,23 @@ def tela_fin(): # EM DESENVOLVIMENTO
                             st.session_state.prazo = prazo_input
 
                             if st.button("Calcular"):
-                                # Tempo em dias
-                                tempo_comercial = prazo_input * dict_taxas[tempo_prazo] * 360
-                                tempo_exato = prazo_input * dict_taxas[tempo_prazo] * 365
+                                # Convertendo a taxa para base anual simples
+                                taxa_juros = juros_input / 100
 
-                                # Juros simples
-                                st.session_state.juros_comercial = capital_input * (juros_input / 100) * (tempo_comercial / 360)
-                                st.session_state.juros_exato = capital_input * (juros_input / 100) * (tempo_exato / 365)
+                                # Tempo em dias, respeitando período do prazo
+                                dias_comercial = prazo_input * dict_taxas[tempo_prazo] * 360
+                                dias_exato = prazo_input * dict_taxas[tempo_prazo] * 365
 
-                                # Exibição dos resultados
+                                # Ajustando a taxa de acordo com o período da taxa de juros
+                                fator_periodo = dict_taxas[tempo_juros]
+                                taxa_comercial = taxa_juros / fator_periodo
+                                taxa_exato = taxa_juros / fator_periodo
+
+                                # Cálculo de juros simples
+                                st.session_state.juros_comercial = capital_input * (taxa_comercial / 360) * dias_comercial
+                                st.session_state.juros_exato = capital_input * (taxa_exato / 365) * dias_exato
+
+                                # Exibição
                                 with st.expander("Juro Comercial"):
                                     st.metric(
                                         label="Juros Comercial",
@@ -805,7 +821,6 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                         label="Juros Exato",
                                         value=f"R${st.session_state.juros_exato:,.2f}"
                                     )
-
                     case 'Operações com Hot Money':
                         st.write('oi')
                     case 'Valor Nominal':
