@@ -793,14 +793,16 @@ def tela_fin(): # EM DESENVOLVIMENTO
                             st.session_state.prazo = prazo_input
 
                             if st.button("Calcular"):
-                                # Tempo em dias
-                                dias_comercial = prazo_input * dict_taxas[tempo_prazo] * 360
-                                dias_exato = prazo_input * dict_taxas[tempo_prazo] * 365
+                                # 1. Converter a taxa para uma taxa ANUAL.
+                                taxa_anual = (st.session_state.juros / 100) / dict_taxas[tempo_juros]
 
-                                # Juros simples
-                                juros_comercial = capital_input * (juros_input / 100) * (dias_comercial / 360)
-                                juros_exato = capital_input * (juros_input / 100) * (dias_exato / 365)
+                                # 2. Converter o prazo para DIAS (usando a base comercial de 360 dias).
+                                dias = st.session_state.prazo * (dict_taxas[tempo_prazo] * 360)
 
+                                # 3. Calcular os juros usando a taxa anual e o prazo em dias.
+                                juros_comercial = st.session_state.capital * taxa_anual * (dias / 360)
+                                juros_exato = st.session_state.capital * taxa_anual * (dias / 365)
+                                
                                 # Armazenando no session_state
                                 st.session_state.juros_comercial = juros_comercial
                                 st.session_state.juros_exato = juros_exato
