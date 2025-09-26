@@ -654,7 +654,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                     st.error('Por favor insira um valor válido e diferente de zero!')
                                 else:                           
                                     juros_decimal = juros_va_input / 100
-                                    st.session_state.juros2 = juros_input
+                                    st.session_state.juros2 = juros_va_input
                                     st.session_state.valor_nominal = valor_nominal_input
                                     st.session_state.prazo2 = prazo2_input
                                     if st.button("Calcular", key = "btn_vajs"):
