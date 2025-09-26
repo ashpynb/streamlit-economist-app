@@ -557,91 +557,85 @@ def tela_fin(): # EM DESENVOLVIMENTO
                 match st.session_state.opcoes2:
                     case 'Juros Simples':
                         st.subheader("Determine a variável a ser calculada:")
-                        lista_js_js = ['Montante', 'Capital', 'Juros', 'Prazo']
-                        st.session_state.opcao3 = st.selectbox(" ",lista_js_js)
+                        lista_js_js = ['Montante', 'Capital', 'Taxa de Juros', 'Prazo']
+                        # Adicionei uma key única para o selectbox para segurança
+                        opcao_selecionada = st.selectbox(" ", lista_js_js, key="js_opcao_selecionada")
                         st.markdown("---")
-                        match st.session_state.opcao3:
-                                case 'Montante':
-                                    #ENTRADAS
-                                    st.write("Insira os dados:")
-                                    capital_input = st.number_input("Capital:", min_value=0.00, value=st.session_state.get('capital', 0.0), key="input_capital")
-                                    prazo_input = st.number_input("Prazo:", min_value=0.00, value=st.session_state.get('prazo', 0.0), key="input_prazo")
-                                    juros_input = st.number_input("Juros:", min_value=0.00, value=st.session_state.get('juros',0.0), key="input_juros")
-                                    st.warning("O período da taxa deve ser compatível com o prazo!")
+
+                        match opcao_selecionada:
+                            case 'Montante':
+                                # ENTRADAS
+                                st.write("Insira os dados para calcular o Montante:")
+                                # Adicionei sufixos para tornar as chaves únicas
+                                capital_input = st.number_input("Capital:", min_value=0.0, format="%.2f", key="montante_input_capital")
+                                prazo_input = st.number_input("Prazo:", min_value=0.0, format="%.2f", key="montante_input_prazo")
+                                juros_input = st.number_input("Taxa de Juros (%):", min_value=0.0, format="%.2f", key="montante_input_juros")
+                                st.warning("O período da taxa deve ser compatível com o prazo!")
+
+                                if st.button("Calcular", key="montante_btn_calcular"):
                                     if (capital_input == 0 or prazo_input == 0 or juros_input == 0):
                                         st.error('Por favor insira um valor válido e diferente de zero!')
                                     else:
-                                        st.session_state.prazo = prazo_input
-                                        st.session_state.juros = juros_input
-                                        st.session_state.capital = capital_input
-                                                                                
-                                        if st.button("Calcular"):
-                                            #PROCESSAMENTO 
-                                            st.session_state.montante = st.session_state.capital * (1 + st.session_state.juros/100 * st.session_state.prazo)
-                                                                                
-                                            with st.expander("Resultado"):
-                                                #SAIDA
-                                                st.metric(label = 'Montante', value = f"R$ {st.session_state.montante:,.2f}")
-                                case 'Capital':
-                                    #ENTRADAS
-                                    st.write("Insira os dados:")
-                                    montante_input = st.number_input("Montante:", min_value=0.00, value=st.session_state.get('montante',0.0), key="input_montante")
-                                    juros_input = st.number_input("Juros:", min_value=0.00, value=st.session_state.get('juros',0.0), key="input_juros")
-                                    prazo_input = st.number_input("Prazo:", min_value=0.00, value=st.session_state.get('prazo', 0.0), key="input_prazo")
-                                    st.warning("O período da taxa deve ser compatível com o prazo!")
+                                        # PROCESSAMENTO
+                                        montante_calculado = capital_input * (1 + (juros_input / 100) * prazo_input)
+                                        with st.expander("Resultado", expanded=True):
+                                            # SAIDA
+                                            st.metric(label='Montante', value=f"R$ {montante_calculado:,.2f}")
+
+                            case 'Capital':
+                                # ENTRADAS
+                                st.write("Insira os dados para calcular o Capital:")
+                                montante_input = st.number_input("Montante:", min_value=0.0, format="%.2f", key="capital_input_montante")
+                                juros_input = st.number_input("Taxa de Juros (%):", min_value=0.0, format="%.2f", key="capital_input_juros")
+                                prazo_input = st.number_input("Prazo:", min_value=0.0, format="%.2f", key="capital_input_prazo")
+                                st.warning("O período da taxa deve ser compatível com o prazo!")
+
+                                if st.button("Calcular", key="capital_btn_calcular"):
                                     if (montante_input == 0 or prazo_input == 0 or juros_input == 0):
                                         st.error('Por favor insira um valor válido e diferente de zero!')
                                     else:
-                                        st.session_state.montante = juros_input
-                                        st.session_state.prazo = prazo_input
-                                        st.session_state.juros = juros_input
-                                        if st.button("Calcular"):
-                                            #PROCESSAMENTO 
-                                            st.session_state.capital = st.session_state.montante / (1 + st.session_state.juros/100 * st.session_state.prazo)
-                                                                                
-                                            with st.expander("Resultado"):
-                                                #SAIDA
-                                                st.metric(label = 'Capital', value = f"R$ {st.session_state.capital:,.2f}")
-                                case 'Juros':
-                                    #ENTRADAS
-                                    st.write("Insira os dados:")
-                                    montante_input = st.number_input("Montante:", min_value=0.0, value=st.session_state.get('montante',0.0), key="input_montante")
-                                    capital_input = st.number_input("Capital:", min_value=0.0, value=st.session_state.get('capital', 0.0), key="input_capital")
-                                    prazo_input = st.number_input("Prazo:", min_value=0.0, value=st.session_state.get('prazo', 0.0), key="input_prazo")
-                                    st.warning("O período da taxa deve ser compatível com o prazo!")        
+                                        # PROCESSAMENTO
+                                        capital_calculado = montante_input / (1 + (juros_input / 100) * prazo_input)
+                                        with st.expander("Resultado", expanded=True):
+                                            # SAIDA
+                                            st.metric(label='Capital', value=f"R$ {capital_calculado:,.2f}")
+
+                            case 'Taxa de Juros':
+                                # ENTRADAS
+                                st.write("Insira os dados para calcular a Taxa de Juros:")
+                                montante_input = st.number_input("Montante:", min_value=0.0, format="%.2f", key="juros_input_montante")
+                                capital_input = st.number_input("Capital:", min_value=0.0, format="%.2f", key="juros_input_capital")
+                                prazo_input = st.number_input("Prazo:", min_value=0.0, format="%.2f", key="juros_input_prazo")
+                                st.warning("O período da taxa será compatível com o prazo!")
+
+                                if st.button("Calcular", key="juros_btn_calcular"):
                                     if (capital_input == 0 or prazo_input == 0 or montante_input == 0):
                                         st.error('Por favor insira um valor válido e diferente de zero!')
-                                    else:                           
-                                        st.session_state.capital = capital_input
-                                        st.session_state.montante = montante_input
-                                        st.session_state.prazo = prazo_input
-                                        if st.button("Calcular"):
-                                            #PROCESSAMENTO 
-                                            st.session_state.juros = ((st.session_state.montante / st.session_state.capital) - 1)/st.session_state.prazo
-                                                                                
-                                            with st.expander("Resultado"):
-                                                #SAIDA
-                                                st.metric(label = 'Juros', value = f"{st.session_state.juros:,.2f}%")
-                                case 'Prazo':
-                                    #ENTRADAS
-                                    st.write("Insira os dados:")
-                                    montante_input = st.number_input("Montante:", min_value=0.0000001, value=st.session_state.get('montante',0.0), key="input_montante")
-                                    capital_input = st.number_input("Capital:", min_value=0.00001, value=st.session_state.get('capital', 0.0), key="input_capital")
-                                    juros_input = st.number_input("Juros:", min_value=0.00001, value=st.session_state.get('juros',0.0), key="input_juros")
-                                    st.warning("O período da taxa deve ser compatível com o prazo!")
+                                    else:
+                                        # PROCESSAMENTO (Fórmula corrigida para retornar a taxa em %)
+                                        juros_calculado = (((montante_input / capital_input) - 1) / prazo_input) * 100
+                                        with st.expander("Resultado", expanded=True):
+                                            # SAIDA
+                                            st.metric(label='Taxa de Juros', value=f"{juros_calculado:,.2f}%")
+
+                            case 'Prazo':
+                                # ENTRADAS
+                                st.write("Insira os dados para calcular o Prazo:")
+                                montante_input = st.number_input("Montante:", min_value=0.0, format="%.2f", key="prazo_input_montante")
+                                capital_input = st.number_input("Capital:", min_value=0.0, format="%.2f", key="prazo_input_capital")
+                                juros_input = st.number_input("Taxa de Juros (%):", min_value=0.0, format="%.2f", key="prazo_input_juros")
+                                st.warning("O prazo será compatível com o período da taxa!")
+                                
+                                if st.button("Calcular", key="prazo_btn_calcular"):
                                     if (capital_input == 0 or montante_input == 0 or juros_input == 0):
                                         st.error('Por favor insira um valor válido e diferente de zero!')
                                     else:
-                                        st.session_state.capital = capital_input
-                                        st.session_state.juros = juros_input
-                                        st.session_state.montante = montante_input
-                                        if st.button("Calcular", key = "btn_calcular_js_js"):
-                                            #PROCESSAMENTO 
-                                            st.session_state.prazo = ((st.session_state.montante / st.session_state.capital) - 1)/st.session_state.juros
-                                                                                
-                                            with st.expander("Resultado"):
-                                                #SAIDA
-                                                st.metric(label = 'Prazo', value = f"{st.session_state.prazo:,.2f}")       
+                                        # PROCESSAMENTO (Fórmula corrigida para usar a taxa como decimal)
+                                        taxa_decimal = juros_input / 100
+                                        prazo_calculado = ((montante_input / capital_input) - 1) / taxa_decimal
+                                        with st.expander("Resultado", expanded=True):
+                                            # SAIDA
+                                            st.metric(label='Prazo', value=f"{prazo_calculado:,.2f}")      
                     case 'Taxas Equivalentes':
                         st.subheader("Determine a variável a ser calculada:")
                         st.warning("No caso de Juros Simples, sabe-se que o prazo deve ser expresso na mesma unidade que a taxa. Então é preciso converter estas taxas para que sejam equivalentes.")
