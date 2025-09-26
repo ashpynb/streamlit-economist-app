@@ -403,9 +403,9 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                 # ENTRADAS
                                 st.write("Insira os dados para calcular o Montante:")
                                 # Adicionei sufixos para tornar as chaves únicas
-                                capital_input = st.number_input("Capital:", min_value=0.0, format="%.2f", key="montante_input_capital")
-                                prazo_input = st.number_input("Prazo:", min_value=0.0, format="%.2f", key="montante_input_prazo")
-                                juros_input = st.number_input("Taxa de Juros (%):", min_value=0.0, format="%.2f", key="montante_input_juros")
+                                capital_input = st.number_input("Capital:", min_value=0.0, format="%.2f", key="montante_input_capital1")
+                                prazo_input = st.number_input("Prazo:", min_value=0.0, format="%.2f", key="montante_input_prazo1")
+                                juros_input = st.number_input("Taxa de Juros (%):", min_value=0.0, format="%.2f", key="montante_input_juros1")
                                 st.warning("O período da taxa deve ser compatível com o prazo!")
 
                                 if st.button("Calcular", key="montante_btn_calcular"):
@@ -421,9 +421,9 @@ def tela_fin(): # EM DESENVOLVIMENTO
                             case 'Capital':
                                 # ENTRADAS
                                 st.write("Insira os dados para calcular o Capital:")
-                                montante_input = st.number_input("Montante:", min_value=0.0, format="%.2f", key="capital_input_montante")
-                                juros_input = st.number_input("Taxa de Juros (%):", min_value=0.0, format="%.2f", key="capital_input_juros")
-                                prazo_input = st.number_input("Prazo:", min_value=0.0, format="%.2f", key="capital_input_prazo")
+                                montante_input = st.number_input("Montante:", min_value=0.0, format="%.2f", key="capital_input_montante2")
+                                juros_input = st.number_input("Taxa de Juros (%):", min_value=0.0, format="%.2f", key="capital_input_juros2")
+                                prazo_input = st.number_input("Prazo:", min_value=0.0, format="%.2f", key="capital_input_prazo2")
                                 st.warning("O período da taxa deve ser compatível com o prazo!")
 
                                 if st.button("Calcular", key="capital_btn_calcular"):
@@ -439,9 +439,9 @@ def tela_fin(): # EM DESENVOLVIMENTO
                             case 'Taxa de Juros':
                                 # ENTRADAS
                                 st.write("Insira os dados para calcular a Taxa de Juros:")
-                                montante_input = st.number_input("Montante:", min_value=0.0, format="%.2f", key="juros_input_montante")
-                                capital_input = st.number_input("Capital:", min_value=0.0, format="%.2f", key="juros_input_capital")
-                                prazo_input = st.number_input("Prazo:", min_value=0.0, format="%.2f", key="juros_input_prazo")
+                                montante_input = st.number_input("Montante:", min_value=0.0, format="%.2f", key="juros_input_montante3")
+                                capital_input = st.number_input("Capital:", min_value=0.0, format="%.2f", key="juros_input_capital3")
+                                prazo_input = st.number_input("Prazo:", min_value=0.0, format="%.2f", key="juros_input_prazo3")
                                 st.warning("O período da taxa será compatível com o prazo!")
 
                                 if st.button("Calcular", key="juros_btn_calcular"):
@@ -457,9 +457,9 @@ def tela_fin(): # EM DESENVOLVIMENTO
                             case 'Prazo':
                                 # ENTRADAS
                                 st.write("Insira os dados para calcular o Prazo:")
-                                montante_input = st.number_input("Montante:", min_value=0.0, format="%.2f", key="prazo_input_montante")
-                                capital_input = st.number_input("Capital:", min_value=0.0, format="%.2f", key="prazo_input_capital")
-                                juros_input = st.number_input("Taxa de Juros (%):", min_value=0.0, format="%.2f", key="prazo_input_juros")
+                                montante_input = st.number_input("Montante:", min_value=0.0, format="%.2f", key="prazo_input_montante4")
+                                capital_input = st.number_input("Capital:", min_value=0.0, format="%.2f", key="prazo_input_capital4")
+                                juros_input = st.number_input("Taxa de Juros (%):", min_value=0.0, format="%.2f", key="prazo_input_juros4")
                                 st.warning("O prazo será compatível com o período da taxa!")
                                 
                                 if st.button("Calcular", key="prazo_btn_calcular"):
@@ -630,7 +630,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                 juros_vn_input = st.number_input("Taxa de juros (%):", min_value=0.0, value=st.session_state.get('juros2', 0.0), key="input_juros2")
                                 valor_atual_input = st.number_input("Valor atual:", min_value=0.0, value=st.session_state.get('valor atual',0.0), key="input_valor_atual1")
                                 prazo2_input = st.number_input("Prazo:", min_value=0.0, value=st.session_state.get('prazo2', 0.0), key="input_prazo2")     
-                                if (juros2_input == 0 or prazo2_input == 0 or valor_atual_input == 0):
+                                if (juros_vn_input == 0 or prazo2_input == 0 or valor_atual_input == 0):
                                     st.error('Por favor insira um valor válido e diferente de zero!')
                                 else:                           
                                     juros_decimal = juros_vn_input/100
@@ -650,7 +650,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                 juros_va_input = st.number_input("Taxa de juros (%):", min_value=0.0, value=st.session_state.get('juros2', 0.0), key="input_juros1")
                                 valor_nominal_input = st.number_input("Valor nominal:", min_value=0.0, value=st.session_state.get('valor nominal', 0.0), key="input_valor_nominal1")
                                 prazo2_input = st.number_input("Prazo:", min_value=0.0, value=st.session_state.get('prazo2', 0.0), key="input_prazo1")     
-                                if (juros2_input == 0 or prazo2_input == 0 or valor_nominal_input == 0):
+                                if (juros_vn_input == 0 or prazo2_input == 0 or valor_nominal_input == 0):
                                     st.error('Por favor insira um valor válido e diferente de zero!')
                                 else:                           
                                     juros_decimal = juros_va_input / 100
