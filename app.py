@@ -76,169 +76,6 @@ def tela_macro(): #DESENVOLVIDO
     if st.button("Voltar ao Menu Principal"):
         st.session_state.tela = 'menu'
 
-#opcoes do selectbox macroeconômico, criam outras telas dentro:
-def tela_PIB(): #DESENVOLVIDO
-    st.title("Cálculo do PIB")
-    if 'pib_etapa1_ok' not in st.session_state:
-        st.session_state.pib_etapa1_ok = False
-    if 'pib_opcao' not in st.session_state:
-        st.session_state.pib_opcao = None
-
-    #ETAPA 1: SELECIONAR O QUE DESEJA CALCULAR
-    if not st.session_state.pib_etapa1_ok:
-        opcao_PIB = st.selectbox("Selecione o modo que deseja calcular o PIB:", ['PIB Real, Nominal e Deflator', 'PIB pela Demanda', 'PIB pela Oferta', 'PIB pela Renda'])
-
-    if st.button("Avançar"):
-        st.session_state.pib_opcao = opcao_PIB
-        st.session_state.pib_etapa1_ok = True
-
-        if opcao_PIB == 'PIB Real, Nominal e Deflator':
-            st.session_state.tela = 'pib_nom_real_defl'
-        elif opcao_PIB == 'PIB pela Demanda':
-            st.session_state.tela = 'pib_demanda'
-        elif opcao_PIB == 'PIB pela Oferta':
-            st.session_state.tela = 'pib_oferta'
-        elif opcao_PIB == 'PIB pela Renda':
-            st.session_state.tela = 'pib_renda'
-            
-    if st.button("Voltar para Macroeconômico"):
-        st.session_state.tela = 'macro'
-
-#funções dentro da tela do pib   
-def tela_PIBS_nom_real_defl():  #EM REFINAMENTO / DESENVOLVIDO
-    st.title('Calcule aqui os PIBs reais, nominais e deflator do PIB')
-
-    #percebi que msm com um botao avançar, não havia um controle para determinar se o usuário acabou ou não, dava muuuito erro
-    #então pedi ajuda pro chatgpt aqui:
-
-    # Controle para mostrar os inputs depois do clique
-    if 'pib_produtos_ok' not in st.session_state:
-        st.session_state.pib_produtos_ok = False
-    if 'qtd_produtos' not in st.session_state:
-        st.session_state.qtd_produtos = None
-
-    #selectbox para selecionar a quantidade pra calcular, deixei só 2 a 4 produtos mesmo viu, esse é a versão demo, depois eu expando!
-    produtos = st.selectbox('indique a quantidade de produtos que deseja calcular:', ['2 produtos', '3 produtos', '4 produtos'])
-    
-    if st.button("Avançar"):
-        st.session_state.pib_produtos_ok = True
-        st.session_state.qtd_produtos = produtos
-    # para mostrar que ta ok e pode continuar!
-
-    if st.button("Voltar para Cálculo do PIB"):
-        st.session_state.tela = 'pib'
-       #volta para a outra tela do pib lá
-     
-    if st.session_state.pib_produtos_ok:
-        produtos = st.session_state.qtd_produtos
-
-    #os ifs estão assim pq pra mostrar independência ok?
-
-        if produtos == '2 produtos':
-            st.warning('Produtos no ANO BASE')
-            preco_base_1 = st.number_input('Preço do 1° produto no ANO BASE: ')
-            quantidade_base_1 = st.number_input('Quantidade do 1° produto no ANO BASE:')
-            preco_base_2 = st.number_input('Preço do 2° produto no ANO BASE:')
-            quantidade_base_2 = st.number_input('Quantidade do 2° produto no ANO BASE:')
-            st.warning('Produtos no ANO ATUAL')
-            preco_atual_1 = st.number_input('Preço do 1° produto no ANO ATUAL: ')
-            quantidade_atual_1 = st.number_input('Quantidade do 1° produto no ANO ATUAL:')
-            preco_atual_2 = st.number_input('Preço do 2° produto no ANO ATUAL: ')
-            quantidade_atual_2 = st.number_input('Quantidade do 2° produto no ANO ATUAL:')
-
-            if st.button('Calcular'):
-                pib_real = 100 * ((quantidade_atual_1 * preco_base_1 + quantidade_atual_2 * preco_base_2 )/(quantidade_base_1 * preco_base_1 + quantidade_base_2 * preco_base_2))
-                pib_nominal = ((preco_atual_1 * quantidade_atual_1 + preco_atual_2 * quantidade_atual_2))
-                deflator_pib = 100 * ((quantidade_atual_1 * preco_atual_1 + quantidade_atual_2 * preco_atual_2)/(preco_atual_1 *quantidade_base_1 + preco_atual_2 * quantidade_base_2))
-                with st.expander("Resultados do PIB"):
-                        st.write(f"O crescimento do PIB Real (Laspeyres de Quantidade): {pib_real:.4f}%")
-                        st.write(f"PIB Nominal: {pib_nominal:4f}")
-                        st.write(f"Deflator do PIB (Paasche de Quantidade): {deflator_pib:.5f} %")
-
-        elif produtos == '3 produtos':
-            st.warning('Produtos no ANO BASE')
-            preco_base_1 = st.number_input('Preço do 1° produto no ANO BASE: ')
-            quantidade_base_1 = st.number_input('Quantidade do 1° produto no ANO BASE:')
-            preco_base_2 = st.number_input('Preço do 2° produto no ANO BASE:')
-            quantidade_base_2 = st.number_input('Quantidade do 2° produto no ANO BASE:')
-            preco_base_3 = st.number_input('Preço do 3° produto no ANO BASE:')
-            quantidade_base_3 = st.number_input('Quantidade do 3° produto no ANO BASE:')
-            st.warning('Produtos no ANO ATUAL')
-            preco_atual_1 = st.number_input('Preço do 1° produto no ANO ATUAL: ')
-            quantidade_atual_1 = st.number_input('Quantidade do 1° produto no ANO ATUAL:')
-            preco_atual_2 = st.number_input('Preço do 2° produto no ANO ATUAL: ')
-            quantidade_atual_2 = st.number_input('Quantidade do 2° produto no ANO ATUAL:')
-            preco_atual_3 = st.number_input('Preço do 3° produto no ANO ATUAL: ')
-            quantidade_atual_3 = st.number_input('Quantidade do 3° produto no ANO ATUAL:')
-            
-            if st.button('Calcular'):
-                pib_real = 100 * (((quantidade_atual_1 * preco_base_1 + quantidade_atual_2 * preco_base_2 + quantidade_atual_3 * preco_base_3  )/(quantidade_base_1 * preco_base_1 + quantidade_base_2 * preco_base_2 + quantidade_base_3 * preco_base_3)))
-                pib_nominal = ((preco_atual_1 * quantidade_atual_1 + preco_atual_2 * quantidade_atual_2 + preco_atual_3 * quantidade_atual_3))
-                deflator_pib = (100 * ((quantidade_atual_1 * preco_atual_1 + quantidade_atual_2 * preco_atual_2 + quantidade_atual_3 * preco_atual_3)/(preco_atual_1 *quantidade_base_1 + preco_atual_2 * quantidade_base_2 + preco_atual_3 * quantidade_base_3)))
-                with st.expander("Resultados do PIB"):
-                    st.write(f"O crescimento do PIB Real (Laspeyres de Quantidade): {pib_real:.4f}%")
-                    st.write(f"PIB Nominal: {pib_nominal:4f}")
-                    st.write(f"Deflator do PIB (Paasche de Quantidade): {deflator_pib:.5f} %")
-
-
-        elif produtos == '4 produtos':
-            st.warning('Produtos no ANO BASE')
-            preco_base_1 = st.number_input('Digite o preço do 1° produto no ANO BASE: ')
-            quantidade_base_1 = st.number_input('Digite a quantidade do 1° produto no ANO BASE:')
-            preco_base_2 = st.number_input('Digite o preço do 2° produto no ANO BASE:')
-            quantidade_base_2 = st.number_input('Digite a quantidade do 2° produto no ANO BASE:')
-            preco_base_3 = st.number_input('Digite o preço do 3° produto no ANO BASE:')
-            quantidade_base_3 = st.number_input('Digite a quantidade do 3° produto no ANO BASE:')
-            preco_base_4 = st.number_input('Digite o preço do 4° produto no ANO BASE:')
-            quantidade_base_4 = st.number_input('Digite a quantidade do 4° produto no ANO BASE:')
-            st.warning('Produtos no ANO ATUAL')
-            preco_atual_1 = st.number_input('Digite o preço do 1° produto no ANO ATUAL: ')
-            quantidade_atual_1 = st.number_input('Digite a quantidade do 1° produto no ANO ATUAL:')
-            preco_atual_2 = st.number_input('Digite o preço do 2° produto no ANO ATUAL: ')
-            quantidade_atual_2 = st.number_input('Digite a quantidade do 2° produto no ANO ATUAL:')
-            preco_atual_3 = st.number_input('Digite o preço do 3° produto no ANO ATUAL: ')
-            quantidade_atual_3 = st.number_input('Digite a quantidade do 3° produto no ANO ATUAL:')
-            preco_atual_4 = st.number_input('Digite o preço do 4° produto no ANO ATUAL: ')
-            quantidade_atual_4 = st.number_input('Digite a quantidade do 4° produto no ANO ATUAL:')
-            
-            if st.button('Calcular'):
-                pib_real = 100 * (((quantidade_atual_1 * preco_base_1 + quantidade_atual_2 * preco_base_2 + quantidade_atual_3 * preco_base_3 + quantidade_atual_4 * preco_base_4  )/(quantidade_base_1 * preco_base_1 + quantidade_base_2 * preco_base_2 + quantidade_base_3 * preco_base_3 + quantidade_base_4 * preco_base_4 )))
-                pib_nominal = ((preco_atual_1 * quantidade_atual_1 + preco_atual_2 * quantidade_atual_2 + preco_atual_3 * quantidade_atual_3 + preco_atual_4 * quantidade_atual_4))
-                deflator_pib = (100 * ((quantidade_atual_1 * preco_atual_1 + quantidade_atual_2 * preco_atual_2 + quantidade_atual_3 * preco_atual_3 + quantidade_atual_4 * preco_atual_4)/(preco_atual_1 *quantidade_base_1 + preco_atual_2 * quantidade_base_2 + preco_atual_3 * quantidade_base_3 + preco_atual_4 * quantidade_base_4)))
-                with st.expander("Resultados do PIB"):
-                    st.write(f"O crescimento do PIB Real (Laspeyres de Quantidade): {pib_real:.4f}%")
-                    st.write(f"PIB Nominal: {pib_nominal:4f}")
-                    st.write(f"Deflator do PIB (Paasche de Quantidade): {deflator_pib:.5f} %")
-
-def tela_PIB_demanda():  #NÃO DESENVOLVIDO
-    st.warning('EM DESENVOLVIMENTO')
-    if st.button("Voltar ao Menu Principal"):
-        st.session_state.tela = 'menu'
-
-def tela_PIB_oferta():  #NÃO DESENVOLVIDO
-    st.warning('EM DESENVOLVIMENTO')
-    if st.button("Voltar ao Menu Principal"):
-        st.session_state.tela = 'menu'
-
-def tela_PIB_renda(): #NÃO DESENVOLVIDO
-    st.warning('EM DESENVOLVIMENTO')
-    if st.button("Voltar ao Menu Principal"):
-        st.session_state.tela = 'menu'
-
-def tela_indices(): #NÃO DESENVOLVIDO
-    st.title("Índices de Preços e Inflação")
-    st.selectbox("Selecione o modo que deseja calcular os Índices: ")
-
-    if st.button("Voltar para Macroeconômico"):
-        st.session_state.tela = 'macro'
-
-def tela_crescimento(): #NÃO DESENVOLVIDO
-    st.title("Crescimento Econômico")
-    st.write("Simulação de crescimento com base em dados anuais...")
-
-    if st.button("Voltar para Macroeconômico"):
-        st.session_state.tela = 'macro'
-
 @st.cache_data(ttl=86400)  # cache diário (86400 segundos = 24 horas)     #via chat gpt
 
 # Função para obter taxas de câmbio atualizadas via API (via chat gpt ajuda)
@@ -561,7 +398,6 @@ def tela_fin(): # EM DESENVOLVIMENTO
                         # Adicionei uma key única para o selectbox para segurança
                         opcao_selecionada = st.selectbox(" ", lista_js_js, key="js_opcao_selecionada")
                         st.markdown("---")
-
                         match opcao_selecionada:
                             case 'Montante':
                                 # ENTRADAS
@@ -693,7 +529,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                         st.error("Por favor insira valores maiores que 0 para os juros!")
                                     else:
                                         # 1. calcular prazo em anos
-                                        prazo_anos = (juros_fim / juros) * dict_taxas[periodo_origem]
+                                        prazo_anos = (juros / juros_fim) * dict_taxas[periodo_origem]
 
                                         # 2. arredondar se próximo de 1 ano
                                         if abs(prazo_anos - 1) < 0.01:
@@ -741,39 +577,11 @@ def tela_fin(): # EM DESENVOLVIMENTO
                             st.session_state.tempo_prazo = "ao mês"
 
                         # Entradas
-                        juros_input = st.number_input(
-                            "Taxa de Juros (%):",
-                            min_value=0.0,
-                            value=st.session_state.juros,
-                            key="input_juros"
-                        )
-
-                        tempo_juros = st.selectbox(
-                            "Selecione o período da Taxa de Juros (%)",
-                            list(dict_taxas.keys()),
-                            key="tempo_juros"
-                        )
-
-                        capital_input = st.number_input(
-                            "Capital:",
-                            min_value=0.0,
-                            value=st.session_state.capital,
-                            key="input_capital"
-                        )
-
-                        prazo_input = st.number_input(
-                            "Prazo:",
-                            min_value=0.0,
-                            value=st.session_state.prazo,
-                            key="input_prazo"
-                        )
-
-                        tempo_prazo = st.selectbox(
-                            "Selecione o período de aplicação:",
-                            list(dict_taxas.keys()),
-                            key="tempo_prazo"
-                        )
-
+                        juros_input = st.number_input("Taxa de Juros (%):", min_value=0.0,value=st.session_state.juros,key="input_juros_je")
+                        tempo_juros = st.selectbox("Selecione o período da Taxa de Juros (%)",list(dict_taxas.keys()),key="tempo_juros_je")
+                        capital_input = st.number_input("Capital:",min_value=0.0,value=st.session_state.capital,key="input_capital_je")
+                        prazo_input = st.number_input("Prazo:",min_value=0.0,value=st.session_state.prazo,key="input_prazo_je")
+                        tempo_prazo = st.selectbox("Selecione o período de aplicação:",list(dict_taxas.keys()),key="tempo_prazo_je")
                         st.warning("O período da taxa deve ser compatível com o prazo!")
 
                         # Validação de zero
@@ -784,7 +592,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                             st.session_state.juros = juros_input
                             st.session_state.prazo = prazo_input
 
-                            if st.button("Calcular"):
+                            if st.button("Calcular", key = "btn_calcular_juro_exato"):
                                 # 1. Converter a taxa para uma taxa ANUAL.
                                 taxa_anual = (st.session_state.juros / 100) / dict_taxas[tempo_juros]
 
@@ -812,52 +620,54 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                         value=f"R${st.session_state.juros_exato:,.2f}"
                                     )
                     case 'Valor Atual e Nominal':
-                        st.markdown("---")
                         st.subheader("Valor Atual e Nominal")
                         lista_vavn = ["Valor nominal", "Valor atual", "Taxa de juros", "Prazo"]
                         st.session_state.opcao_vavn = st.selectbox("Selecione a opção que deseja calcular:", lista_vavn)
                         match st.session_state.opcao_vavn:
                             case 'Valor nominal':
-                                #V +Vin = N
+                                #VN=VA×(1+i×n)
                                 st.write("Insira os dados:")
-                                juros2_input = st.number_input("Taxa de juros (%):", min_value=0.0, value=st.session_state.get('juros2', 0.0), key="input_juros2")
-                                valor_atual_input = st.number_input("Valor atual:", min_value=0.0, value=st.session_state.get('valor atual',0.0), key="input_valor_atual")
+                                juros_vn_input = st.number_input("Taxa de juros (%):", min_value=0.0, value=st.session_state.get('juros2', 0.0), key="input_juros2")
+                                valor_atual_input = st.number_input("Valor atual:", min_value=0.0, value=st.session_state.get('valor atual',0.0), key="input_valor_atual1")
                                 prazo2_input = st.number_input("Prazo:", min_value=0.0, value=st.session_state.get('prazo2', 0.0), key="input_prazo2")     
                                 if (juros2_input == 0 or prazo2_input == 0 or valor_atual_input == 0):
                                     st.error('Por favor insira um valor válido e diferente de zero!')
                                 else:                           
-                                    st.session_state.juros2 = juros2_input
+                                    juros_decimal = juros_vn_input/100
+                                    st.session_state.juros = juros_vn_input
                                     st.session_state.valor_atual = valor_atual_input
                                     st.session_state.prazo2 = prazo2_input
-                                    if st.button("Calcular", key = "btn_vnvajs"):
+                                    if st.button("Calcular", key = "btn_vnjs"):
                                         #PROCESSAMENTO 
-                                        st.session_state.valor_nominal = (st.session_state.valor_atual + (st.session_state.valor_atual * st.session_state.juros2 * st.session_state.prazo2))                                      
+                                        
+                                        st.session_state.valor_nominal_calculado = valor_atual_input * (1 + (juros_decimal * prazo2_input))
                                         with st.expander("Resultado"):
                                             #SAIDA
-                                            st.metric(label = 'Valor Nominal', value = f"R${st.session_state.valor_nominal:,.2f}")
+                                            st.metric(label = 'Valor Nominal', value = f"R${st.session_state.valor_nominal_calculado:,.2f}")
                             case 'Valor atual':
-                                #V +Vin = N
+                                #VA = VN / ( 1 + in)
                                 st.write("Insira os dados:")
-                                juros2_input = st.number_input("Taxa de juros (%):", min_value=0.0, value=st.session_state.get('juros2', 0.0), key="input_juros2")
-                                valor_nominal_input = st.number_input("Valor nominal:", min_value=0.0, value=st.session_state.get('valor nominal', 0.0), key="input_valor_nominal")
-                                prazo2_input = st.number_input("Prazo:", min_value=0.0, value=st.session_state.get('prazo2', 0.0), key="input_prazo2")     
+                                juros_va_input = st.number_input("Taxa de juros (%):", min_value=0.0, value=st.session_state.get('juros2', 0.0), key="input_juros1")
+                                valor_nominal_input = st.number_input("Valor nominal:", min_value=0.0, value=st.session_state.get('valor nominal', 0.0), key="input_valor_nominal1")
+                                prazo2_input = st.number_input("Prazo:", min_value=0.0, value=st.session_state.get('prazo2', 0.0), key="input_prazo1")     
                                 if (juros2_input == 0 or prazo2_input == 0 or valor_nominal_input == 0):
                                     st.error('Por favor insira um valor válido e diferente de zero!')
                                 else:                           
-                                    st.session_state.juros2 = juros2_input
+                                    juros_decimal = juros_va_input / 100
+                                    st.session_state.juros2 = juros_input
                                     st.session_state.valor_nominal = valor_nominal_input
                                     st.session_state.prazo2 = prazo2_input
-                                    if st.button("Calcular", key = "btn_vnvajs"):
+                                    if st.button("Calcular", key = "btn_vajs"):
                                         #PROCESSAMENTO 
-                                        st.session_state.valor_atual = (st.session_state.valor_nominal /(1 + st.session_state_prazo2 * st.session_state.juros2))                                        
+                                        st.session_state.valor_atual_calculado = valor_nominal_input / (1 + (juros_decimal * prazo2_input))                
                                         with st.expander("Resultado"):
                                             #SAIDA
-                                            st.metric(label = 'Valor Atual', value = f"R${st.session_state.valor_atual:,.2f}")
+                                            st.metric(label = 'Valor Atual', value = f"R${st.session_state.valor_atual_calculado:,.2f}")
                             case 'Taxa de juros':
                                 st.write("Insira os dados:")
-                                valor_atual_input = st.number_input("Valor atual:", min_value=0.0, value=st.session_state.get('valor atual',0.0), key="input_valor_atual")
-                                valor_nominal_input = st.number_input("Valor nominal:", min_value=0.0, value=st.session_state.get('valor nominal', 0.0), key="input_valor_nominal")
-                                prazo2_input = st.number_input("Prazo:", min_value=0.0, value=st.session_state.get('prazo2', 0.0), key="input_prazo2")     
+                                valor_atual_input = st.number_input("Valor atual:", min_value=0.0, value=st.session_state.get('valor atual',0.0), key="input_valor_atual2")
+                                valor_nominal_input = st.number_input("Valor nominal:", min_value=0.0, value=st.session_state.get('valor nominal', 0.0), key="input_valor_nominal2")
+                                prazo2_input = st.number_input("Prazo:", min_value=0.0, value=st.session_state.get('prazo', 0.0), key="input_prazo3")     
                                 if (valor_atual_input == 0 or prazo2_input == 0 or valor_nominal_input == 0):
                                     st.error('Por favor insira um valor válido e diferente de zero!')
                                 else:                           
@@ -866,15 +676,15 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                     st.session_state.prazo2 = prazo2_input
                                     if st.button("Calcular", key = "btn_vnvajs"):
                                         #PROCESSAMENTO 
-                                        st.session_state.juros = ((st.session_state.valor_nominal - st.session_state.valor_atual) / st.session_state.valor_atual * st.session_state_prazo2)                                        
+                                        st.session_state.taxa_calculada = (((valor_nominal_input / valor_atual_input) - 1) / prazo2_input) * 100           
                                         with st.expander("Resultado"):
                                             #SAIDA
                                             st.metric(label = 'Juros', value = f"{st.session_state.juros:,.2f}% ao período")
                             case 'Prazo':
                                 st.write("Insira os dados:")
-                                valor_atual_input = st.number_input("Valor atual:", min_value=0.0, value=st.session_state.get('valor atual',0.0), key="input_valor_atual")
-                                valor_nominal_input = st.number_input("Valor nominal:", min_value=0.0, value=st.session_state.get('valor nominal', 0.0), key="input_valor_nominal")
-                                juros2_input = st.number_input("Taxa de juros (%):", min_value=0.0, value=st.session_state.get('juros2', 0.0), key="input_juros2")     
+                                valor_atual_input = st.number_input("Valor atual:", min_value=0.0, value=st.session_state.get('valor atual',0.0), key="input_valor_atual4")
+                                valor_nominal_input = st.number_input("Valor nominal:", min_value=0.0, value=st.session_state.get('valor nominal', 0.0), key="input_valor_nominal4")
+                                juros2_input = st.number_input("Taxa de juros (%):", min_value=0.0, value=st.session_state.get('juros2', 0.0), key="input_juros4")     
                                 if (valor_atual_input == 0 or juros2_input == 0 or valor_nominal_input == 0):
                                     st.error('Por favor insira um valor válido e diferente de zero!')
                                 else:                           
@@ -883,10 +693,10 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                     st.session_state.juros2 = juros2_input
                                     if st.button("Calcular", key = "btn_vnvajs"):
                                         #PROCESSAMENTO 
-                                        st.session_state.prazo = ((st.session_state.valor_nominal - st.session_state.valor_atual) / st.session_state.valor_atual * st.session_state_juros2)                                        
+                                        st.session_state.prazo_calculado = ((valor_nominal_input / valor_atual_input) - 1) / juros_decimal                        
                                         with st.expander("Resultado"):
                                             #SAIDA
-                                            st.metric(label = 'Prazo', value = f"{st.session_state.prazo:,.2f}")
+                                            st.metric(label = 'Prazo', value = f"{st.session_state.prazo_calculado:,.2f}")
             case 'Descontos Simples':
                 match st.session_state.opcoes2:
                     case 'Desconto comercial':
@@ -1250,12 +1060,6 @@ def main(): #DESENVOLVIDO
             opcoes_menu()
         case 'macro':
             tela_macro()
-        case 'pib':
-            tela_PIB()
-        case 'indices':
-            tela_indices()
-        case 'crescimento':
-            tela_crescimento()
         case 'micro':
             tela_micro()
         case 'fin':
@@ -1264,30 +1068,6 @@ def main(): #DESENVOLVIDO
             tela_est()
         case 'conv':
             tela_conv()
-        case 'pib_nom_real_defl':
-            tela_PIBS_nom_real_defl()
-        case 'pib_demanda':
-            tela_PIB_demanda()
-        case 'pib_oferta':
-            tela_PIB_oferta()
-        case 'pib_renda':
-            tela_PIB_renda()
-        case 'sobre':
-            tela_sobre()
-        case 'linha_orcamentaria':
-            tela_linha_orcamentaria()
-        case 'curva_indiferenca':
-            tela_curva_indiferenca()
-        case 'equilibrio_consumidor':
-            tela_equilibrio_consumidor()
-        case 'curva_demanda_indiv':
-            tela_curva_demanda_indiv()
-        case 'maximizacao_utilidade':
-            tela_maximizacao_util()
-        case 'elasticidades':
-            tela_elasticidades()
-        case 'excedentes_consumidor':
-            tela_excedente_consumidor()
 
 #loop 
 if __name__ == "__main__":
