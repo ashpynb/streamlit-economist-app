@@ -650,7 +650,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                 juros_va_input = st.number_input("Taxa de juros (%):", min_value=0.0, value=st.session_state.get('juros2', 0.0), key="input_juros1")
                                 valor_nominal_input = st.number_input("Valor nominal:", min_value=0.0, value=st.session_state.get('valor nominal', 0.0), key="input_valor_nominal1")
                                 prazo2_input = st.number_input("Prazo:", min_value=0.0, value=st.session_state.get('prazo2', 0.0), key="input_prazo1")     
-                                if (juros_vn_input == 0 or prazo2_input == 0 or valor_nominal_input == 0):
+                                if (juros_va_input == 0 or prazo2_input == 0 or valor_nominal_input == 0):
                                     st.error('Por favor insira um valor válido e diferente de zero!')
                                 else:                           
                                     juros_decimal = juros_va_input / 100
