@@ -60,21 +60,136 @@ def opcoes_menu():  #DESENVOLVIDO
 #menu macroeconômico
 def tela_macro(): #DESENVOLVIDO
     st.title('Simulador Macroeconômico')
-    st.subheader('Simule e analise os principais indicadores da economia', divider = True)
+    st.subheader('Simule e analise os principais indicadores da economia', divider = 'orange')
+    #para nao dar rerun
+    if "opcoes_macro" not in st.session_state:
+        st.session_state.opcoes_macro = None
+    if "opcoes2_macro" not in st.session_state:
+        st.session_state.opcoes2_macro = None
+    if "opcoes3_macro" not in st.session_state:
+        st.session_state.opcoes3_macro = None
+    if "col_mc_1ok" not in st.session_state:
+        st.session_state.col_mc_1ok = False
+    if "col_mc_2ok" not in st.session_state:
+        st.session_state.col_mc_2ok = False
+    
+    col1_mac, col2_mac = st.columns(2)
+    with col1_mac:
+        st.write('I')
+        lista_macro = ['Macro I', 'Macro II', 'Macro III']
+        st.session_state.opcoes_macro = st.selectbox('Escolha o tópico:', lista_macro)
+        if st.button('OK', key = 'col1macro'):
+            st.session_state.col_mc_1ok = True
+        if st.button("Voltar ao Menu", key = "btn_menu_mac"):
+            st.session_state.tela = 'menu'
+    with col2_mac:
+        st.write('II.')
+        if st.session_state.col_mc_1ok == True:
+            if st.session_state.opcoes_macro == 'Macro I':
+                lista_macro_2 = ["PIB pelas 3 óticas", "Índice de Preços e Quantidade", "PIB Agregado e Crescimento"]
+                st.session_state.opcoes2_macro = st.selectbox('Escolha a matéria:', lista_macro_2)
+                if st.button('Avançar', key = 'macro_I_button'):
+                    st.session_state.col_mc_2ok = True
+            else:
+                st.warning('A desenvolvedora ainda está aprendendo esta matéria!')
+    st.markdown('---')
+    if st.session_state.col_mc_1ok and st.session_state.col_mc_2ok:
+        #tela
+        match st.session_state.opcoes_macro:
+            case 'Macro I':
+                match st.session_state.opcoes2_macro:
+                    case 'PIB pelas 3 óticas':
+                        st.write('oi')
+                    case 'Índice de Preços e Quantidade':
+                        st.header('Simulador de Índices de Preços e Quantidade')
+                        st.info('Use a tabela abaixo para criar uma economia fictícia e calcular os principais indicadores macroeconômicos')
+                        # primeiro a pessoa precisa me informar quantos bens quer na economia
+                        st.subheader('1. Configure sua economia')
+                        st.session_state.num_bens = st.slider('Quantos bens você quer analisar na sua economia?', 2, 20, 3)
+                        #com base na quantidade de bens, crio um dataframe 
+                        #primeiro preciso de pandas...
+                        #preciso meio que inicializar essa matriz q é o dataframe, então vou utilizar for
+                        lista_inicial = [] #lista vazia
+                        for periodo in [0, 1]: #para periodo em 0 e 1
+                            for i in range (1, st.session_state.num_bens + 1): # i representa a linha
+                                lista_inicial.append(
+                                    {
+                                        'PERÍODO': periodo,
+                                        'BEM': f'Bem{i}',
+                                        'PREÇO': 0.0,
+                                        'QUANTIDADE': 0
+                                    }
+                                )
 
-    opcao = st.selectbox("Escolha uma operação:", 
-                         ["Cálculo PIB", "Índice de Preços, Quantidade e Inflação", "Crescimento Econômico"])
+                        df_inicial = pd.DataFrame(lista_inicial)
+                        #agora o usuário vai preencher a tabela
+                        st.subheader('2. Preencha os dados da sua economia')
+                        st.write("Insira os preços e quantidades para o período base (0) e o período atual (1).")
+                        df_editado = st.data_editor( #comando para sair da biblioteca do panda e ir pro streamlit
+                            df_inicial, #dataframe que criamos
+                            num_rows = "dynamic", #parametro para fazer o usuario remover e adicionar bens
+                            key = "data_editor_indices" #só uma chave para essa funcionalidade ser unica. caso eu criar outro dataframe futuramente pode dar erro
+                        )
 
-    if st.button("Avançar"):
-        if opcao == "Cálculo PIB":
-            st.session_state.tela = 'pib'
-        elif opcao == "Índice de Preços e Inflação":
-            st.session_state.tela = 'indices'
-        elif opcao == "Crescimento Econômico":
-            st.session_state.tela = 'crescimento'
-#eu utilizo dois ifs pois dentro da biblioteca streamlit há mt disso de associar if e elif a botões DEPENDENTES, o que ferra o processo. preciso que cada botão seja independente sabe?
-    if st.button("Voltar ao Menu Principal"):
-        st.session_state.tela = 'menu'
+                        #depois do usuário preencher, oferecemos opções de calculo.
+                        st.subheader("3. Escolha quais índices calcular:")
+                        resultado_macro_indices = ['Índice de Preços de Laspeyres (IPCA)','Índice de Preços de Paasche (Deflator do PIB)','Índice de Preços de Fischer','Índice de Quantidade de Laspeyres','Índice de Quantidade de Paasche','Índice de Quantidade de Fischer']
+                        indices_selecionados = st.multiselect('Quais resultados deseja visualizar?', resultado_macro_indices)
+                        #Botão "Calcular Índices".
+                        if st.button('Calcular índices', type= 'primary', key= 'stbtnci'):
+                            try:
+                                #tratamento de erro
+                                #separar os dataframes por periodos
+                                base = df_editado[df_editado['PERÍODO'] == 0].reset_index(drop=True) #estrutura de dicionario
+                                atual = df_editado[df_editado['PERÍODO'] == 1].reset_index(drop=True)
+                                # pra garantir que temos o mesmo número de bens em ambos os períodos
+                                if len(base) != len(atual):
+                                    st.error("Erro: O número de bens no Período 0 é diferente do Período 1. Por favor, ajuste a tabela.")
+                                    return #Para a execução aqui
+                                # Extrair as colunas como arrays numpy para cálculos rápidos
+                                P0 = base['PREÇO (P)'].values
+                                Q0 = base['QUANTIDADE (Q)'].values
+                                P1 = atual['PREÇO (P)'].values
+                                Q1 = atual['QUANTIDADE (Q)'].values
+
+                                resultados = {}
+                                # Cálculos de Preços
+                                resultados['Índice de Preços de Laspeyres (IPCA)'] = ((P1 * Q0).sum() / (P0 * Q0).sum()) * 100
+                                resultados['Índice de Preços de Paasche (Deflator do PIB)'] = ((P1 * Q1).sum() / (P0 * Q1).sum()) * 100
+                                resultados['Índice de Preços de Fischer'] = np.sqrt(resultados['Índice de Preços de Laspeyres (IPCA)'] * resultados['Índice de Preços de Paasche (Deflator do PIB)'])
+
+                                # Cálculos de Quantidade
+                                resultados['Índice de Quantidade de Laspeyres'] = ((P0 * Q1).sum() / (P0 * Q0).sum()) * 100
+                                resultados['Índice de Quantidade de Paasche'] = ((P1 * Q1).sum() / (P1 * Q0).sum()) * 100
+                                resultados['Índice de Quantidade de Fischer'] = np.sqrt(resultados['Índice de Quantidade de Laspeyres'] * resultados['Índice de Quantidade de Paasche'])
+
+                                st.subheader("Resultados")
+                                
+                                #cria colunas para exibir os resultados de forma organizada, via GEMINI
+                                cols = st.columns(len(indices_selecionados))
+                                col_idx = 0
+                                for indice in indices_selecionados:
+                                    with cols[col_idx]:
+                                        st.metric(label=indice, value=f"{resultados[indice]:.2f}")
+                                    col_idx += 1
+                            #tratamento de erro
+                            except ZeroDivisionError:
+                                st.error("Erro: Divisão por zero. Verifique se todos os preços e quantidades no período base são maiores que zero.")
+                            except Exception as e:
+                                st.error(f"Ocorreu um erro inesperado: {e}")
+                    case 'PIB Agregado e Crescimento':
+                        #O QUE DESEJA CALCULAR?
+                        opcoes_pib_agreg = ['PIB Real', 'PIB Nominal', 'Deflator do PIB']
+                            #DEPENDENDO DA ESCOLHA PEDE OS OUTROS VALORES, AS FÓRMULAS LÁ
+                            #SAIDA
+                            #DEPOIS DA SAÍDA: DESEJA CALCULAR TAXA DE CRESCIMENTO ECONÔMICO? PEDE OS DADOS DE UM SEGUNDO ANO PARA COMPARAR OS PIBS REAIS E CALCULAR VARIAÇÃO PERCENTUAL
+
+
+
+
+
+
+   
 
 @st.cache_data(ttl=86400)  # cache diário (86400 segundos = 24 horas)     #via chat gpt
 
@@ -360,11 +475,13 @@ def tela_fin(): # EM DESENVOLVIMENTO
                     st.session_state.opcoes2 = st.selectbox("Escolha o tópico II: ", LISTA_TOPICOII)
                     if st.button("Pronto", key="btn_col2"):
                         st.session_state.col_2ok = True
+            
                 case 'Juros Compostos':
                     LISTA_TOPICOII = ['Juros Compostos', 'Períodos Não Inteiros', 'Taxas Equivalentes', 'CDB e RCB', 'Valor atual', 'Valor nominal', 'Compra a vista x Compra a Prazo', 'Taxa Acumulada', 'Taxa Over Selic']
                     st.session_state.opcoes2 = st.selectbox("Escolha o tópico II: ", LISTA_TOPICOII)
                     if st.button("Pronto", key="btn_col2"):
                         st.session_state.col_2ok = True
+            '''
                 case 'Taxa Real de Juros':
                     LISTA_TOPICOII = ['Índice de preços', 'Taxa Acumulada', 'IPCA', 'Taxa Real de Juros']
                     st.session_state.opcoes2 = st.selectbox("Escolha o tópico II: ", LISTA_TOPICOII)
@@ -385,7 +502,7 @@ def tela_fin(): # EM DESENVOLVIMENTO
                     st.session_state.opcoes2 = st.selectbox("Escolha o tópico II: ", LISTA_TOPICOII)
                     if st.button("Pronto", key="btn_col2"):
                         st.session_state.col_2ok = True
-
+            '''
 #------------- FORA DA COLUNA ------------------------------------
     st.markdown("---")
     if (st.session_state.col_1ok and st.session_state.col_2ok):
@@ -789,9 +906,96 @@ def tela_fin(): # EM DESENVOLVIMENTO
                                 st.session_state.taxa_mensal = taxa_desconto_input / (1 - taxa_desconto_input * prazo_input)
                                 with st.expander("Resultado"):
                                     st.metric(label = 'Taxa de juros efetiva', value = f"{st.session_state.taxa_mensal:,.2f}% a.p.") 
-            #case 'Juros Compostos':
-                #match st.session_state.opcoes2:
-                    #case
+            case 'Juros Compostos':
+                match st.session_state.opcoes2:
+                    case 'Juros Compostos':
+                        st.subheader("Determine a variável a ser calculada:")
+                        lista_jc_jc = ['Montante', 'Capital', 'Taxa de Juros', 'Prazo']
+                        # Adicionei uma key única para o selectbox para segurança
+                        opcao_selecionada = st.selectbox(" ", lista_jc_jc, key="jc_opcao_selecionada")
+                        st.markdown("---")
+                        match opcao_selecionada:
+                            case 'Montante':
+                                # ENTRADAS
+                                st.write("Insira os dados para calcular o Montante:")
+                                # Adicionei sufixos para tornar as chaves únicas
+                                capital_input = st.number_input("Capital:", min_value=0.0, format="%.2f", key="montante_input_capital1_jc")
+                                prazo_input = st.number_input("Prazo:", min_value=0.0, format="%.2f", key="montante_input_prazo1_jc")
+                                juros_input = st.number_input("Taxa de Juros (%):", min_value=0.0, format="%.2f", key="montante_input_juros1_jc")
+                                st.warning("O período da taxa deve ser compatível com o prazo!")
+
+                                if st.button("Calcular", key="montante_btn_calcular_jc"):
+                                    if (capital_input == 0 or prazo_input == 0 or juros_input == 0):
+                                        st.error('Por favor insira um valor válido e diferente de zero!')
+                                    else:
+                                        # PROCESSAMENTO
+                                        montante_calculado = capital_input * ((1 + (juros_input / 100))**prazo_input)
+                                        with st.expander("Resultado", expanded=True):
+                                            # SAIDA
+                                            st.metric(label='Montante', value=f"R$ {montante_calculado:,.2f}")
+
+                            case 'Capital':
+                                # ENTRADAS
+                                st.write("Insira os dados para calcular o Capital:")
+                                montante_input = st.number_input("Montante:", min_value=0.0, format="%.2f", key="capital_input_montante2_jc")
+                                juros_input = st.number_input("Taxa de Juros (%):", min_value=0.0, format="%.2f", key="capital_input_juros2_jc")
+                                prazo_input = st.number_input("Prazo:", min_value=0.0, format="%.2f", key="capital_input_prazo2_jc")
+                                st.warning("O período da taxa deve ser compatível com o prazo!")
+
+                                if st.button("Calcular", key="capital_btn_calcular_jc"):
+                                    if (montante_input == 0 or prazo_input == 0 or juros_input == 0):
+                                        st.error('Por favor insira um valor válido e diferente de zero!')
+                                    else:
+                                        # PROCESSAMENTO
+                                        capital_calculado = montante_input / ((1 + (juros_input / 100)) ** prazo_input)
+                                        with st.expander("Resultado", expanded=True):
+                                            # SAIDA
+                                            st.metric(label='Capital', value=f"R$ {capital_calculado:,.2f}")
+
+                            case 'Taxa de Juros':
+                                # ENTRADAS
+                                st.write("Insira os dados para calcular a Taxa de Juros:")
+                                montante_input = st.number_input("Montante:", min_value=0.0, format="%.2f", key="juros_input_montante3")
+                                capital_input = st.number_input("Capital:", min_value=0.0, format="%.2f", key="juros_input_capital3")
+                                prazo_input = st.number_input("Prazo:", min_value=0.0, format="%.2f", key="juros_input_prazo3")
+                                st.warning("O período da taxa será compatível com o prazo!")
+
+                                if st.button("Calcular", key="juros_btn_calcular"):
+                                    if (capital_input == 0 or prazo_input == 0 or montante_input == 0):
+                                        st.error('Por favor insira um valor válido e diferente de zero!')
+                                    else:
+                                        # PROCESSAMENTO (Fórmula corrigida para retornar a taxa em %)
+                                        juros_calculado = (((montante_input / capital_input)** prazo_input) - 1) * 100
+                                        with st.expander("Resultado", expanded=True):
+                                            # SAIDA
+                                            st.metric(label='Taxa de Juros', value=f"{juros_calculado:,.2f}%")
+
+                            case 'Prazo':
+                                # ENTRADAS
+                                st.write("Insira os dados para calcular o Prazo:")
+                                montante_input = st.number_input("Montante:", min_value=0.0, format="%.2f", key="prazo_input_montante4_jc")
+                                capital_input = st.number_input("Capital:", min_value=0.0, format="%.2f", key="prazo_input_capital4_jc")
+                                juros_input = st.number_input("Taxa de Juros (%):", min_value=0.0, format="%.2f", key="prazo_input_juros4_jc")
+                                st.warning("O prazo será compatível com o período da taxa!")
+                                
+                                if st.button("Calcular", key="prazo_btn_calcular_jc"):
+                                    if (capital_input == 0 or montante_input == 0 or juros_input == 0):
+                                        st.error('Por favor insira um valor válido e diferente de zero!')
+                                    else:
+                                        # PROCESSAMENTO (Fórmula corrigida para usar a taxa como decimal)
+                                        taxa_decimal = juros_input / 100
+                                        prazo_calculado = (math.log(montante_input / capital_input))/ (math.log(1 + taxa_decimal))
+                                        with st.expander("Resultado", expanded=True):
+                                            # SAIDA
+                                            st.metric(label='Prazo', value=f"{prazo_calculado:,.2f}")
+                    case 'Períodos Não Inteiros':
+                        st.subheader('Período Não Inteiro')
+                    case 'Taxas Equivalentes':
+                        st.subheader('Taxas equivalentes')
+                    case 'CDB e RCB':
+                        st.subheader("CDB e RCB")
+                    
+
 
             #case 'Taxa Real de Juros':                      
 
@@ -1014,41 +1218,6 @@ def tela_sobre(): #DESENVOLVIDO
         st.caption('Detalhe: apenas 10% do projeto foi utilizado com auxílio de IA. Apenas para ajuda com integração de API, tratamentos básicos de erros e caminhos para auxiliar e garantir que a lógica da programação seja a melhor possível')
     if st.button('Voltar ao Menu'):
             st.session_state.tela = 'menu'    
-
-def tela_linha_orcamentaria(): #AINDA NÃO DESENVOLVIDO
-    st.write('EM CONSTRUÇÃO...')
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
-
-def tela_curva_indiferenca(): #AINDA NÃO DESENVOLVIDO
-    st.write('EM CONSTRUÇÃO...')
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
-
-def tela_equilibrio_consumidor(): #AINDA NÃO DESENVOLVIDO
-    st.write('EM CONSTRUÇÃO...')
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
-
-def tela_curva_demanda_indiv(): #AINDA NÃO DESENVOLVIDO
-    st.write('EM CONSTRUÇÃO...')
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
-
-def tela_maximizacao_util(): #AINDA NÃO DESENVOLVIDO
-    st.write('EM CONSTRUÇÃO...')
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
-         
-def tela_elasticidades(): #AINDA NÃO DESENVOLVIDO
-    st.write('EM CONSTRUÇÃO...')
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
-
-def tela_excedente_consumidor(): #AINDA NÃO DESENVOLVIDO
-    st.write('EM CONSTRUÇÃO...')
-    if st.button('Voltar ao Menu'):
-        st.session_state.tela = 'menu'
 
 # Menu (main)
 def main(): #DESENVOLVIDO
