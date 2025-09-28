@@ -164,14 +164,13 @@ def tela_macro(): #DESENVOLVIDO
                                 resultados['Índice de Quantidade de Fischer'] = np.sqrt(resultados['Índice de Quantidade de Laspeyres'] * resultados['Índice de Quantidade de Paasche'])
 
                                 st.subheader("Resultados")
-                                
-                                #cria colunas para exibir os resultados de forma organizada, via GEMINI
-                                cols = st.columns(len(indices_selecionados))
-                                col_idx = 0
-                                for indice in indices_selecionados:
-                                    with cols[col_idx]:
-                                        st.metric(label=indice, value=f"{resultados[indice]:.2f}")
-                                    col_idx += 1
+                                #loop para organizar
+                                for i in range(0, len(indices_selecionados), 3):
+                                    coluna_desta_linha = st.columns(3)
+                                    pedaco_de_indices = indices_selecionados[i : i+3] 
+                                    for j, indice_atual in enumerate(pedaco_de_indices):
+                                        with coluna_desta_linha[j]:
+                                            st.metric(label=indice_atual, value=f"{resultados[indice_atual]:.2f}")
                             #tratamento de erro
                             except ZeroDivisionError:
                                 st.error("Erro: Divisão por zero. Verifique se todos os preços e quantidades no período base são maiores que zero.")
