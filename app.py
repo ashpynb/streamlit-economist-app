@@ -95,7 +95,7 @@ def tela_macro(): #DESENVOLVIDO
     st.markdown('---')
     if st.session_state.col_mc_1ok and st.session_state.col_mc_2ok:
         #tela
-        match st.session_state.opcoes_macro:
+        match st.session_state.opcoes_macro:    
             case 'Macro I':
                 match st.session_state.opcoes2_macro:
                     case 'PIB pelas 3 óticas':
@@ -147,10 +147,10 @@ def tela_macro(): #DESENVOLVIDO
                                     st.error("Erro: O número de bens no Período 0 é diferente do Período 1. Por favor, ajuste a tabela.")
                                     return #Para a execução aqui
                                 # Extrair as colunas como arrays numpy para cálculos rápidos
-                                P0 = base['PREÇO (P)'].values
-                                Q0 = base['QUANTIDADE (Q)'].values
-                                P1 = atual['PREÇO (P)'].values
-                                Q1 = atual['QUANTIDADE (Q)'].values
+                                P0 = base['PREÇO'].values
+                                Q0 = base['QUANTIDADE'].values
+                                P1 = atual['PREÇO'].values
+                                Q1 = atual['QUANTIDADE'].values
 
                                 resultados = {}
                                 # Cálculos de Preços
