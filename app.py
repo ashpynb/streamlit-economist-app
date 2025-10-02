@@ -99,7 +99,46 @@ def tela_macro(): #DESENVOLVIDO
             case 'Macro I':
                 match st.session_state.opcoes2_macro:
                     case 'PIB pelas 3 óticas':
-                        st.write('oi')
+                        aba1, aba2, aba3 = st.tabs(["Ótica do Produto", "Ótica da Despesa", "Ótica da Renda"])
+                        with aba1:
+                            #Aqui dentro vai toda a lógica para a Ótica do Produto
+                            st.subheader('Ótica do Produto')
+                            st.info("Em vez de somar o produto final, somamos o valor que cada setor da economia adicionou ao longo da cadeia de produção. Isso evita a dupla contagem. Fórmula: PIB = Soma do Valor Adicionado + Impostos Indiretos Líquidos.")
+                            VAA = st.number_input("VA da Agropecuária:", value = 100., key = 'vaagro_aba1')
+                            VAI = st.number_input("VA da Indústria:", value = 100., key = 'vaind_aba1')
+                            VAS = st.number_input("VA dos Serviços:", value = 100., key = 'vaser_aba1')
+                            II = st.number_input("Impostos Indiretos: ", value = 100., key = 'impostosind_aba1')
+                            Sub = st.number_input("Subsídios:", value = 100., key = 'subsidios_aba1')
+                            if st.button('Calcular', key = 'stbtnaba1'):
+                                PIB = VAA + VAI + VAS + (II - Sub)
+                                st.metric('Resultado PIB', f'R$ {PIB:.2f}')
+                        with aba2:
+                            #Aqui dentro vai a lógica para a Ótica da Despesa
+                            st.subheader('Ótica da Despesa')
+                            st.info("O PIB é a soma de todos os gastos finais na economia. Fórmula: PIB = C + I + G + (X - M).")
+                            C = st.number_input("Consumo das Famílias (C): ", value = 100., key = 'consumo_aba2')
+                            I = st.number_input("Investimento (I): ", value = 100., key = 'investimento_aba2')
+                            G = st.number_input("Gastos do Governo (G): ", value = 100., key = 'gastos_aba2')
+                            X = st.number_input("Exportações (X): ", value = 100., key = 'exportacoes_aba2')
+                            M = st.number_input("Importações (M): ", value = 100., key = 'importacoes_aba2')
+                            if st.button('Calcular', key = 'stbtnaba2'):
+                                PIB = C + I + G + (X - M)
+                                st.metric('Resultado PIB', f'R$ {PIB:.2f}')
+
+                        with aba3:
+                            #E aqui a lógica para a Ótica da Renda
+                            st.subheader('Ótica da Renda')
+                            st.info("Se o PIB é o valor de tudo que foi produzido e vendido, esse dinheiro tem que ir para o bolso de alguém na forma de renda. Fórmula: PIB = Salários + Juros + Aluguéis + Lucros + (Impostos - Subsidios).")
+                            S = st.number_input("Salários (S): ", value = 100., key = 'salarios_aba3')
+                            J = st.number_input("Juros (J): ", value = 100., key = 'juros_aba3')
+                            A = st.number_input("Aluguéis (A): ", value = 100., key = 'alugueis_aba3')
+                            L = st.number_input("Lucros (L): ", value = 100., key = 'lucross_aba3')
+                            II = st.number_input("Impostos indiretos (II): ", value = 100., key = 'impostos_indiretos_aba3')
+                            Sub = st.number_input("Subsídios (Sub): ", value = 100., key = 'sub_aba3')
+                            if st.button('Calcular', key = 'stbtnaba3'):
+                                PIB = S + J + A + L + (II - Sub)
+                                st.metric('Resultado PIB', f'R$ {PIB:.2f}')
+
                     case 'Índice de Preços e Quantidade':
                         st.header('Simulador de Índices de Preços e Quantidade')
                         st.info('Use a tabela abaixo para criar uma economia fictícia e calcular os principais indicadores macroeconômicos')
@@ -177,18 +216,44 @@ def tela_macro(): #DESENVOLVIDO
                             except Exception as e:
                                 st.error(f"Ocorreu um erro inesperado: {e}")
                     case 'PIB Agregado e Crescimento':
+                        col1_pibag, col_2_pibag = st.columns(2)
                         #O QUE DESEJA CALCULAR?
                         opcoes_pib_agreg = ['PIB Real', 'PIB Nominal', 'Deflator do PIB']
-                            #DEPENDENDO DA ESCOLHA PEDE OS OUTROS VALORES, AS FÓRMULAS LÁ
-                            #SAIDA
-                            #DEPOIS DA SAÍDA: DESEJA CALCULAR TAXA DE CRESCIMENTO ECONÔMICO? PEDE OS DADOS DE UM SEGUNDO ANO PARA COMPARAR OS PIBS REAIS E CALCULAR VARIAÇÃO PERCENTUAL
+                        st.session_state.opcoes_pib_agregado = st.selectbox('Selecione o que deseja calcular:', opcoes_pib_agreg)
+                        match st.session_state.opcoes_pib_agregado:
+                            case 'PIB Real':
+                                with col1_pibag:
+                                    st.session_state.pib_nominal = st.number_input("PIB Nominal", min_value=0.0, value=1200.0, key = '1')
+                                with col_2_pibag:
+                                    st.session_state.deflator_pib = st.number_input("Deflator do PIB", min_value=0.1, value=110.0, key = '2')
+                            case 'PIB Nominal':
+                                with col1_pibag:
+                                    st.session_state.pib_real = st.number_input("PIB Real", min_value=0.0, value=1090.91, key="pib_real_input")
+                                with col_2_pibag:
+                                    st.session_state.deflator_pib = st.number_input("Deflator do PIB", min_value=0.1, value=110.0, key="def_pib_input_2")
+                            case 'Deflator do PIB':
+                                with col1_pibag:
+                                    st.session_state.pib_nominal = st.number_input("PIB Nominal", min_value=0.0, value=1200.0, key="pib_nom_input_2")
+                                with col_2_pibag:
+                                    st.session_state.pib_real = st.number_input("PIB Real", min_value=0.1, value=1090.91, key="pib_real_input_2")
+                        if st.button('Calcular', key = 'st.button.pibag'):
+                            try:
+                                match st.session_state.opcoes_pib_agregado:
+                                    case 'PIB Real':
+                                        pib_real = (st.session_state.pib_nominal / st.session_state.deflator_pib) * 100
+                                        st.metric('O PIB Real é', f'R$ {pib_real:,.2f}')
+                                    
+                                    case 'PIB Nominal':
+                                        pib_nominal = (st.session_state.pib_real * st.session_state.deflator_pib) / 100
+                                        st.metric('O PIB Nominal é', f'R$ {pib_nominal:,.2f}')
 
-
-
-
-
-
-   
+                                    case 'Deflator do PIB':
+                                        deflator = (st.session_state.pib_nominal / st.session_state.pib_real) * 100
+                                        st.metric('O Deflator do PIB é', f'{deflator:.2f}')
+                            except ZeroDivisionError:
+                                st.error("Erro: Nenhum dos valores de input pode ser zero para este cálculo.")
+                            except Exception as e:
+                                st.error(f"Ocorreu um erro. Por favor, verifique os valores inseridos.")
 
 @st.cache_data(ttl=86400)  # cache diário (86400 segundos = 24 horas)     #via chat gpt
 
